@@ -1,8 +1,10 @@
 {
     "agents": [
         "claude_code",
-        "factory",
-        "opencode"
+        "codex",
+        "antigravity",
+        "copilot",
+        "junie"
     ],
     "cloud": false,
     "guidelines": true,
@@ -12,9 +14,14 @@
     "skills": [
         "fortify-development",
         "laravel-best-practices",
+        "mcp-development",
+        "octane-development",
         "wayfinder-development",
         "pest-testing",
         "inertia-react-development",
-        "tailwindcss-development"
+        "tailwindcss-development",
+        "echo-react-development",
+        "echo-development",
+        "laravel-inertia-react"
     ]
 }

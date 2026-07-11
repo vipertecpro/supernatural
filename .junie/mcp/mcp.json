@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/Users/vipertecpro/Library/Application Support/Herd/bin/php84",
+            "args": [
+                "/Users/vipertecpro/Herd/supernatural/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}

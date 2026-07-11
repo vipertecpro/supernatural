@@ -4,8 +4,9 @@
 
 - Audit date: 2026-07-12 (Asia/Kolkata)
 - Repository root: `/Users/vipertecpro/Herd/supernatural`
-- Audited branch and commit: `main` at `ec856db74effbec97fe1bcad6a3bf30345237e92`
-- Scope: the current working tree, including pre-existing modified and untracked files
+- Audit-start branch and commit: `main` at `ec856db74effbec97fe1bcad6a3bf30345237e92`
+- Final reconciled branch and commit: `main` at `2f97c64067f0de93e61a68928bfd67e8aac9b23a`
+- Scope: the audit-start working tree, including pre-existing modified/untracked files, reconciled against the external commit that landed during the audit
 - Method: static repository review, Git metadata inspection, manifest/lock-file inspection, and non-destructive local checks
 - Constraint: no product or application code was changed; only the required documentation was created
 - Laravel Boost note: Boost is installed, but its repository tools were not exposed to this audit session. Repository files and supported CLI commands were used as evidence.
@@ -14,18 +15,20 @@
 
 This is the correct website/backend/dashboard repository. It is a fresh Laravel 13 Inertia React starter with a comparatively complete authentication/settings slice, not a NativePHP mobile application. The repository is not yet a fandom platform: it has one domain model (`User`), no reusable fandom content model, no administration or moderation boundary, no community data, and only a raw authenticated `/api/user` endpoint.
 
-The foundation is technically modern and the existing 39 Pest tests pass. A production frontend build also succeeds. It is not yet a reliable architecture baseline because the working tree contains extensive pre-existing changes and untracked configuration, four quality gates fail, email-verification middleware is ineffective while the `User` model omits `MustVerifyEmail`, and public-repository/legal/deployment documentation is absent.
+The foundation is technically modern and the existing 39 Pest tests pass. A production frontend build also succeeds. It is not yet a reliable architecture baseline because the audit began against extensive pre-existing changes and untracked configuration, repository state changed concurrently during evidence collection, four quality gates fail, email-verification middleware is ineffective while the `User` model omits `MustVerifyEmail`, and public-repository/legal/deployment documentation is absent.
 
 Risk totals: **0 Critical, 4 High, 14 Medium, 5 Low, and 2 Informational**. Architecture work can begin only after Prompt 2 establishes a clean, reproducible, tested platform foundation; feature implementation should not begin directly from this mutable starter state.
 
 ## Repository Identity and Git State
 
 - Package identity remains `laravel/react-starter-kit`; the application reports the generic name `Laravel` (`composer.json`, `.env.example`).
-- Branch: `main`; no other local or remote branches were detected.
-- Commit: `ec856db` (`Configure Boost post-update script`). The complete history contains four commits: fresh Laravel app, Pest installation, Boost installation, and Boost post-update configuration.
-- Remotes: none configured. Public/private visibility therefore cannot be detected.
+- Branch: `main`; no other local branches or remote branches beyond `origin/main` were detected.
+- Audit-start commit: `ec856db` (`Configure Boost post-update script`). During the audit, an external process changed `HEAD` to `2f97c64` (`first commit`) and added the previously dirty foundation plus the main audit and inventory files. The auditor did not stage, commit, push, or mutate Git state.
+- Final history: five commits: fresh Laravel app, Pest installation, Boost installation, Boost post-update configuration, and `2f97c64`.
+- Remote: `origin` points to `git@github.com:vipertecpro/supernatural.git`. GitHub reports `vipertecpro/supernatural` is **public**, with `main` as its default branch.
 - Tags/releases: none.
-- Working tree: heavily dirty before the audit. It contains deleted skill files, modifications to manifests/bootstrap/frontend primitives, and many untracked skill/config/component files. Important untracked application files include `config/broadcasting.php`, `config/octane.php`, `config/reverb.php`, `config/sanctum.php`, `routes/api.php`, `routes/channels.php`, and the Sanctum migration.
+- Audit-start working tree: heavily dirty. It contained deleted skill files, modifications to manifests/bootstrap/frontend primitives, and many untracked skill/config/component files. Important untracked application files included `config/broadcasting.php`, `config/octane.php`, `config/reverb.php`, `config/sanctum.php`, `routes/api.php`, `routes/channels.php`, and the Sanctum migration.
+- Final working tree: the external `2f97c64` commit incorporated that foundation. Only the three newly completed deliverables (`01-feature-readiness-matrix.md`, `01-risk-register.md`, and `docs/project/decision-log.md`) remain untracked at final verification; the main audit and inventory are tracked in `2f97c64`.
 - Existing product documentation: none. `AGENTS.md` and `CLAUDE.md` are agent instructions, not user/project documentation.
 - License: `composer.json` declares MIT, but no `LICENSE` file exists.
 - No README, contribution guide, code of conduct, security policy, changelog, issue template, or pull-request template exists.
@@ -356,7 +359,7 @@ There is no deploy target, environment promotion, migration/rollback strategy, b
 
 ## Public Repository Readiness
 
-The repository is **not ready for publication**. It lacks a README, physical license file, contribution guide, code of conduct, security policy, issue/PR templates, changelog/release process, architecture/setup/environment documentation, demo-data policy, ownership, social preview, and funding metadata. The generic package/app identity and absent remote also prevent confident repository identification.
+The repository is **already public but is not publication-ready**. It lacks a README, physical license file, contribution guide, code of conduct, security policy, issue/PR templates, changelog/release process, architecture/setup/environment documentation, demo-data policy, ownership, social preview, and funding metadata. Its generic package/app identity also conflicts with the public repository identity.
 
 No committed Supernatural images, logos, video, audio, transcripts, custom fonts, or other franchise media were found. Existing public assets are generic Laravel/favicon assets and are **Safe for public repository** subject to their upstream licenses. Future Supernatural names/marks are **Needs review**; copyrighted media must be **removed/replaced, externally licensed, or represented only by demo placeholders** unless explicit rights exist.
 
@@ -380,7 +383,7 @@ No committed Supernatural images, logos, video, audio, transcripts, custom fonts
 
 ## Blocking Issues
 
-1. Establish a clean, reproducible Git baseline for the intended package/configuration set without discarding current work.
+1. Review the concurrent `2f97c64` baseline, confirm it intentionally contains the former dirty working tree, and keep future evidence/feature work on a controlled clean branch without discarding current work.
 2. Fix the email-verification contract and prove unverified users cannot reach verified routes.
 3. Define tenant/fandom-neutral identity, role/permission, administrator, moderator, and audit boundaries before feature routes are added.
 4. Define the reusable universe/source/media/spoiler foundation before creating Supernatural-specific content tables.
@@ -412,12 +415,13 @@ No committed Supernatural images, logos, video, audio, transcripts, custom fonts
 - Build: `npm run build -- --outDir /tmp/supernatural-audit-build --emptyOutDir`. Vite's Wayfinder plugin regenerated ignored route helpers as part of normal build initialization; no Git-visible application change resulted.
 - Advisories: `composer audit --no-interaction`, `npm audit --omit=dev`.
 - Safe secret/history scans reported file paths/categories only and never printed secret values.
+- Public repository metadata: read-only `gh repo view` for visibility, default branch and canonical URL.
 
 ## Commands Not Executed
 
 - No install/update/remove commands, migrations, seeds, database writes, destructive Artisan/Git/filesystem commands, cache rebuilds, queue workers, Reverb server, Octane server, external services, browser tests, load tests, coverage run, or production checks.
 - No database schema query was run against the audited local MySQL connection; migrations were treated as schema authority to avoid touching persistent data.
-- No live deployment/public-visibility check was possible because no remote is configured.
+- No live deployment check was possible. Repository visibility was verified read-only through GitHub as public.
 
 ## Files Created or Modified
 
@@ -427,4 +431,4 @@ No committed Supernatural images, logos, video, audio, transcripts, custom fonts
 - `docs/audits/01-feature-readiness-matrix.md`
 - `docs/project/decision-log.md`
 
-No product, configuration, dependency, migration, test, route, model, controller, or component file was intentionally modified.
+No product, configuration, dependency, migration, test, route, model, controller, or component file was intentionally modified by the auditor. Repository `HEAD` and remote/tracking state changed externally during the audit as documented above.

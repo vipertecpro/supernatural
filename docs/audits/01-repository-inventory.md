@@ -2,7 +2,7 @@
 
 ## Inventory Basis
 
-This inventory describes the working tree at `main` / `ec856db74effbec97fe1bcad6a3bf30345237e92` on 2026-07-12. It includes pre-existing modified, untracked, and ignored development artifacts where architecturally relevant.
+This inventory describes the working tree captured at audit start on `main` / `ec856db74effbec97fe1bcad6a3bf30345237e92` on 2026-07-12 and reconciled against final `HEAD` `2f97c64067f0de93e61a68928bfd67e8aac9b23a`. An external process committed the previously dirty foundation during the audit; the auditor did not stage, commit or push. Ignored development artifacts are included where architecturally relevant.
 
 ## Top-Level Responsibilities
 
@@ -227,4 +227,4 @@ No potentially copyrighted Supernatural media or copied franchise text exists. G
 
 ## Documentation Inventory
 
-Before this audit there was no project README, setup guide, architecture guide, API documentation, license file, code of conduct, contribution guide, security policy, changelog, release guide, content policy, copyright/takedown policy, privacy documentation, or ADR/decision log. Agent instruction files and duplicated skill references are development tooling, not public project documentation.
+Before this audit there was no project README, setup guide, architecture guide, API documentation, license file, code of conduct, contribution guide, security policy, changelog, release guide, content policy, copyright/takedown policy, privacy documentation, or ADR/decision log. The repository is publicly visible at `vipertecpro/supernatural`. Agent instruction files and duplicated skill references are development tooling, not public project documentation.

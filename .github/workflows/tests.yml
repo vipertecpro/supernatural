@@ -1,28 +1,18 @@
-name: tests
+name: CI
 
 on:
   push:
-    branches:
-      - develop
-      - main
-      - master
-      - workos
+    branches: [main, develop]
   pull_request:
-    branches:
-      - develop
-      - main
-      - master
-      - workos
+    branches: [main, develop]
 
 permissions:
   contents: read
 
 jobs:
-  ci:
+  quality:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ['8.3', '8.4', '8.5']
+    timeout-minutes: 20
 
     steps:
       - name: Checkout code
@@ -33,32 +23,53 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: '8.4'
           tools: composer:v2
-          coverage: xdebug
+          coverage: none
 
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: '22'
+          cache: npm
 
-      - name: Install Node Dependencies
-        run: npm i
+      - name: Validate Composer manifest
+        run: composer validate --strict
 
-      - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress --optimize-autoloader
 
-      - name: Copy Environment File
-        run: cp .env.example .env
+      - name: Audit PHP dependencies
+        run: composer audit --no-interaction
 
-      - name: Generate Application Key
-        run: php artisan key:generate
+      - name: Install frontend dependencies
+        run: npm ci
 
-      - name: Build Assets
+      - name: Audit production frontend dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Prepare isolated test environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Check PHP formatting
+        run: vendor/bin/pint --test --format agent
+
+      - name: Run PHP static analysis
+        run: composer run types:check
+
+      - name: Run backend tests
+        run: php artisan test --compact
+
+      - name: Check ESLint
+        run: npm run lint:check
+
+      - name: Check Prettier
+        run: npm run format:check
+
+      - name: Check TypeScript
+        run: npm run types:check
+
+      - name: Build production frontend
         run: npm run build
-
-      - name: Run Type Analysis
-        run: composer types:check
-
-      - name: Tests
-        run: php artisan test

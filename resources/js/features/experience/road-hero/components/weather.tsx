@@ -36,8 +36,9 @@ export function Weather({
         }
 
         points.current.position.y -=
-            delta * (2.2 + runtime.current.progress * 3);
-        points.current.position.z += delta * (1.4 + runtime.current.velocity);
+            delta * (2.2 + runtime.current.driveSpeed * 0.18);
+        points.current.position.z +=
+            delta * (1.4 + runtime.current.driveSpeed * 0.3);
 
         if (points.current.position.y < -3) {
             points.current.position.y = 3;
@@ -58,7 +59,7 @@ export function Weather({
                     />
                 </bufferGeometry>
                 <pointsMaterial
-                    color={isLight ? '#e3e7e3' : '#b9cad0'}
+                    color={isLight ? '#e5e5e5' : '#c4c4c4'}
                     size={quality === 'high' ? 0.035 : 0.028}
                     transparent
                     opacity={isLight ? 0.3 : 0.5}
@@ -73,7 +74,7 @@ export function Weather({
                 >
                     <planeGeometry args={[18, 8]} />
                     <meshBasicMaterial
-                        color={isLight ? '#c6ceca' : '#111c24'}
+                        color={isLight ? '#cacaca' : '#191919'}
                         transparent
                         opacity={0.13}
                         depthWrite={false}

@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/immutability -- R3F frame state is intentionally mutable outside React rendering. */
+import { useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { MutableRefObject } from 'react';
 import * as THREE from 'three';
+import { getRoadHeroPose } from '../motion';
 import type { RoadHeroRuntime } from '../types';
 
 const segmentLength = 18;
@@ -16,10 +18,25 @@ export function Road({
     isLight: boolean;
 }) {
     const group = useRef<THREE.Group>(null);
+    const [roadColor, roadNormal, roadRoughness] = useTexture([
+        '/media/road-journey/polyhaven/asphalt-01-diffuse-1k.jpg',
+        '/media/road-journey/polyhaven/asphalt-01-normal-1k.jpg',
+        '/media/road-journey/polyhaven/asphalt-01-roughness-1k.jpg',
+    ]);
     const markings = useMemo(
         () => Array.from({ length: segmentCount * 3 }, (_, index) => index),
         [],
     );
+
+    useEffect(() => {
+        roadColor.colorSpace = THREE.SRGBColorSpace;
+        [roadColor, roadNormal, roadRoughness].forEach((texture) => {
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(1.5, 3.2);
+            texture.needsUpdate = true;
+        });
+    }, [roadColor, roadNormal, roadRoughness]);
 
     useFrame((_, delta) => {
         const road = group.current;
@@ -28,7 +45,20 @@ export function Road({
             return;
         }
 
-        const target = (runtime.current.progress * 126) % segmentLength;
+        const progress = runtime.current.progress;
+        const pose = getRoadHeroPose(progress);
+        const targetSpeed = 8.5 + progress * 4.5;
+        runtime.current.driveSpeed = THREE.MathUtils.damp(
+            runtime.current.driveSpeed,
+            targetSpeed,
+            2.8,
+            delta,
+        );
+        runtime.current.distance +=
+            runtime.current.driveSpeed * delta * pose.travelDirection;
+        const target =
+            ((runtime.current.distance % segmentLength) + segmentLength) %
+            segmentLength;
         road.position.z = THREE.MathUtils.damp(
             road.position.z,
             target,
@@ -59,9 +89,13 @@ export function Road({
                                 args={[11.5, segmentLength + 0.08]}
                             />
                             <meshStandardMaterial
-                                color={isLight ? '#303738' : '#070a0c'}
-                                roughness={isLight ? 0.34 : 0.23}
-                                metalness={isLight ? 0.22 : 0.42}
+                                color={isLight ? '#363636' : '#090909'}
+                                map={roadColor}
+                                normalMap={roadNormal}
+                                normalScale={new THREE.Vector2(0.42, 0.42)}
+                                roughnessMap={roadRoughness}
+                                roughness={isLight ? 0.48 : 0.31}
+                                metalness={isLight ? 0.18 : 0.34}
                             />
                         </mesh>
                         {[-5.45, 5.45].map((x) => (
@@ -72,7 +106,7 @@ export function Road({
                             >
                                 <planeGeometry args={[0.11, segmentLength]} />
                                 <meshBasicMaterial
-                                    color={isLight ? '#d8d4bd' : '#9da9a5'}
+                                    color={isLight ? '#d4d4d4' : '#a3a3a3'}
                                     transparent
                                     opacity={0.54}
                                 />
@@ -84,7 +118,7 @@ export function Road({
                         >
                             <planeGeometry args={[18, segmentLength]} />
                             <meshStandardMaterial
-                                color={isLight ? '#30352f' : '#030504'}
+                                color={isLight ? '#343434' : '#040404'}
                                 roughness={0.96}
                             />
                         </mesh>
@@ -102,7 +136,7 @@ export function Road({
                     >
                         <planeGeometry args={[0.12, 2.7]} />
                         <meshBasicMaterial
-                            color={isLight ? '#e7e1c5' : '#d8d6c6'}
+                            color={isLight ? '#e3e3e3' : '#d5d5d5'}
                             transparent
                             opacity={0.72}
                         />

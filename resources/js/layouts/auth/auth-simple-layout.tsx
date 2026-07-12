@@ -26,16 +26,11 @@ export default function AuthSimpleLayout({
                 <h2>
                     Every archive <span>begins with a witness.</span>
                 </h2>
-                <div className="immersive-auth-sigil">
-                    <span />
-                    <span />
-                    <span />
-                </div>
                 <small>ENCRYPTED SESSION · PRIVATE BY DEFAULT</small>
             </aside>
             <main
                 id="auth-content"
-                className="immersive-auth-panel w-full max-w-md border border-border-strong bg-surface-primary/92 p-6 shadow-surface backdrop-blur-xl sm:p-8"
+                className="immersive-auth-panel w-full max-w-md border border-border-strong bg-surface-primary/86 p-6 shadow-surface backdrop-blur-lg sm:p-8"
             >
                 <Link href={home()} className="inline-flex">
                     <BrandWordmark />

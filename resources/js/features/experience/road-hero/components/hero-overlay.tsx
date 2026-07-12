@@ -27,8 +27,10 @@ export function HeroOverlay() {
                     <span>Archive</span>
                 </h1>
                 <p className="road-hero-statement" data-road-hero-reveal>
-                    Follow the road through connected worlds, evidence-led lore,
-                    and the stories that refuse to stay buried.
+                    A fan-made companion to the Supernatural television
+                    series—follow the road through hunts, creatures,
+                    evidence-led lore, and the stories that refuse to stay
+                    buried.
                 </p>
                 <div className="road-hero-actions" data-road-hero-reveal>
                     <Button size="lg" asChild>
@@ -48,26 +50,6 @@ export function HeroOverlay() {
                         </Link>
                     </Button>
                 </div>
-            </div>
-            <div
-                className="road-hero-copy road-hero-copy-approach"
-                aria-hidden="true"
-            >
-                <p className="road-hero-kicker">
-                    The signal is getting stronger
-                </p>
-                <p className="font-editorial text-4xl md:text-6xl">
-                    Some doors only appear once you are moving.
-                </p>
-            </div>
-            <div
-                className="road-hero-copy road-hero-copy-threshold"
-                aria-hidden="true"
-            >
-                <p className="road-hero-kicker">Threshold reached</p>
-                <p className="font-display text-5xl uppercase md:text-7xl">
-                    Enter the light.
-                </p>
             </div>
             <HeroControls />
             <div className="road-hero-scroll" data-road-hero-reveal>

@@ -83,20 +83,17 @@ export function PublicPageChoreography() {
                         },
                     });
 
-                    gsap.to(
-                        '.public-immersive-orb-one, .public-immersive-orb-two',
-                        {
-                            yPercent: 22,
-                            scale: 1.06,
-                            ease: 'none',
-                            scrollTrigger: {
-                                trigger: '#main-content',
-                                start: 'top top',
-                                end: 'bottom bottom',
-                                scrub: 1.2,
-                            },
+                    gsap.to('.cinematic-image-scrim', {
+                        yPercent: 22,
+                        scale: 1.06,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: '#main-content',
+                            start: 'top top',
+                            end: 'bottom bottom',
+                            scrub: 1.2,
                         },
-                    );
+                    });
 
                     const revealFallback = window.setTimeout(() => {
                         gsap.set(criticalRevealTargets, {
@@ -134,6 +131,10 @@ export function PublicPageChoreography() {
                                 'h2, h3, p, li, a, button',
                             );
 
+                            const media = section.querySelector(
+                                '.public-article-media',
+                            );
+
                             gsap.from(section, {
                                 opacity: 0,
                                 y: 110,
@@ -157,6 +158,20 @@ export function PublicPageChoreography() {
                                     once: true,
                                 },
                             });
+
+                            if (media) {
+                                gsap.from(media, {
+                                    clipPath: 'inset(0 0 100% 0)',
+                                    scale: 1.08,
+                                    ease: 'power3.out',
+                                    scrollTrigger: {
+                                        trigger: section,
+                                        start: 'top 78%',
+                                        end: 'top 34%',
+                                        scrub: 0.8,
+                                    },
+                                });
+                            }
                         });
                 });
 

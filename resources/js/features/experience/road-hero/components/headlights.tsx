@@ -1,21 +1,8 @@
-import * as THREE from 'three';
-
 export function Headlights({ isLight }: { isLight: boolean }) {
     return (
         <group userData={{ asset: 'archive-roadster' }}>
             {[-0.66, 0.66].map((x) => (
                 <group key={x} position={[x, 0.05, -2.18]}>
-                    <mesh rotation-x={Math.PI / 2} position={[0, 0, -3.6]}>
-                        <coneGeometry args={[2.15, 8.4, 32, 1, true]} />
-                        <meshBasicMaterial
-                            color={isLight ? '#fff0bd' : '#ffe0a0'}
-                            transparent
-                            opacity={isLight ? 0.035 : 0.095}
-                            depthWrite={false}
-                            side={THREE.DoubleSide}
-                            blending={THREE.AdditiveBlending}
-                        />
-                    </mesh>
                     <spotLight
                         position={[0, 0, 0]}
                         target-position={[0, -0.8, -15]}
@@ -24,11 +11,17 @@ export function Headlights({ isLight }: { isLight: boolean }) {
                         angle={0.28}
                         penumbra={0.8}
                         decay={1.7}
-                        color="#ffe6ac"
+                        color="#e6e6e6"
+                    />
+                    <pointLight
+                        intensity={isLight ? 2.5 : 5.5}
+                        distance={4.5}
+                        decay={2}
+                        color="#e6e6e6"
                     />
                     <mesh>
                         <cylinderGeometry args={[0.17, 0.17, 0.08, 24]} />
-                        <meshBasicMaterial color="#fff4cc" />
+                        <meshBasicMaterial color="#f4f4f4" />
                     </mesh>
                 </group>
             ))}

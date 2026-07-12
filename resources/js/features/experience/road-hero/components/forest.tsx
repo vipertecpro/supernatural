@@ -67,7 +67,7 @@ export function Forest({
             return;
         }
 
-        const target = (runtime.current.progress * 126) % 7.6;
+        const target = ((runtime.current.distance % 7.6) + 7.6) % 7.6;
         forest.current.position.z = THREE.MathUtils.damp(
             forest.current.position.z,
             target,
@@ -82,14 +82,14 @@ export function Forest({
             <instancedMesh ref={crowns} args={[undefined, undefined, count]}>
                 <coneGeometry args={[1, 1, 7]} />
                 <meshStandardMaterial
-                    color={isLight ? '#33433a' : '#07100d'}
+                    color={isLight ? '#3b3b3b' : '#0a0a0a'}
                     roughness={0.92}
                 />
             </instancedMesh>
             <instancedMesh ref={trunks} args={[undefined, undefined, count]}>
                 <cylinderGeometry args={[1, 1.25, 1, 6]} />
                 <meshStandardMaterial
-                    color={isLight ? '#4b4136' : '#120f0d'}
+                    color={isLight ? '#454545' : '#111111'}
                     roughness={1}
                 />
             </instancedMesh>

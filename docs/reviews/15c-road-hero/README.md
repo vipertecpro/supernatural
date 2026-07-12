@@ -17,6 +17,10 @@ These PNG files are direct captures of the locally rendered, rights-clear proced
 | WebGL-disabled fallback | `webgl-disabled-fallback.png` |
 | Sound control | `sound-control-active.png` |
 | 320px reflow | `mobile-320-reflow.png` |
+| Continuous journey initial state | `continuous-journey-initial.png` |
+| Spirits encounter and case file | `continuous-journey-ghosts.png` |
+| Final car stop and conversion chapter | `continuous-journey-final-stop.png` |
+| Continuous journey mobile case file | `continuous-journey-mobile.png` |
 
 Video recording was unavailable. `motion-00-0ms.png` through `motion-05-2000ms.png` are the six-frame timestamp-like substitute. The in-app browser's synthesized mobile wheel input jumps more coarsely than a physical touch scroll, so the mobile mid-scroll capture represents the later scroll chapter rather than an exact 50% position.
 
@@ -28,7 +32,7 @@ The sound-control capture records the browser harness's off state. Automated Web
 
 ## Validation record
 
-- `php artisan test --compact`: 317 passed, 1,726 assertions.
+- `php artisan test --compact`: 317 passed, 1,757 assertions.
 - `vendor/bin/phpstan analyse`: passed with zero errors.
 - `vendor/bin/pint --format agent`, `vendor/bin/pint`, and `vendor/bin/pint --test`: passed; the agent formatter normalized one test quote.
 - `npm run lint`, `npm run lint:check`, `npm run format`, `npm run format:check`, `npm run types:check`: passed.

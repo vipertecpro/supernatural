@@ -33,8 +33,8 @@ export default function Dashboard() {
                         title="Shell foundation"
                         description="Responsive navigation, semantic surfaces, and reusable states are active."
                     >
-                        <div className="grid gap-4 md:grid-cols-3">
-                            <Card>
+                        <div className="dashboard-motion-grid grid gap-4 md:grid-cols-3">
+                            <Card className="dashboard-motion-card">
                                 <CardHeader>
                                     <Archive className="size-6 text-foreground-evidence" />
                                     <CardTitle>Practical navigation</CardTitle>
@@ -45,7 +45,7 @@ export default function Dashboard() {
                                     </CardDescription>
                                 </CardHeader>
                             </Card>
-                            <Card>
+                            <Card className="dashboard-motion-card">
                                 <CardHeader>
                                     <ShieldCheck className="size-6 text-success" />
                                     <CardTitle>Privacy-conscious</CardTitle>
@@ -55,7 +55,7 @@ export default function Dashboard() {
                                     </CardDescription>
                                 </CardHeader>
                             </Card>
-                            <Card>
+                            <Card className="dashboard-motion-card">
                                 <CardHeader>
                                     <LockKeyhole className="size-6 text-moderation" />
                                     <CardTitle>Explicit contexts</CardTitle>

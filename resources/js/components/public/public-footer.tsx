@@ -37,13 +37,14 @@ export function PublicFooter() {
                 <div className="max-w-sm">
                     <BrandWordmark />
                     <p className="mt-5 text-sm leading-6 text-foreground-secondary">
-                        An original, fandom-neutral foundation for connected
-                        knowledge, private journeys, and safer communities.
+                        An unofficial fan-made companion for Supernatural lore,
+                        episodes, hunts, creatures, private journeys, and safer
+                        community knowledge.
                     </p>
                     <p className="mt-4 text-xs leading-5 text-foreground-muted">
-                        Unofficial project. Not affiliated with or endorsed by
-                        any franchise, studio, creator, cast member, or rights
-                        holder.
+                        Not affiliated with or endorsed by Warner Bros.
+                        Television, The CW, the series creators, cast, or other
+                        rights holders.
                     </p>
                 </div>
                 <FooterGroup

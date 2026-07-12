@@ -32,7 +32,6 @@ export default function PublicMarketingLayout({
     const currentUrl = usePage().url;
     const { visualMode } = useExperience();
     const [scrolled, setScrolled] = useState(false);
-    const isHomepage = currentUrl === '/' || currentUrl.startsWith('/?');
 
     useEffect(() => {
         const update = (): void => setScrolled(window.scrollY > 24);
@@ -52,17 +51,17 @@ export default function PublicMarketingLayout({
                 Skip to content
             </a>
             <OfflineBanner />
-            {!isHomepage && <PublicImmersiveBackdrop url={currentUrl} />}
+            <PublicImmersiveBackdrop url={currentUrl} />
             {hero && (
                 <a href="#archive-opens" className="skip-link skip-intro-link">
                     Skip introduction
                 </a>
             )}
             <header
-                className="public-header sticky top-0 z-40 border-b border-border-subtle bg-background/92 backdrop-blur"
+                className="public-header sticky top-0 z-40"
                 data-scrolled={scrolled}
             >
-                <div className="mx-auto flex h-(--shell-header-height) max-w-(--content-wide) items-center gap-4 px-4 sm:px-6">
+                <div className="public-header-inner mx-auto flex h-(--shell-header-height) max-w-(--content-wide) items-center gap-4 px-4 sm:px-6">
                     <Link
                         href={home()}
                         prefetch

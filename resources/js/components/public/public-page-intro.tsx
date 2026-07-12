@@ -1,23 +1,15 @@
 import type { ReactNode } from 'react';
+import { resolvePublicCollageImages } from '@/features/experience/public-collage-images';
 import type { PublicSceneVariant } from '@/features/experience/public-scene-variants';
 
-function PageGlyph({ variant }: { variant: PublicSceneVariant }) {
-    return (
-        <div
-            className="immersive-page-glyph"
-            data-glyph={variant}
-            aria-hidden="true"
-        >
-            <span className="immersive-glyph-ring immersive-glyph-ring-one" />
-            <span className="immersive-glyph-ring immersive-glyph-ring-two" />
-            <span className="immersive-glyph-ring immersive-glyph-ring-three" />
-            <span className="immersive-glyph-axis immersive-glyph-axis-x" />
-            <span className="immersive-glyph-axis immersive-glyph-axis-y" />
-            <span className="immersive-glyph-core" />
-            <span className="immersive-glyph-code">{variant.slice(0, 3)}</span>
-        </div>
-    );
-}
+const variantLabels: Record<PublicSceneVariant, string> = {
+    archive: 'AR',
+    knowledge: 'KN',
+    system: 'SY',
+    signal: 'SG',
+    boundary: 'BD',
+    rights: 'RT',
+};
 
 export function PublicPageIntro({
     eyebrow,
@@ -38,6 +30,7 @@ export function PublicPageIntro({
         titleWords.slice(0, breakAt).join(' '),
         titleWords.slice(breakAt).join(' '),
     ].filter(Boolean);
+    const heroImage = resolvePublicCollageImages(variant)[0];
 
     return (
         <header className="immersive-page-intro" data-page-variant={variant}>
@@ -61,7 +54,21 @@ export function PublicPageIntro({
                 </p>
                 {children}
             </div>
-            <PageGlyph variant={variant} />
+            <figure className="immersive-page-hero-media">
+                <img
+                    src={heroImage.src}
+                    alt={heroImage.alt ?? ''}
+                    width={heroImage.width}
+                    height={heroImage.height}
+                    decoding="async"
+                    fetchPriority="high"
+                    style={{ objectPosition: heroImage.focalPosition }}
+                />
+                <figcaption>
+                    <span>({variantLabels[variant]})</span>
+                    <span>ARCHIVE / VISUAL RECORD</span>
+                </figcaption>
+            </figure>
             <div className="immersive-page-coordinate" aria-hidden="true">
                 <span>LAT 00.000</span>
                 <span>LON 00.000</span>
@@ -74,14 +81,41 @@ export function PublicPageIntro({
 export function PublicArticleSection({
     title,
     children,
+    image,
 }: {
     title: string;
     children: ReactNode;
+    image?: {
+        src: string;
+        alt?: string;
+        focalPosition?: string;
+    };
 }) {
     return (
-        <section className="public-article-section" data-immersive-section>
-            <h2>{title}</h2>
-            {children}
+        <section
+            className="public-article-section"
+            data-immersive-section
+            data-has-media={Boolean(image)}
+        >
+            <div className="public-article-content">
+                <div className="public-article-metadata" aria-hidden="true">
+                    <span>ARCHIVE RECORD</span>
+                    <span>FIELD NOTE / ACTIVE</span>
+                </div>
+                <h2>{title}</h2>
+                {children}
+            </div>
+            {image ? (
+                <figure className="public-article-media">
+                    <img
+                        src={image.src}
+                        alt={image.alt ?? ''}
+                        loading="lazy"
+                        decoding="async"
+                        style={{ objectPosition: image.focalPosition }}
+                    />
+                </figure>
+            ) : null}
         </section>
     );
 }

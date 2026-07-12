@@ -2,7 +2,7 @@
 
 ## Scene design
 
-The homepage opening is a single, scroll-driven road journey. A procedural roadster begins in a wet conifer corridor, advances through fog and weather, and approaches an original illuminated archive entrance. The title and calls to action are ordinary semantic DOM layered above the decorative Canvas.
+The homepage is one continuous, scroll-driven road journey. A procedural roadster begins in a wet conifer corridor beneath an original atmospheric omen, executes a cornering/U-turn beat, then drives a zigzag pursuit through semantic case-file chapters for spirits, demons, vampires, and unknown entities before braking at the footer approach. The title, case files, and calls to action are ordinary semantic DOM layered above the decorative Canvas.
 
 The implementation is isolated under `resources/js/features/experience/road-hero/`. `RoadScene` composes `Atmosphere`, `Road`, `Forest`, `ArchiveEntrance`, `Vehicle`, `Weather`, and `HeroCamera`. The Canvas is lazy, protected by the existing scene error boundary, and replaced by the same CSS composition for reduced motion, missing WebGL, load failure, or the fallback quality tier.
 
@@ -10,11 +10,11 @@ The implementation is isolated under `resources/js/features/experience/road-hero
 
 No dependency was added. The hero uses the installed React Three Fiber, Three.js, Drei, GSAP/ScrollTrigger, Lenis, and Web Audio stack. Three, React Three Fiber, Drei, Lenis, and Howler are MIT licensed; GSAP uses its standard no-charge licence. Howler remains installed but is not loaded by this hero.
 
-All visual and audio scene inputs are original procedural source. No model, texture, HDRI, image, audio file, episode, trailer, official logo, official symbol, or franchise recording was downloaded. Fontsource supplies Cinzel Decorative and Cormorant Garamond under OFL-1.1, Special Elite under Apache-2.0, and Instrument Sans under OFL-1.1. Full rights metadata and rejected candidates are in `docs/media/15c-road-hero-assets.md` and the typed asset manifest.
+Vehicle, forest, weather, omen, and creature geometry remain original procedural source. The road uses three 1K `Asphalt 01` PBR maps downloaded from Poly Haven under CC0 1.0; exact files, sizes, hashes, source, and fallback metadata are recorded in the asset audit and typed manifest. The supplied Pinterest/CW promotional composition was inspected as mood reference only and is not stored in the repository. No model, HDRI, episode, trailer, official logo, official symbol, soundtrack, or franchise recording was downloaded. Fontsource supplies Cinzel Decorative and Cormorant Garamond under OFL-1.1, Special Elite under Apache-2.0, and Instrument Sans under OFL-1.1.
 
 ## Animation and audio
 
-One ScrollTrigger owns the section progress. Progress 0–0.30 establishes the departure, 0.30–0.65 increases speed and changes copy, and 0.65–1.00 closes on the luminous entrance. Camera position, road recycling, wheel rotation, weather velocity, light intensity, entrance scale, and audio engine pitch consume the same mutable runtime. Cleanup reverts the GSAP context and kills only triggers attached to this section.
+One ScrollTrigger owns the full journey progress. Progress 0–0.18 establishes the continuously moving departure, 0.18–0.30 drives the cornering/U-turn and short stop, 0.30–0.94 drives the zigzag pursuit and four collision/dissolve encounters, and 0.94–1.00 brakes the car at the footer approach. Camera position, lateral vehicle path, road/forest recycling, wheel rotation, weather velocity, encounter visibility, impact dissolution, entrance scale, and audio engine pitch consume the same mutable runtime. Cleanup reverts the GSAP context and kills only triggers attached to this section.
 
 The loader combines `document.fonts.ready` and the Canvas `onCreated` callback, exposes a real progress bar, supports Skip, bypasses reduced mode, and records completion in session storage. Completion focuses the hero title.
 
@@ -28,5 +28,4 @@ Automatic mode maps capable desktop hardware to High, constrained desktop to Med
 
 ## Known visual weaknesses and next improvement
 
-The procedural roadster reads as an original muscle-car silhouette but remains visibly low-detail around the roof, wheel arches, glass, and rear fascia. The forest is intentionally graphic rather than photoreal. Dark-mode mids are slightly crushed, the headlight/fog cones can read as translucent geometry, and the archive entrance is still a simple monolith. The exact next visual pass should improve the roadster silhouette and material breakup, then replace the headlight cones with a softer depth-aware volumetric treatment while keeping the current rights-clear procedural boundary.
-
+The procedural roadster now has separate rear quarters, trunk, fascia, exhausts, glass, wheels, and improved material breakup, but it remains less detailed than a production automotive model. The CC0 asphalt surface is realistic; forest and creatures deliberately remain stylized geometry so collision dissolution stays lightweight and rights-clear. Dark-mode mids can still be lifted, creature silhouettes need another anatomical/detail pass, and the archive entrance remains a simple monolith. The exact next visual pass should replace the procedural vehicle and creature meshes only when exact redistributable model licences and optimized web formats are confirmed.

@@ -1,7 +1,7 @@
 export type RoadHeroAsset = {
     readonly id: string;
     readonly name: string;
-    readonly kind: 'procedural' | 'font';
+    readonly kind: 'procedural' | 'font' | 'texture';
     readonly creator: string;
     readonly sourceUrl: string;
     readonly license: string;
@@ -69,6 +69,35 @@ export const roadHeroAssets = [
         'road-hero-fallback',
     ),
     original(
+        'procedural-omen-sky',
+        'Original atmospheric omen ring',
+        'Three.js emissive geometry',
+        'dark-sky-gradient',
+    ),
+    original(
+        'procedural-creature-encounters',
+        'Ghost, demon, vampire, and wraith encounters',
+        'Three.js geometry and materials',
+        'semantic-case-files',
+    ),
+    {
+        id: 'generated-spectral-runner',
+        name: 'Original spectral runner VFX cutout',
+        kind: 'texture',
+        creator: 'OpenAI image generation for this repository',
+        sourceUrl:
+            'local://public/media/road-journey/generated/spectral-runner-768.png',
+        license: 'Original generated project asset',
+        commercialUsePermitted: true,
+        modificationPermitted: true,
+        attributionRequired: false,
+        repositoryRedistributionPermitted: true,
+        derivative: false,
+        format: 'PNG 512x768 with alpha',
+        sizeBytes: 348667,
+        fallback: 'procedural-spectral-runner',
+    },
+    original(
         'procedural-soundtrack',
         'Procedural soundtrack',
         'Web Audio graph',
@@ -80,6 +109,54 @@ export const roadHeroAssets = [
         'JSX and CSS',
         'semantic-copy',
     ),
+    {
+        id: 'polyhaven-asphalt-01-diffuse',
+        name: 'Asphalt 01 diffuse 1K',
+        kind: 'texture',
+        creator: 'Rob Tuytel / Poly Haven',
+        sourceUrl: 'https://polyhaven.com/a/asphalt_01',
+        license: 'CC0-1.0',
+        commercialUsePermitted: true,
+        modificationPermitted: true,
+        attributionRequired: false,
+        repositoryRedistributionPermitted: true,
+        derivative: false,
+        format: 'JPEG 1024x1024',
+        sizeBytes: 739513,
+        fallback: 'procedural-road-material',
+    },
+    {
+        id: 'polyhaven-asphalt-01-normal',
+        name: 'Asphalt 01 OpenGL normal 1K',
+        kind: 'texture',
+        creator: 'Rob Tuytel / Poly Haven',
+        sourceUrl: 'https://polyhaven.com/a/asphalt_01',
+        license: 'CC0-1.0',
+        commercialUsePermitted: true,
+        modificationPermitted: true,
+        attributionRequired: false,
+        repositoryRedistributionPermitted: true,
+        derivative: false,
+        format: 'JPEG 1024x1024',
+        sizeBytes: 1237059,
+        fallback: 'procedural-road-material',
+    },
+    {
+        id: 'polyhaven-asphalt-01-roughness',
+        name: 'Asphalt 01 roughness 1K',
+        kind: 'texture',
+        creator: 'Rob Tuytel / Poly Haven',
+        sourceUrl: 'https://polyhaven.com/a/asphalt_01',
+        license: 'CC0-1.0',
+        commercialUsePermitted: true,
+        modificationPermitted: true,
+        attributionRequired: false,
+        repositoryRedistributionPermitted: true,
+        derivative: false,
+        format: 'JPEG 1024x1024',
+        sizeBytes: 344964,
+        fallback: 'procedural-road-material',
+    },
     {
         id: 'cinzel-decorative',
         name: 'Cinzel Decorative 700',

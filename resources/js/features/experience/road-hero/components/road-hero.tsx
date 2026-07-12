@@ -9,6 +9,7 @@ import { createRoadHeroRuntime } from '../types';
 import { HeroFallback } from './hero-fallback';
 import { HeroLoader } from './hero-loader';
 import { HeroOverlay } from './hero-overlay';
+import { JourneySections } from './journey-sections';
 
 const RoadScene = lazy(() => import('./road-scene'));
 
@@ -44,23 +45,13 @@ export function RoadHero() {
     }, [resolvedAppearance]);
 
     useEffect(() => {
-        const element = section.current;
+        const heroRuntime = runtime.current;
 
-        if (!element || !('IntersectionObserver' in window)) {
-            return;
-        }
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                runtime.current.active = entry.isIntersecting;
-                experienceAudio.setHeroActive(entry.isIntersecting);
-            },
-            { threshold: 0.05 },
-        );
-        observer.observe(element);
+        heroRuntime.active = true;
+        experienceAudio.setHeroActive(true);
 
         return () => {
-            observer.disconnect();
+            heroRuntime.active = false;
             experienceAudio.setHeroActive(false);
         };
     }, []);
@@ -95,6 +86,7 @@ export function RoadHero() {
                 <div className="road-hero-grain" aria-hidden="true" />
                 <HeroOverlay />
             </div>
+            <JourneySections />
             <HeroLoader sceneReady={sceneReady || !useCanvas} />
         </section>
     );

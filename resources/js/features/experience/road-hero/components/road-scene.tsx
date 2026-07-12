@@ -2,8 +2,10 @@ import { Canvas } from '@react-three/fiber';
 import type { RoadHeroSceneProps } from '../types';
 import { ArchiveEntrance } from './archive-entrance';
 import { Atmosphere } from './atmosphere';
+import { CreatureEncounters } from './creature-encounters';
 import { Forest } from './forest';
 import { HeroCamera } from './hero-camera';
+import { OmenSky } from './omen-sky';
 import { Road } from './road';
 import { Vehicle } from './vehicle';
 import { Weather } from './weather';
@@ -44,10 +46,12 @@ export default function RoadScene({
                 onReady();
             }}
         >
-            <Atmosphere isLight={isLight} />
+            <Atmosphere isLight={isLight} runtime={runtime} />
+            <OmenSky runtime={runtime} />
             <Road runtime={runtime} isLight={isLight} />
             <Forest runtime={runtime} quality={quality} isLight={isLight} />
             <ArchiveEntrance runtime={runtime} isLight={isLight} />
+            <CreatureEncounters runtime={runtime} />
             <Vehicle runtime={runtime} isLight={isLight} />
             <Weather runtime={runtime} quality={quality} isLight={isLight} />
             <HeroCamera runtime={runtime} />

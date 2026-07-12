@@ -53,11 +53,19 @@ export function useRoadHeroScroll(
                                 progress.toFixed(4),
                             );
                             element.dataset.chapter =
-                                progress < 0.3
-                                    ? 'departure'
-                                    : progress < 0.65
-                                      ? 'approach'
-                                      : 'threshold';
+                                progress < 0.18
+                                    ? 'hero'
+                                    : progress < 0.3
+                                      ? 'turn'
+                                      : progress < 0.46
+                                        ? 'ghosts'
+                                        : progress < 0.62
+                                          ? 'demons'
+                                          : progress < 0.78
+                                            ? 'vampires'
+                                            : progress < 0.94
+                                              ? 'wraiths'
+                                              : 'final-stop';
                         },
                     });
 

@@ -6,8 +6,8 @@ import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
@@ -28,14 +28,16 @@ export default function Login({ status, canResetPassword }: Props) {
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
+                className="auth-motion-form flex flex-col gap-6"
             >
                 {({ processing, errors }) => (
                     <>
                         <FormErrorSummary errors={errors} />
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                        <FieldGroup>
+                            <Field data-invalid={Boolean(errors.email)}>
+                                <FieldLabel htmlFor="email">
+                                    Email address
+                                </FieldLabel>
                                 <Input
                                     id="email"
                                     type="email"
@@ -45,13 +47,16 @@ export default function Login({ status, canResetPassword }: Props) {
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="email@example.com"
+                                    aria-invalid={Boolean(errors.email)}
                                 />
                                 <InputError message={errors.email} />
-                            </div>
+                            </Field>
 
-                            <div className="grid gap-2">
+                            <Field data-invalid={Boolean(errors.password)}>
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                    <FieldLabel htmlFor="password">
+                                        Password
+                                    </FieldLabel>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
@@ -69,18 +74,21 @@ export default function Login({ status, canResetPassword }: Props) {
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Password"
+                                    aria-invalid={Boolean(errors.password)}
                                 />
                                 <InputError message={errors.password} />
-                            </div>
+                            </Field>
 
-                            <div className="flex items-center space-x-3">
+                            <Field orientation="horizontal">
                                 <Checkbox
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
-                            </div>
+                                <FieldLabel htmlFor="remember">
+                                    Remember me
+                                </FieldLabel>
+                            </Field>
 
                             <Button
                                 type="submit"
@@ -92,7 +100,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                 {processing && <Spinner />}
                                 Log in
                             </Button>
-                        </div>
+                        </FieldGroup>
 
                         <div className="text-center text-sm text-muted-foreground">
                             Don't have an account?{' '}

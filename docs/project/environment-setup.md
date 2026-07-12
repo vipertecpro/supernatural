@@ -34,6 +34,7 @@ Laravel Herd serves the repository without running `php artisan serve`. The defa
 - Reverb/broadcasting: `BROADCAST_CONNECTION`, server/app/origin/rate-limit variables, `VITE_REVERB_*`
 - Octane/FrankenPHP: `OCTANE_SERVER`, `OCTANE_HTTPS`
 - Logging/storage: `LOG_*`, `FILESYSTEM_DISK`, optional AWS variables
+- Media: `MEDIA_QUARANTINE_DISK` (private disk, default `local`) and `MEDIA_MAX_UPLOAD_KILOBYTES` (default 10240)
 
 Only configuration files may call `env()`. Application code reads `config()` so configuration caching remains safe.
 
@@ -66,3 +67,5 @@ Rebuild caches and restart Octane/queue/Reverb workers after configuration chang
 - Broadcasts do not arrive: confirm both Reverb and a queue worker are running for queued events.
 - FrankenPHP serves stale code: restart/reload Octane workers.
 - Generated route types are stale: run `php artisan wayfinder:generate --with-form --no-interaction` or rebuild through Vite.
+- Search results are stale: run `php artisan search:rebuild --dry-run`, then a normal bounded rebuild; add `--prune` only when explicit derived-row deletion is intended.
+- Media publication is blocked: verify moderation/processing states and the current unexpired Source rights decision for `hosting` or `embedding`; never bypass unknown rights.

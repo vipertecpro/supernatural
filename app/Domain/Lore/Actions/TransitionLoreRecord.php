@@ -11,6 +11,8 @@ use App\Enums\PublicationStatus;
 use App\Enums\SpoilerClassificationStatus;
 use App\Events\LoreEntityPublished;
 use App\Events\LoreRelationshipPublished;
+use App\Events\SearchProjectionRemovalRequested;
+use App\Events\SearchProjectionRequested;
 use App\Events\TimelinePublished;
 use App\Models\EntityAppearance;
 use App\Models\LoreAlias;
@@ -47,6 +49,7 @@ class TransitionLoreRecord
                 $locked instanceof Timeline => TimelinePublished::dispatch($locked->id, $actor->id),
                 default => null,
             };
+            SearchProjectionRequested::dispatch($locked->getMorphClass(), (int) $locked->getKey());
 
             return $locked->fresh();
         });
@@ -60,6 +63,7 @@ class TransitionLoreRecord
             $status = $locked instanceof LoreRelationship ? LoreRelationshipStatus::Archived : PublicationStatus::Archived;
             $locked->update(['status' => $status, 'archived_at' => now(), 'updated_by' => $actor->id, 'lock_version' => $expectedVersion + 1, ...($locked->isFillable('visibility') ? ['visibility' => LoreVisibility::Restricted] : [])]);
             $this->auditLogger->record('lore.'.str($locked::class)->classBasename()->snake().'_archived', $locked, ['status' => 'archived', 'version' => $expectedVersion + 1], $actor);
+            SearchProjectionRemovalRequested::dispatch($locked->getMorphClass(), (int) $locked->getKey());
 
             return $locked->fresh();
         });

@@ -5,6 +5,8 @@ namespace App\Domain\Catalog\Actions;
 use App\Domain\Catalog\Exceptions\InvalidCatalogOperation;
 use App\Domain\Editorial\Exceptions\OptimisticLockConflict;
 use App\Enums\PublicationStatus;
+use App\Events\SearchProjectionRemovalRequested;
+use App\Events\SearchProjectionRequested;
 use App\Models\Episode;
 use App\Models\Franchise;
 use App\Models\Season;
@@ -49,6 +51,7 @@ class TransitionCatalogRecord
                 metadata: ['status' => PublicationStatus::Published->value],
                 actor: $actor,
             );
+            SearchProjectionRequested::dispatch($record->getMorphClass(), (int) $record->getKey());
 
             return $record->fresh();
         });
@@ -83,6 +86,7 @@ class TransitionCatalogRecord
                 metadata: ['status' => PublicationStatus::Archived->value],
                 actor: $actor,
             );
+            SearchProjectionRemovalRequested::dispatch($record->getMorphClass(), (int) $record->getKey());
 
             return $record->fresh();
         });

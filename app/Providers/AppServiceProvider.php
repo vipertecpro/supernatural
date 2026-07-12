@@ -3,19 +3,33 @@
 namespace App\Providers;
 
 use App\Enums\PermissionName;
+use App\Events\EditorialRevisionApplied;
+use App\Events\LoreEntityPublished;
+use App\Events\SearchProjectionRemovalRequested;
+use App\Events\SearchProjectionRequested;
+use App\Events\TimelinePublished;
+use App\Listeners\RefreshSearchProjection;
 use App\Models\AuditLog;
 use App\Models\Citation;
 use App\Models\ContentLicense;
 use App\Models\EditorialRevision;
 use App\Models\EntityAppearance;
 use App\Models\Episode;
+use App\Models\ExternalEmbed;
 use App\Models\Franchise;
 use App\Models\LoreAlias;
 use App\Models\LoreEntity;
 use App\Models\LoreEntityTranslation;
 use App\Models\LoreRelationship;
+use App\Models\MediaAsset;
+use App\Models\MediaAttachment;
+use App\Models\MediaProcessingJob;
+use App\Models\MediaVariant;
 use App\Models\RevisionBlock;
 use App\Models\RevisionItem;
+use App\Models\SearchDocument;
+use App\Models\SearchQuery;
+use App\Models\SearchSuggestion;
 use App\Models\Season;
 use App\Models\Source;
 use App\Models\SourceRightsReview;
@@ -23,6 +37,7 @@ use App\Models\SpoilerBoundary;
 use App\Models\SpoilerConstraint;
 use App\Models\Timeline;
 use App\Models\TimelineEntry;
+use App\Models\TrendingSnapshot;
 use App\Models\Universe;
 use App\Models\User;
 use App\Models\Work;
@@ -32,10 +47,13 @@ use App\Policies\ContentLicensePolicy;
 use App\Policies\EditorialRevisionPolicy;
 use App\Policies\EntityAppearancePolicy;
 use App\Policies\EpisodePolicy;
+use App\Policies\ExternalEmbedPolicy;
 use App\Policies\FranchisePolicy;
 use App\Policies\LoreAliasPolicy;
 use App\Policies\LoreEntityPolicy;
 use App\Policies\LoreRelationshipPolicy;
+use App\Policies\MediaAssetPolicy;
+use App\Policies\MediaAttachmentPolicy;
 use App\Policies\SeasonPolicy;
 use App\Policies\SourcePolicy;
 use App\Policies\SourceRightsReviewPolicy;
@@ -51,6 +69,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -75,6 +94,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureMorphMap();
         $this->configureAuthorization();
         $this->configureRateLimiting();
+        $this->configureSearchProjectionListeners();
     }
 
     /** Keep polymorphic persistence stable across PHP namespace changes. */
@@ -104,6 +124,15 @@ class AppServiceProvider extends ServiceProvider
             'lore_relationship' => LoreRelationship::class,
             'timeline' => Timeline::class,
             'timeline_entry' => TimelineEntry::class,
+            'media_asset' => MediaAsset::class,
+            'media_variant' => MediaVariant::class,
+            'external_embed' => ExternalEmbed::class,
+            'media_attachment' => MediaAttachment::class,
+            'media_processing_job' => MediaProcessingJob::class,
+            'search_document' => SearchDocument::class,
+            'search_suggestion' => SearchSuggestion::class,
+            'trending_snapshot' => TrendingSnapshot::class,
+            'search_query' => SearchQuery::class,
         ]);
     }
 
@@ -141,6 +170,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(LoreAlias::class, LoreAliasPolicy::class);
         Gate::policy(LoreEntity::class, LoreEntityPolicy::class);
         Gate::policy(LoreRelationship::class, LoreRelationshipPolicy::class);
+        Gate::policy(MediaAsset::class, MediaAssetPolicy::class);
+        Gate::policy(ExternalEmbed::class, ExternalEmbedPolicy::class);
+        Gate::policy(MediaAttachment::class, MediaAttachmentPolicy::class);
         Gate::policy(Season::class, SeasonPolicy::class);
         Gate::policy(Source::class, SourcePolicy::class);
         Gate::policy(SourceRightsReview::class, SourceRightsReviewPolicy::class);
@@ -171,5 +203,17 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute((int) config('api.public_rate_limit_per_minute', 30))
                 ->by((string) $request->ip());
         });
+    }
+
+    /** Register synchronous idempotent projection consumers for after-commit events. */
+    protected function configureSearchProjectionListeners(): void
+    {
+        Event::listen([
+            SearchProjectionRequested::class,
+            SearchProjectionRemovalRequested::class,
+            LoreEntityPublished::class,
+            TimelinePublished::class,
+            EditorialRevisionApplied::class,
+        ], RefreshSearchProjection::class);
     }
 }

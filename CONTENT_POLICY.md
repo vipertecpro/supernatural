@@ -12,6 +12,8 @@ This foundation policy is not a substitute for legal review. It defines the mini
 - Do not rehost episodes, music, protected video, fonts, logos, or other copyrighted media without explicit rights.
 - Do not copy or publish full transcripts or substantial protected text. Short quotations must be justified, attributed, and limited.
 - Never scrape or bulk-ingest third-party sites without an approved technical, legal, and provider-policy review.
+- Hosted uploads remain private until file validation, moderation, attribution, and intended-use rights succeed. Provider embedding permission never grants hosting or download permission.
+- Search projections may contain only approved public bounded text; they must be removed when source publication, rights, moderation, takedown, or spoiler visibility no longer permits discovery.
 
 ## User-Submitted and Community Content
 

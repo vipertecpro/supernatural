@@ -92,3 +92,7 @@ Prompt 5 implements the canonical Editorial tables `editorial_revisions`, `revis
 ## Prompt 6 implemented Lore subset
 
 Prompt 6 implements all 19 Lore inventory tables. `timelines` is the minimal parent correction required by the previously reserved `timeline_entries`, named timeline API resources, and accepted Lore behavior. Existing citations and spoiler constraints attach through stable morph aliases; no duplicate evidence or spoiler table is introduced.
+
+## Prompt 7 implemented Media and Search subset
+
+Prompt 7 implements all five canonical Media tables and all four canonical Search tables. Media assets/embeds/attachments are authoritative Media records; variants and processing jobs are derived lifecycle records. Every Search table is derived or privacy-minimized analytics input and may be rebuilt/pruned without mutating Catalog, Lore, or Media. No table name or inventory count changed.

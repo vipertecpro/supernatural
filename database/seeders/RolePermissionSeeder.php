@@ -45,6 +45,10 @@ class RolePermissionSeeder extends Seeder
                 PermissionName::LoreRelationshipsCreate,
                 PermissionName::LoreTimelinesCreate,
                 PermissionName::LoreTimelinesUpdate,
+                PermissionName::MediaViewDrafts,
+                PermissionName::MediaCreate,
+                PermissionName::MediaUpdateOwnDrafts,
+                PermissionName::MediaAttach,
             ],
             RoleName::Moderator->value => [
                 PermissionName::DashboardAccess,

@@ -23,3 +23,9 @@ erDiagram
     CONTENT_LICENSES o|--o{ MEDIA_ASSETS : governs
     SEARCH_DOCUMENTS }o--|| UNIVERSES : scopes
 ```
+
+## Prompt 7 implementation
+
+The five Media and four Search inventory tables are implemented without an external dependency. Uploads enter the private configured disk with server-owned keys and validation; variants/processing remain lifecycle-only. Provider URLs are parsed locally through the YouTube/Vimeo/Spotify/SoundCloud allowlist and never fetched. Media publication requires explicit moderation plus independent effective rights.
+
+Relational projections cover public universe, franchise, work, season, episode, Lore entity, and timeline records with published locale rows and safe aliases. After-commit scalar-ID events refresh/remove projections idempotently. `search:rebuild` provides bounded dry-run/upsert/prune reconciliation. Matching is portable normalized token/title ranking; no typo tolerance or semantic search is claimed. Raw query text and user identity are not stored.

@@ -5,12 +5,16 @@ use App\Http\Controllers\Api\V1\EditorialReviewController;
 use App\Http\Controllers\Api\V1\EditorialRevisionController;
 use App\Http\Controllers\Api\V1\EntityAppearanceController;
 use App\Http\Controllers\Api\V1\EpisodeController;
+use App\Http\Controllers\Api\V1\ExternalEmbedController;
 use App\Http\Controllers\Api\V1\FranchiseController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\LoreAliasController;
 use App\Http\Controllers\Api\V1\LoreEntityController;
 use App\Http\Controllers\Api\V1\LoreRelationshipController;
 use App\Http\Controllers\Api\V1\MeController;
+use App\Http\Controllers\Api\V1\MediaAssetController;
+use App\Http\Controllers\Api\V1\MediaAttachmentController;
+use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\SeasonController;
 use App\Http\Controllers\Api\V1\SourceRightsReviewController;
 use App\Http\Controllers\Api\V1\SpoilerBoundaryController;
@@ -18,6 +22,7 @@ use App\Http\Controllers\Api\V1\TimelineController;
 use App\Http\Controllers\Api\V1\TimelineEntryController;
 use App\Http\Controllers\Api\V1\WorkController;
 use App\Http\Controllers\Api\V1\WorkTranslationController;
+use App\Http\Middleware\ResolveOptionalSanctumUser;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->group(function () {
@@ -29,7 +34,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         ->middleware(['auth:sanctum', 'verified', 'throttle:api-v1'])
         ->name('me');
 
-    Route::middleware('throttle:api-v1-public')->scopeBindings()->group(function () {
+    Route::middleware(['throttle:api-v1-public', ResolveOptionalSanctumUser::class])->scopeBindings()->group(function () {
         Route::get('universes/{universe}/franchises', [FranchiseController::class, 'index'])->name('universes.franchises.index');
         Route::get('franchises/{franchise}', [FranchiseController::class, 'show'])->name('franchises.show');
         Route::get('universes/{universe}/works', [WorkController::class, 'index'])->name('universes.works.index');
@@ -47,9 +52,26 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('universes/{universe}/timelines', [TimelineController::class, 'index'])->name('universes.timelines.index');
         Route::get('timelines/{timeline}', [TimelineController::class, 'show'])->name('timelines.show');
         Route::get('timelines/{timeline}/entries', [TimelineEntryController::class, 'index'])->name('timelines.entries.index');
+        Route::get('search', [SearchController::class, 'index'])->name('search.index');
+        Route::get('search/suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
+        Route::get('discovery/related/{type}/{id}', [SearchController::class, 'related'])->whereNumber('id')->name('discovery.related');
+        Route::get('media/assets/{asset}', [MediaAssetController::class, 'show'])->name('media.assets.show');
+        Route::get('media/embeds/{embed}', [ExternalEmbedController::class, 'show'])->name('media.embeds.show');
+        Route::get('media/attachments/{targetType}/{targetId}', [MediaAttachmentController::class, 'index'])->whereNumber('targetId')->name('media.attachments.index');
     });
 
     Route::middleware(['auth:sanctum', 'verified', 'throttle:api-v1'])->scopeBindings()->group(function () {
+        Route::post('media/assets', [MediaAssetController::class, 'store'])->name('media.assets.store');
+        Route::patch('media/assets/{asset}', [MediaAssetController::class, 'update'])->name('media.assets.update');
+        Route::post('media/assets/{asset}/publish', [MediaAssetController::class, 'publish'])->name('media.assets.publish');
+        Route::post('media/assets/{asset}/archive', [MediaAssetController::class, 'archive'])->name('media.assets.archive');
+        Route::post('media/embeds', [ExternalEmbedController::class, 'store'])->name('media.embeds.store');
+        Route::patch('media/embeds/{embed}', [ExternalEmbedController::class, 'update'])->name('media.embeds.update');
+        Route::post('media/embeds/{embed}/publish', [ExternalEmbedController::class, 'publish'])->name('media.embeds.publish');
+        Route::post('media/embeds/{embed}/archive', [ExternalEmbedController::class, 'archive'])->name('media.embeds.archive');
+        Route::post('media/attachments', [MediaAttachmentController::class, 'store'])->name('media.attachments.store');
+        Route::post('media/attachments/{attachment}/publish', [MediaAttachmentController::class, 'publish'])->name('media.attachments.publish');
+        Route::delete('media/attachments/{attachment}', [MediaAttachmentController::class, 'destroy'])->name('media.attachments.destroy');
         Route::post('universes/{universe}/franchises', [FranchiseController::class, 'store'])->name('universes.franchises.store');
         Route::patch('franchises/{franchise}', [FranchiseController::class, 'update'])->name('franchises.update');
         Route::post('franchises/{franchise}/publish', [FranchiseController::class, 'publish'])->name('franchises.publish');

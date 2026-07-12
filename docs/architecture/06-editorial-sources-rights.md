@@ -38,3 +38,7 @@ The Catalog slice now implements revision metadata, field-registry scalar items,
 ## Prompt 6 implementation
 
 Lore entities, translations, aliases, appearances, relationships, timelines, and timeline entries are added to the existing revision and citation allowlists. The field registry exposes only approved Lore content fields and application revalidates Lore/Catalog ownership inside the existing row-locked transaction. Relationship citations use the existing `citations` and `citation_sources`; tri-state rights history remains unchanged and no relationship-evidence source duplicate is created.
+
+## Prompt 7 implementation
+
+Media publication reuses `source_rights_reviews`: licensed hosted assets require current `hosting=allowed`; external embeds require current `embedding=allowed`; expiry, unknown, and prohibited deny. Original project/user-owned origins record their hosting basis without fabricating a Source permission. Moderation and rights authority remain separate, private legal notes are not serialized, and no second rights table was created.

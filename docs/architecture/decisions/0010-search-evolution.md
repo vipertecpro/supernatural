@@ -8,3 +8,7 @@
 - Security implications: index only approved text and enforce visibility/spoiler filters both at indexing and query time.
 - Migration implications: search documents can be reindexed from source tables and later synchronized through Scout.
 - Future review conditions: p95 search over 300 ms at expected load, more than one million public documents, or required typo/facet/relevance quality unattainable in MySQL.
+
+## Prompt 7 implementation note
+
+Implemented portable relational token matching and deterministic title weighting over bounded candidates. SQLite/MySQL use the same correctness path; a future MySQL FULLTEXT optimization must retain it as fallback. Projections are locale-specific, source-versioned, event-refreshed, manually rebuildable, spoiler-filtered before pagination, and contain no raw source model serialization. No Scout or search vendor was added.

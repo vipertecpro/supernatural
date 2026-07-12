@@ -121,3 +121,24 @@ Implemented and verified within the relational Lore boundary.
 ### Consequence
 
 The backend now has a governed multi-universe Lore source of truth. Prompt 7 may consume published Lore events or IDs but must preserve the established module boundary and deferred search/media decisions.
+
+## 2026-07-12 — Prompt 7 Media and relational Search/Discovery
+
+### Status
+
+Implemented and verified within the Phase 4 boundary.
+
+### Decisions
+
+- Implement the exact five Media and four Search inventory tables; Catalog/Lore remain authoritative and every Search row remains rebuildable.
+- Admit actual uploads only to the private configured quarantine disk with server keys, MIME/extension/size/image validation, checksums, and private-by-default state. Transformation, signed delivery, malware integration, and cloud-provider selection remain deferred.
+- Keep hosted assets and external embeds separate. Allow only configured YouTube, Vimeo, Spotify, and SoundCloud HTTPS URLs, generate trusted embed URLs locally, and never fetch/download remote content.
+- Reuse Source tri-state rights independently: licensed hosting requires `hosting=allowed`; embeds require `embedding=allowed`; unknown/prohibited/expired deny.
+- Restrict attachments to stable Catalog/Lore morph aliases, one media source, same-universe targets, deterministic ordering, public compatible lifecycle, and backend spoiler filtering.
+- Project published universe/franchise/work/season/episode/Lore entity/timeline sources into locale-specific relational documents after commit. Source events are scalar-ID, idempotent, non-broadcast, and synchronous while work remains bounded.
+- Use portable normalized token/title ranking with safe alias/summaries and source-resolved spoiler filtering before pagination. Do not claim typo tolerance or semantic search.
+- Store Search interaction input only as HMAC query hash, length, public filter/locale, coarse result bucket, and time. Trending publication waits for approved retention/abuse/minimum-sample operations.
+
+### Consequence
+
+Prompt 8 should implement only the next User Journey phase, expand viewing sessions/orders/preferences as approved, and reuse Search/Spoiler contracts. Community, moderation, notifications, messaging, and external search remain later phases.

@@ -109,3 +109,13 @@ This append-only section records the bounded Catalog implementation.
 | Editorial revisions | Implemented for Catalog and Lore | Existing registry, reviews, citations, rights checks, transactions and conflicts now accept approved Lore targets. | Schedule automation, reconstruction tooling and UI. |
 | Spoiler engine | Implemented for Catalog and Lore API | Target-aware relationship redaction and hidden alias/appearance/edge/entry filtering reuse normalized boundaries and viewer context. | Search/notification/community consumers and richer viewing sessions. |
 | API | Partially present | Public and verified Lore/timeline routes extend the v1 contract with one-hop bounded traversal and stable domain errors. | Remaining product modules, SDK and public/admin frontend. |
+
+## Prompt 7 reassessment — 2026-07-12
+
+| Module | Updated status | Prompt 7 result | Still deferred |
+| --- | --- | --- | --- |
+| Hosted Media | Implemented backend foundation | Private quarantine admission, safe metadata, rights/moderation/version lifecycle, variants/processing schema, policies/API/audit/tests. | Signed delivery, malware review, transformations, cloud storage, takedown records, UI. |
+| External embeds | Implemented backend foundation | Four-provider HTTPS allowlist, local ID/embed normalization, independent embedding rights, no fetch/download/HTML. | Provider availability jobs, additional providers after policy review. |
+| Media attachments | Implemented backend foundation | Allowlisted Catalog/Lore morph targets, one-source/universe/duplicate/primary/order/public/spoiler controls. | Gallery/admin UI and richer revision workflow. |
+| Search projections | Implemented relational foundation | Locale-specific rebuildable public documents/suggestions, after-commit refresh/removal, source versions, command reconciliation. | External engine until ADR thresholds; scheduled reconciliation. |
+| Search API | Implemented first generation | Bounded token/title ranking, filters, safe cursor, backend spoiler filtering, suggestions, related discovery, hashed aggregate input. | Typo/semantic search, advanced facets, public trending until privacy thresholds. |

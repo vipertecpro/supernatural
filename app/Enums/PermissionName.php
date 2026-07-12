@@ -44,6 +44,18 @@ enum PermissionName: string
     case LoreTimelinesCreate = 'lore.timelines.create';
     case LoreTimelinesUpdate = 'lore.timelines.update';
     case LoreTimelinesPublish = 'lore.timelines.publish';
+    case MediaViewDrafts = 'media.view-drafts';
+    case MediaCreate = 'media.create';
+    case MediaUpdateOwnDrafts = 'media.update-own-drafts';
+    case MediaAttach = 'media.attach';
+    case MediaReview = 'media.review';
+    case MediaPublish = 'media.publish';
+    case MediaArchive = 'media.archive';
+    case MediaRightsReview = 'media.rights-review';
+    case MediaModerate = 'media.moderate';
+    case SearchRebuild = 'search.rebuild';
+    case SearchInspectProjections = 'search.inspect-projections';
+    case SearchManage = 'search.manage';
 
     /**
      * Get the human-readable permission label.

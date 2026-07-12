@@ -57,3 +57,7 @@ Phase 2 is implemented for Catalog targets only: attributable revisions and deci
 ## Prompt 6 completion note
 
 Phase 3 is implemented as the 19-table relational Lore foundation, reusing Prompt 5 revisions, citations, rights, spoiler decisions, optimistic locking, audit, and permissions. The missing named `timelines` inventory root was corrected without broad redesign. Prompt 7 may begin only the next approved phase after this diff is reviewed; it must not duplicate Lore evidence, search, or media infrastructure.
+
+## Prompt 7 completion note
+
+Phase 4 is implemented as the rights-aware private-quarantine Media foundation and nine-table relational Media/Search slice. Search consumes committed Catalog/Lore facts into rebuildable locale projections and enforces source publication and spoiler decisions before pagination. Prompt 8 may begin only the next approved User Journey phase after review; it must reuse the current minimal progress/spoiler contract and must not begin Community or other later phases.

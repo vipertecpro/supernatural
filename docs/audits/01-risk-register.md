@@ -100,3 +100,16 @@ This append-only section records architecture-phase risks. Prompt 3 changed no a
 | R-043 | Open — Medium | Cursor pages filter hidden candidates after retrieval, so a page may contain fewer safe rows than requested. It leaks no total, but a future query projection should prefilter spoiler reachability for dense hidden sets. |
 | R-044 | Accepted/deferred — Low | Relational one-hop traversal is intentionally bounded. Recursive traversal, graph analytics and a graph database require measured latency/scale evidence under ADR 0005. |
 | R-045 | Open — High | Exact rights/takedown/dual-review policy remains an owner/legal decision. Lore citation enforcement does not grant hosting or derivative rights. |
+
+## Prompt 7 reassessment — 2026-07-12
+
+| ID | Status / severity | Media/Search consequence and mitigation |
+| --- | --- | --- |
+| R-027 | Resolved baseline | Prompt 5 and Prompt 6 were committed together at `d176086`; Prompt 7 began from a clean tree and remains intentionally uncommitted. |
+| R-043 | Mitigated — Low | Search resolves sources and removes hidden results before its own bounded cursor slice, avoiding the earlier sparse-page/count issue. Other Catalog/Lore list endpoints retain their prior bounded post-filter behavior. |
+| R-045 | Open — High | Owner/legal approval is still required for exact ownership assertions, licenses, takedown restoration, dual review, and provider terms. Code does not constitute legal advice. |
+| R-046 | Open — High | Quarantine validates format/metadata but has no malware scanner or decompression pipeline. Keep files private and do not launch public binary delivery until an approved scanner and operations process exist. |
+| R-047 | Open — Medium | Storage/database transactions cannot atomically commit together; the create action deletes the stored object on DB failure, but worker crashes may leave orphans. Add periodic private-storage reconciliation before production uploads. |
+| R-048 | Mitigated — Medium | Relational ranking is bounded to 250 candidates and has no typo tolerance. Observe p95 and quality; adopt Scout/engine only at ADR 0010 thresholds. |
+| R-049 | Open — Medium | Search query hashes and trending snapshots need an approved retention/pruning schedule, minimum sample threshold, and abuse filtering before production analytics/trending publication. |
+| R-050 | Accepted/deferred — Low | Media processing/variants are lifecycle records only. No derivatives are generated until format-specific security, resource, and licensing controls are approved. |

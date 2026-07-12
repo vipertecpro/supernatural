@@ -50,3 +50,7 @@ Legacy severity data is preserved through the explicit `mild → minor` and `cri
 ## Prompt 6 implementation
 
 Lore entities, translations, aliases, appearances, relationships, timelines, and entries use stable spoiler morph aliases and the existing backend decision service. Public resources redact protected Lore text, remove hidden children before output, and separately evaluate relationship targets so identity and edge counts do not reveal hidden nodes. Search indexing remains deferred.
+
+## Prompt 7 implementation
+
+Search documents store only identity-safe title data and approved summary/alias text plus normalized severity/boundary metadata. Query and suggestion services resolve the authoritative source and apply the existing viewer decision before pagination; hidden rows/counts and hidden aliases are absent. Media attachments opt into the stable spoiler morph map and public lists conservatively exclude redacted/hidden attachments before nested media serialization.

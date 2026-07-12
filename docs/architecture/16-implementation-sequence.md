@@ -65,3 +65,7 @@ Phase 4 is implemented as the rights-aware private-quarantine Media foundation a
 ## Prompt 8 completion note
 
 Phase 5 implements Catalog viewing orders plus the owner-private User Journey lifecycle, current/historical progress, sessions, rewatches, continue watching, watchlists, favourites, ratings, notes, typed preferences, spoiler knowledge, Search query-time personalization, API v1, deletion behavior, factories, and tests. Prompt 9 may begin only the approved Phase 6 moderation/notification minimum after review; it must consume scalar journey events without exposing personal history and must not begin Community.
+
+## Prompt 9 completion note
+
+Phase 6 implements controlled reports/evidence, cases/assignments/actions, Identity and content restrictions, appeals/decisions, explicit existing-module enforcement, stable recipient/versioned notification records, preferences, in-app/email attempts, spoiler-safe rendering, queued scalar event consumers, API v1, deletion behavior, factories, and tests. Community remains Phase 7 and may begin only after owner review of this uncommitted diff; it must use these report/restriction interfaces without expanding into Messaging.

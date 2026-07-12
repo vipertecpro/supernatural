@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasModerationRestrictions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\DatePrecision;
 use App\Enums\PublicationStatus;
@@ -29,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Season extends Model
 {
     /** @use HasFactory<SeasonFactory> */
-    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasModerationRestrictions, HasSpoilerConstraints;
 
     /** @return BelongsTo<Work, $this> */
     public function work(): BelongsTo
@@ -58,7 +59,8 @@ class Season extends Model
                 ->whereNull('archived_at')
                 ->whereHas('universe', fn (Builder $universe) => $universe
                     ->where('status', PublicationStatus::Published)
-                    ->where('is_public', true)));
+                    ->where('is_public', true)))
+            ->withoutActivePublicRestriction();
     }
 
     /** @return array<string, string> */

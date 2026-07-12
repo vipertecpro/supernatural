@@ -100,3 +100,7 @@ Prompt 7 implements all five canonical Media tables and all four canonical Searc
 ## Prompt 8 implemented User Journey subset
 
 Prompt 8 implements Catalog-owned `viewing_orders` and `viewing_order_items`; adds `user_viewing_journeys`, `viewing_sessions`, `viewing_progress_events`, `rewatch_cycles`, `watchlists`, `watchlist_items`, `ratings`, `favourites`, `personal_notes`, and `user_fandom_preferences`; and evolves existing `viewing_progress` and `user_spoiler_preferences` in place. The User Journey inventory remains 12 by replacing the previously deferred saved-theory/activity/recap reservations with the approved journey/progress-history/rewatch roots. No existing row is dropped.
+
+## Prompt 9 implemented Moderation and Notification subset
+
+Prompt 9 implements Identity-owned `user_restrictions` and `user_restriction_scopes`; Moderation-owned `report_categories`, `reports`, `report_evidence`, `moderation_cases`, `moderation_case_assignments`, `moderation_actions`, `content_restrictions`, `appeals`, and `appeal_decisions`; and Notification-owned `notifications`, `notification_preferences`, and `notification_deliveries`. Stable notification types are code-controlled. Reserved `copyright_notices`, `trust_signals`, `digest_preferences`, and `push_devices` remain unimplemented because public legal intake, trust automation, digests, and push are outside Phase 6. No existing table or row is removed.

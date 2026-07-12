@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HasModerationRestrictions;
 use App\Enums\ExternalMediaProvider;
 use App\Enums\MediaKind;
 use App\Enums\MediaModerationStatus;
@@ -43,7 +44,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ExternalEmbed extends Model
 {
     /** @use HasFactory<ExternalEmbedFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasModerationRestrictions, SoftDeletes;
 
     protected $fillable = ['owner_user_id', 'universe_id', 'source_id', 'content_license_id', 'provider', 'provider_content_id', 'canonical_url', 'embed_url', 'kind', 'title', 'description', 'thumbnail_url', 'creator', 'publisher', 'attribution_text', 'status', 'moderation_status', 'visibility', 'provider_metadata', 'published_at', 'archived_at', 'takedown_at', 'lock_version', 'created_by', 'updated_by'];
 
@@ -83,7 +84,7 @@ class ExternalEmbed extends Model
      */
     public function scopeVisibleToPublic(Builder $query): Builder
     {
-        return $query->where('status', MediaStatus::Published)->where('moderation_status', MediaModerationStatus::Approved)->where('visibility', MediaVisibility::Public)->whereNull('archived_at')->whereNull('takedown_at');
+        return $query->where('status', MediaStatus::Published)->where('moderation_status', MediaModerationStatus::Approved)->where('visibility', MediaVisibility::Public)->whereNull('archived_at')->whereNull('takedown_at')->withoutActivePublicRestriction();
     }
 
     protected function casts(): array

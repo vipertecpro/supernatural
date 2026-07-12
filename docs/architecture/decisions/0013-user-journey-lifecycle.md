@@ -8,3 +8,5 @@
 - Security implications: no public personal route, no user ID input, no private state in Search projections, and no device fingerprint collection.
 - Migration implications: preserve both existing tables, backfill deterministic legacy scope keys, and refuse lossy rollback when richer scopes cannot fit the old unique constraint.
 - Future review conditions: approved public profile projections, an export endpoint, production retention/legal hold, or measured need for a dedicated continue-watching projection.
+
+Prompt 9 consumes only `ViewingJourneyCompleted` and `RewatchCycleCompleted` for owner notifications. It does not consume progress/session events, query private history, copy Journey data into cases, or broadcast personal activity.

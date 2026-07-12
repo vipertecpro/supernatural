@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasModerationRestrictions;
 use App\Enums\PublicationStatus;
 use Carbon\CarbonImmutable;
 use Database\Factories\FranchiseFactory;
@@ -23,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Franchise extends Model
 {
     /** @use HasFactory<FranchiseFactory> */
-    use HasEditorialRevisions, HasFactory;
+    use HasEditorialRevisions, HasFactory, HasModerationRestrictions;
 
     /** @return BelongsTo<Universe, $this> */
     public function universe(): BelongsTo
@@ -60,7 +61,8 @@ class Franchise extends Model
             ->whereNull('archived_at')
             ->whereHas('universe', fn (Builder $universe) => $universe
                 ->where('status', PublicationStatus::Published)
-                ->where('is_public', true));
+                ->where('is_public', true))
+            ->withoutActivePublicRestriction();
     }
 
     /** @return array<string, string> */

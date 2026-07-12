@@ -29,7 +29,7 @@ class TimelineEntryController extends Controller
         }
         $query = $timeline->entries()->with(['entities', 'spoilerConstraints.boundaries']);
         if (! $request->user()?->can('viewAny', TimelineEntry::class)) {
-            $query->where('status', PublicationStatus::Published)->whereNull('archived_at');
+            $query->where('status', PublicationStatus::Published)->whereNull('archived_at')->withoutActivePublicRestriction();
         }
         $paginator = $query->cursorPaginate($request->pageSize());
         $items = collect($paginator->items())->reject(fn (TimelineEntry $entry): bool => app(SpoilerVisibilityService::class)->decide($entry, $request->user()) === SpoilerVisibility::Hidden)->values();
@@ -39,7 +39,7 @@ class TimelineEntryController extends Controller
 
     public function forEntity(LoreIndexRequest $request, LoreEntity $entity): JsonResponse
     {
-        $query = TimelineEntry::query()->with(['timeline', 'entities', 'spoilerConstraints.boundaries'])->whereHas('entities', fn ($entities) => $entities->whereKey($entity->id))->whereHas('timeline', fn ($timelines) => $timelines->where('status', PublicationStatus::Published)->where('visibility', 'public')->whereNull('archived_at'))->where('status', PublicationStatus::Published)->whereNull('archived_at');
+        $query = TimelineEntry::query()->with(['timeline', 'entities', 'spoilerConstraints.boundaries'])->whereHas('entities', fn ($entities) => $entities->whereKey($entity->id))->whereHas('timeline', fn ($timelines) => $timelines->where('status', PublicationStatus::Published)->where('visibility', 'public')->whereNull('archived_at'))->where('status', PublicationStatus::Published)->whereNull('archived_at')->withoutActivePublicRestriction();
         $paginator = $query->orderBy('sort_key')->orderBy('id')->cursorPaginate($request->pageSize());
         $items = collect($paginator->items())->reject(fn (TimelineEntry $entry): bool => app(SpoilerVisibilityService::class)->decide($entry, $request->user()) === SpoilerVisibility::Hidden)->values();
 

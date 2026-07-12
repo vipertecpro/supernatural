@@ -60,6 +60,21 @@ enum PermissionName: string
     case JourneyViewingOrdersUpdate = 'journey.viewing-orders.update';
     case JourneyViewingOrdersPublish = 'journey.viewing-orders.publish';
     case JourneyViewingOrdersArchive = 'journey.viewing-orders.archive';
+    case ModerationReportsView = 'moderation.reports.view';
+    case ModerationReportsTriage = 'moderation.reports.triage';
+    case ModerationCasesCreate = 'moderation.cases.create';
+    case ModerationCasesView = 'moderation.cases.view';
+    case ModerationCasesAssign = 'moderation.cases.assign';
+    case ModerationCasesInvestigate = 'moderation.cases.investigate';
+    case ModerationCasesReopen = 'moderation.cases.reopen';
+    case ModerationActionsApply = 'moderation.actions.apply';
+    case ModerationUserRestrictionsApply = 'moderation.restrictions.user';
+    case ModerationContentRestrictionsApply = 'moderation.restrictions.content';
+    case ModerationPermanentRestrictionsApply = 'moderation.restrictions.permanent';
+    case ModerationAppealsReview = 'moderation.appeals.review';
+    case NotificationTypesManage = 'notifications.types.manage';
+    case NotificationDeliveriesInspect = 'notifications.inspect-deliveries';
+    case NotificationDeliveriesRetry = 'notifications.retry-deliveries';
 
     /**
      * Get the human-readable permission label.

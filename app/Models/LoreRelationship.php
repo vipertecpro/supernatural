@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasModerationRestrictions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\CanonClassification;
 use App\Enums\DatePrecision;
@@ -39,7 +40,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class LoreRelationship extends Model
 {
     /** @use HasFactory<LoreRelationshipFactory> */
-    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasModerationRestrictions, HasSpoilerConstraints;
 
     protected $fillable = ['source_entity_id', 'target_entity_id', 'relationship_type_id', 'canon_classification', 'confidence', 'status', 'start_work_id', 'start_season_id', 'start_episode_id', 'end_work_id', 'end_season_id', 'end_episode_id', 'starts_on', 'ends_on', 'date_precision', 'qualifier', 'editorial_note', 'dispute_reason', 'created_by', 'updated_by', 'published_at', 'archived_at', 'lock_version'];
 

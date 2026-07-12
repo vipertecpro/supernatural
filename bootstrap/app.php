@@ -5,8 +5,10 @@ use App\Domain\Editorial\Exceptions\InvalidEditorialOperation;
 use App\Domain\Editorial\Exceptions\OptimisticLockConflict;
 use App\Domain\Lore\Exceptions\InvalidLoreOperation;
 use App\Domain\Media\Exceptions\InvalidMediaOperation;
+use App\Domain\Moderation\Exceptions\InvalidModerationOperation;
 use App\Domain\UserJourney\Exceptions\InvalidJourneyOperation;
 use App\Http\Middleware\AssignRequestId;
+use App\Http\Middleware\EnforceUserRestrictions;
 use App\Http\Middleware\EnsureVerifiedUserAccess;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
@@ -37,6 +39,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(AssignRequestId::class);
+        $middleware->alias(['restrictions' => EnforceUserRestrictions::class]);
 
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
@@ -95,6 +98,12 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (InvalidMediaOperation $exception, Request $request): ?JsonResponse {
+            return $request->is('api/v1/*')
+                ? ApiResponse::error($request, $exception->errorCode, $exception->getMessage(), 409)
+                : null;
+        });
+
+        $exceptions->render(function (InvalidModerationOperation $exception, Request $request): ?JsonResponse {
             return $request->is('api/v1/*')
                 ? ApiResponse::error($request, $exception->errorCode, $exception->getMessage(), 409)
                 : null;

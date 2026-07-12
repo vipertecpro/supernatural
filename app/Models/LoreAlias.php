@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasModerationRestrictions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\LoreAliasType;
 use App\Enums\PublicationStatus;
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class LoreAlias extends Model
 {
     /** @use HasFactory<LoreAliasFactory> */
-    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasModerationRestrictions, HasSpoilerConstraints;
 
     protected $fillable = ['lore_entity_id', 'name', 'normalized_name', 'type', 'locale', 'spoiler_sensitive', 'status', 'created_by', 'updated_by', 'published_at', 'archived_at', 'lock_version'];
 

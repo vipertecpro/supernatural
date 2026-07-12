@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Domain\Moderation\Services\RestrictionEvaluator;
 use App\Enums\MediaStatus;
 use App\Enums\PermissionName;
 use App\Models\ExternalEmbed;
@@ -26,16 +27,16 @@ class ExternalEmbedPolicy
 
     public function update(User $user, ExternalEmbed $embed): bool
     {
-        return $user->hasPermission(PermissionName::MediaModerate) || ($user->hasPermission(PermissionName::MediaUpdateOwnDrafts) && $embed->owner_user_id === $user->id && $embed->status === MediaStatus::Pending);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($embed) && ($user->hasPermission(PermissionName::MediaModerate) || ($user->hasPermission(PermissionName::MediaUpdateOwnDrafts) && $embed->owner_user_id === $user->id && $embed->status === MediaStatus::Pending));
     }
 
-    public function publish(User $user): bool
+    public function publish(User $user, ExternalEmbed $embed): bool
     {
-        return $user->hasPermission(PermissionName::MediaPublish);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($embed) && $user->hasPermission(PermissionName::MediaPublish);
     }
 
-    public function archive(User $user): bool
+    public function archive(User $user, ExternalEmbed $embed): bool
     {
-        return $user->hasPermission(PermissionName::MediaArchive);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($embed) && $user->hasPermission(PermissionName::MediaArchive);
     }
 }

@@ -29,6 +29,10 @@ All version-one endpoints use `/api/v1`.
 | POST/PATCH | `/api/v1/media/assets`, `/media/embeds`, `/media/attachments` and lifecycle actions | Sanctum, verified, policy, rate limited | Private quarantine, allowlisted providers/targets, optimistic locking |
 | GET | `/api/v1/universes/{universe}/viewing-orders`, `/viewing-orders/{order}` and items | Public, rate limited | Published non-archived Catalog viewing paths |
 | GET/POST/PATCH/DELETE | `/api/v1/me/journeys`, progress, sessions, rewatches, continue watching, watchlists, favourites, ratings, notes and preferences | Sanctum, verified, owner policy, rate limited | Private User Journey state, bounded cursors, idempotency and optimistic conflicts |
+| GET/POST | `/api/v1/report-categories`, `/reports`, `/me/reports` and evidence/withdrawal | Sanctum, verified, owner policy, strict report limit | Controlled private reporting without subject case access |
+| GET/POST/PATCH | `/api/v1/moderation/cases`, assignments, actions and restriction lifts | Sanctum, verified, explicit moderation permission and case scope | Versioned case workflow with private-field-safe resources |
+| GET/POST | `/api/v1/me/appeals`, `/api/v1/moderation/appeals` | Sanctum, verified, owner or appeal-review policy, strict appeal limit | Eligible affected-user appeals and independent decisions |
+| GET/POST/PATCH | `/api/v1/me/notifications` and notification preferences | Sanctum, verified, recipient ownership | Stable type/version, spoiler-safe render, read/archive and mandatory preference rules |
 
 The legacy unversioned `/api/user` endpoint has been removed.
 
@@ -80,6 +84,8 @@ Lore errors add `invalid_lore_operation`, `invalid_relationship_semantics`, `dup
 Media errors add `invalid_media_operation`, `unsafe_media_file`, `unsupported_media_provider`, `media_rights_required`, `media_moderation_required`, `media_processing_required`, `media_takedown_blocked`, `invalid_media_target`, `invalid_media_source`, `duplicate_media_attachment`, and `cross_universe_media_attachment`. Search validation rejects unknown filters/sorts and oversized/short queries before query execution.
 
 User Journey errors add `invalid_journey_operation`, `invalid_journey_target`, `journey_target_unavailable`, `active_journey_exists`, `active_rewatch_exists`, `progress_moved_backwards`, `invalid_progress_position`, `invalid_progress_percentage`, `duplicate_watchlist_item`, and cross-universe variants. Stale writes retain `optimistic_lock_conflict`.
+
+Moderation/notification errors add `unsupported_report_target`, `report_target_inaccessible`, `invalid_case_transition`, `case_resolution_required`, assignment/reviewer conflict and authority codes, restriction scope/authority codes, appeal eligibility/window/duplicate codes, `platform_access_restricted`, `capability_restricted`, notification type/payload/preference/retry codes, and existing `optimistic_lock_conflict`. Private explanations, reporter identity, reviewer notes, raw notification payloads, and delivery-provider bodies are never serialized to affected users.
 
 ## Rate Limits
 

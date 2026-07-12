@@ -130,3 +130,14 @@ This append-only section records the bounded Catalog implementation.
 | Spoiler engine | Implemented with journey knowledge | Exact completion, historical events, legacy paths and rewatches feed the existing canonical resolver. | Versioned reachability projection if order complexity/scale later requires it. |
 | Search API | Implemented with private personalization | Authenticated progress joins at query time without projection/ranking/analytics mutation. | User-requested completed/unwatched filters and recommendations remain deferred. |
 | Privacy/account deletion | Implemented for User Journey | All identifiable current/historical journey rows cascade on deletion; export structure is documented. | Export endpoint/UI, legal hold and production retention approval. |
+
+## Prompt 9 reassessment — 2026-07-12
+
+| Module | Updated status | Prompt 9 result | Still deferred |
+| --- | --- | --- | --- |
+| Reports and evidence | Implemented backend foundation | Controlled categories, private owner reports, allowlisted targets, bounded evidence, duplicates, withdrawal, rate limits, policies/API/audit/tests. | Public legal intake, file evidence, remote capture/archiving and UI. |
+| Moderation cases/actions | Implemented minimum workflow | Versioned cases, assignments/conflicts, append-only actions, public/private reasons, permissions and case-scoped API. | Workload balancing, automatic assignment, severe dual control and UI. |
+| Restrictions | Implemented backend enforcement | Time-aware user scopes, platform exceptions, public-content hiding, editing/attachment gates, Search removal/reprojection. | Community/message scopes until their modules exist; automated classification. |
+| Appeals | Implemented backend foundation | Eligibility/window/uniqueness, independent reviewer conflicts, immutable decisions, transactional lifts and notifications. | Public appeal pages, legal workflow, replacement-action UI. |
+| Notifications | Implemented stable foundation | Code-owned type/version registry, scalar payloads, inbox, spoiler-safe rendering, preferences, in-app/email attempts, idempotent queued consumers. | Push, digest, mobile, frontend UI, provider receipts and scheduled reminders. |
+| Privacy/deletion | Implemented for Phase 6 | Reporter/subject attribution nulling, appeal detachment, inbox/preference deletion, no Journey copying. | Approved legal-hold and per-record production retention/pruning windows. |

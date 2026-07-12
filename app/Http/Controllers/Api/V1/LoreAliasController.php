@@ -25,7 +25,7 @@ class LoreAliasController extends Controller
     {
         $query = $entity->aliases()->with('spoilerConstraints.boundaries')->orderBy('name')->orderBy('id');
         if (! $request->user()?->can('viewAny', LoreAlias::class)) {
-            $query->where('status', PublicationStatus::Published)->whereNull('archived_at');
+            $query->where('status', PublicationStatus::Published)->whereNull('archived_at')->withoutActivePublicRestriction();
         }
         $items = $query->get()->reject(fn (LoreAlias $alias): bool => app(SpoilerVisibilityService::class)->decide($alias, $request->user()) === SpoilerVisibility::Hidden)->values();
 

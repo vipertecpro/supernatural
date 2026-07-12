@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HasModerationRestrictions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\MediaAttachmentRole;
 use App\Enums\PublicationStatus;
@@ -32,7 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MediaAttachment extends Model
 {
     /** @use HasFactory<MediaAttachmentFactory> */
-    use HasFactory, HasSpoilerConstraints, SoftDeletes;
+    use HasFactory, HasModerationRestrictions, HasSpoilerConstraints, SoftDeletes;
 
     protected $fillable = ['media_asset_id', 'external_embed_id', 'attachable_type', 'attachable_id', 'role', 'position', 'is_primary', 'primary_key', 'locale', 'caption_override', 'alt_text_override', 'status', 'spoiler_constraint_id', 'lock_version', 'created_by', 'updated_by'];
 

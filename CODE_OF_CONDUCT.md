@@ -14,4 +14,6 @@ This standard applies in repository issues, pull requests, discussions, reviews,
 
 Report conduct concerns privately through an available repository-owner contact channel. Do not post sensitive allegations or personal information publicly. Maintainers should limit access to reports, avoid retaliation, consider conflicts of interest, and communicate outcomes only to the extent appropriate for safety and privacy.
 
+Application reports and appeals follow the same confidentiality rule: reporter identity and private evidence are limited to authorized review, subjects receive only public-safe reasons, conflicted reviewers must recuse, and retaliation or abusive reporting may itself be addressed through an explicit attributable action.
+
 Enforcement decisions may be appealed once with concise new context. Appeals do not permit continued harmful behavior while under review.

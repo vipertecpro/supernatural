@@ -28,7 +28,7 @@ class MediaAttachmentController extends Controller
         abort_if($class === null || ! $class::query()->whereKey($targetId)->exists(), 404);
         $assetIds = MediaAsset::query()->visibleToPublic()->select('id');
         $embedIds = ExternalEmbed::query()->visibleToPublic()->select('id');
-        $items = MediaAttachment::query()->with(['mediaAsset.variants', 'externalEmbed', 'spoilerConstraints.boundaries'])->where('attachable_type', $targetType)->where('attachable_id', $targetId)->where('status', PublicationStatus::Published)
+        $items = MediaAttachment::query()->with(['mediaAsset.variants', 'externalEmbed', 'spoilerConstraints.boundaries'])->where('attachable_type', $targetType)->where('attachable_id', $targetId)->where('status', PublicationStatus::Published)->withoutActivePublicRestriction()
             ->where(fn ($query) => $query->whereIn('media_asset_id', $assetIds)->orWhereIn('external_embed_id', $embedIds))
             ->orderBy('role')->orderBy('position')->orderBy('id')->limit(50)->get()
             ->reject(fn (MediaAttachment $attachment): bool => in_array(app(SpoilerVisibilityService::class)->decide($attachment, $request->user()), [SpoilerVisibility::Redacted, SpoilerVisibility::Hidden], true))->values();

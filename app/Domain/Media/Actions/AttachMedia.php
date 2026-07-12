@@ -4,6 +4,7 @@ namespace App\Domain\Media\Actions;
 
 use App\Domain\Editorial\Exceptions\OptimisticLockConflict;
 use App\Domain\Media\Exceptions\InvalidMediaOperation;
+use App\Domain\Moderation\Services\RestrictionEvaluator;
 use App\Enums\PublicationStatus;
 use App\Models\Episode;
 use App\Models\ExternalEmbed;
@@ -26,12 +27,15 @@ class AttachMedia
     /** @var list<string> */
     private const TARGET_TYPES = ['universe', 'franchise', 'work', 'work_translation', 'season', 'episode', 'lore_entity', 'lore_entity_translation', 'lore_alias', 'entity_appearance', 'lore_relationship', 'timeline', 'timeline_entry'];
 
-    public function __construct(private readonly AuditLogger $auditLogger) {}
+    public function __construct(private readonly AuditLogger $auditLogger, private readonly RestrictionEvaluator $restrictions) {}
 
     /** @param array<string, mixed> $attributes */
     public function create(array $attributes, User $actor): MediaAttachment
     {
         $target = $this->resolveTarget((string) $attributes['attachable_type'], (int) $attributes['attachable_id']);
+        if ($this->restrictions->areAttachmentsBlocked($target)) {
+            throw new InvalidMediaOperation('New media attachments are restricted for this target.', 'content_attachments_restricted');
+        }
         $media = $this->resolveMedia($attributes);
         $this->assertUniverseCompatible($media, $target);
         $attributes['locale'] = isset($attributes['locale']) ? str((string) $attributes['locale'])->replace('_', '-')->lower()->toString() : null;
@@ -65,7 +69,7 @@ class AttachMedia
                 ? MediaAsset::query()->visibleToPublic()->whereKey($locked->media_asset_id)->exists()
                 : ExternalEmbed::query()->visibleToPublic()->whereKey($locked->external_embed_id)->exists();
             $target = $this->resolveTarget($locked->attachable_type, $locked->attachable_id);
-            if (! $mediaIsPublic || ! $this->targetIsPublic($target)) {
+            if (! $mediaIsPublic || ! $this->targetIsPublic($target) || $this->restrictions->areAttachmentsBlocked($target)) {
                 throw new InvalidMediaOperation('Both media and attachment target must be public before attachment publication.', 'media_attachment_not_publishable');
             }
             $locked->update(['status' => PublicationStatus::Published, 'updated_by' => $actor->id, 'lock_version' => $expectedVersion + 1]);

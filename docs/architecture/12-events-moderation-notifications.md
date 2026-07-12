@@ -16,6 +16,8 @@ Moderators see case-relevant evidence only. Private messages require a report/ca
 
 Every channel renders from a stable notification data object after authorization, block/mute, preference, and spoiler evaluation. Email/push never contains more sensitive content than in-app. Retries are idempotent and bounded.
 
+Prompt 9 implements the minimum case workflow, Identity capability restrictions, public-content restrictions, appeals, and stable in-app/email records. Report/action/appeal facts and selected Editorial, Media, Journey-completion events feed one queued after-commit notification consumer. Payloads are scalar and allowlisted; rendering is per recipient. Viewing progress, sessions, playback positions, personal notes, and reporter identity never enter notifications or Reverb. Digest and push infrastructure remains deferred.
+
 ```mermaid
 erDiagram
     EVENTS ||--o{ EVENT_SESSIONS : schedules

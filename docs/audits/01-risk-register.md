@@ -125,3 +125,16 @@ This append-only section records architecture-phase risks. Prompt 3 changed no a
 | R-054 | Open — Medium | A populated richer progress schema cannot always rollback into one legacy user/work row. Rollback refuses lossy consolidation; backup/export and an explicit transform are required. |
 | R-055 | Accepted/deferred — Low | Continue watching is a bounded relational query. Add a private projection only after measured p95/query-volume evidence. |
 | R-056 | Open — Medium | Export structure and account deletion are defined, but an export endpoint/UI and legal-hold exception workflow require owner/legal approval. |
+
+## Prompt 9 reassessment — 2026-07-12
+
+| ID | Status / severity | Moderation/Notification consequence and mitigation |
+| --- | --- | --- |
+| R-057 | Open — High | Jurisdiction-specific copyright notice, counter-notice, legal hold and retention rules require owner/legal approval. The authenticated category is not a public legal process. |
+| R-058 | Mitigated — Medium | Portable SQL cannot express every conflict, target-access and active-equivalence rule. Transactional registries/actions, null-safe unique keys, policies and focused tests enforce them; bypass writes remain prohibited. |
+| R-059 | Open — Medium | Moderation evidence/case/action and failed-delivery retention windows are configurable policy decisions but no destructive scheduler is approved. Establish production retention and legal-hold operations before launch. |
+| R-060 | Mitigated — Low | Notification duplication is prevented by recipient/idempotency uniqueness and bounded attempt numbers; operational queue monitoring and dead-letter/reconciliation are still required before high volume. |
+| R-061 | Open — Medium | SMTP/provider acceptance is recorded as sent without a provider delivery receipt. Add provider webhook reconciliation only after a provider and privacy contract are approved. |
+| R-062 | Mitigated — Medium | Content restrictions use after-commit Search removal and source revalidation on reprojection. Monitor queue lag/reconcile projections before Community-scale public content. |
+| R-063 | Open — High | Severe/permanent actions have stronger permission but no second-reviewer workflow. Define dual-control thresholds before granting permanent restriction authority operationally. |
+| R-064 | Accepted/deferred — Low | Push devices, digests, mobile delivery, UI and scheduled expiry reminders remain intentionally absent; do not represent them as launch-ready. |

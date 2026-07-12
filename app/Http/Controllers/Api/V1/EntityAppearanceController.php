@@ -25,7 +25,7 @@ class EntityAppearanceController extends Controller
     {
         $query = $entity->appearances()->with(['work', 'season', 'episode', 'spoilerConstraints.boundaries'])->orderBy('position')->orderBy('id');
         if (! $request->user()?->can('viewAny', EntityAppearance::class)) {
-            $query->where('status', PublicationStatus::Published)->whereNull('archived_at')->whereHas('work', fn ($work) => $work->where('status', PublicationStatus::Published)->where('is_public', true)->whereNull('archived_at'));
+            $query->where('status', PublicationStatus::Published)->whereNull('archived_at')->withoutActivePublicRestriction()->whereHas('work', fn ($work) => $work->where('status', PublicationStatus::Published)->where('is_public', true)->whereNull('archived_at'));
         }
         $items = $query->get()->reject(fn (EntityAppearance $appearance): bool => app(SpoilerVisibilityService::class)->decide($appearance, $request->user()) === SpoilerVisibility::Hidden)->values();
 

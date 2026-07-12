@@ -26,7 +26,7 @@ class LoreRelationshipController extends Controller
         $query = LoreRelationship::query()->with(['sourceEntity.spoilerConstraints.boundaries', 'targetEntity.spoilerConstraints.boundaries', 'relationshipType', 'spoilerConstraints.boundaries'])
             ->where(fn ($edges) => $edges->where('source_entity_id', $entity->id)->orWhere('target_entity_id', $entity->id));
         if (! $request->user()?->can('viewAny', LoreRelationship::class)) {
-            $query->where('status', LoreRelationshipStatus::Published)->whereNull('archived_at')
+            $query->where('status', LoreRelationshipStatus::Published)->whereNull('archived_at')->withoutActivePublicRestriction()
                 ->whereHas('sourceEntity', fn ($source) => $source->where('status', 'published')->where('visibility', 'public')->whereNull('archived_at'))
                 ->whereHas('targetEntity', fn ($target) => $target->where('status', 'published')->where('visibility', 'public')->whereNull('archived_at'));
         }

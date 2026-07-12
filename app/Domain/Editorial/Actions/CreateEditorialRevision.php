@@ -3,6 +3,7 @@
 namespace App\Domain\Editorial\Actions;
 
 use App\Domain\Editorial\Exceptions\InvalidEditorialOperation;
+use App\Domain\Moderation\Services\RestrictionEvaluator;
 use App\Enums\EditorialRevisionStatus;
 use App\Models\EditorialRevision;
 use App\Models\EntityAppearance;
@@ -24,13 +25,16 @@ use Illuminate\Support\Facades\DB;
 
 class CreateEditorialRevision
 {
-    public function __construct(private readonly AuditLogger $auditLogger) {}
+    public function __construct(private readonly AuditLogger $auditLogger, private readonly RestrictionEvaluator $restrictions) {}
 
     /** @param array{summary: string, parent_revision_id?: int|null, metadata?: array<string, mixed>|null} $attributes */
     public function handle(Model $target, array $attributes, User $author): EditorialRevision
     {
         if (! $this->isSupported($target)) {
             throw new InvalidEditorialOperation('This record does not support editorial revisions.', 'unsupported_revision_target');
+        }
+        if ($this->restrictions->isEditingFrozen($target)) {
+            throw new InvalidEditorialOperation('Editorial changes are frozen for this record.', 'content_editing_frozen');
         }
 
         return DB::transaction(function () use ($target, $attributes, $author): EditorialRevision {

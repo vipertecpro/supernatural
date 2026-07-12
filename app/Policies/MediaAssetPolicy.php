@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Domain\Moderation\Services\RestrictionEvaluator;
 use App\Enums\MediaStatus;
 use App\Enums\PermissionName;
 use App\Models\MediaAsset;
@@ -26,17 +27,17 @@ class MediaAssetPolicy
 
     public function update(User $user, MediaAsset $asset): bool
     {
-        return $user->hasPermission(PermissionName::MediaModerate) || ($user->hasPermission(PermissionName::MediaUpdateOwnDrafts) && $asset->owner_user_id === $user->id && $asset->status === MediaStatus::Pending);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($asset) && ($user->hasPermission(PermissionName::MediaModerate) || ($user->hasPermission(PermissionName::MediaUpdateOwnDrafts) && $asset->owner_user_id === $user->id && $asset->status === MediaStatus::Pending));
     }
 
-    public function publish(User $user): bool
+    public function publish(User $user, MediaAsset $asset): bool
     {
-        return $user->hasPermission(PermissionName::MediaPublish);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($asset) && $user->hasPermission(PermissionName::MediaPublish);
     }
 
-    public function archive(User $user): bool
+    public function archive(User $user, MediaAsset $asset): bool
     {
-        return $user->hasPermission(PermissionName::MediaArchive);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($asset) && $user->hasPermission(PermissionName::MediaArchive);
     }
 
     public function delete(User $user, MediaAsset $asset): bool

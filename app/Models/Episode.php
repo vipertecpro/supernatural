@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasModerationRestrictions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\DatePrecision;
 use App\Enums\EpisodeType;
@@ -28,7 +29,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Episode extends Model
 {
     /** @use HasFactory<EpisodeFactory> */
-    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasModerationRestrictions, HasSpoilerConstraints;
 
     /** @return BelongsTo<Work, $this> */
     public function work(): BelongsTo
@@ -63,7 +64,8 @@ class Episode extends Model
                 ->orWhereHas('season', fn (Builder $item) => $item
                     ->where('status', PublicationStatus::Published)
                     ->where('is_public', true)
-                    ->whereNull('archived_at')));
+                    ->whereNull('archived_at')))
+            ->withoutActivePublicRestriction();
     }
 
     /** @return array<string, string> */

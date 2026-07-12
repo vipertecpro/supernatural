@@ -161,3 +161,23 @@ Implemented and verified within the Phase 5 boundary.
 ### Consequence
 
 Prompt 9 should implement only the minimum moderation and stable-notification phase. It may consume scalar after-commit journey events but must not expose private viewing history, introduce Community early, or broadcast playback/progress through Reverb.
+
+## 2026-07-12 — Prompt 9 Moderation and stable Notifications
+
+### Status
+
+Implemented and verified within the Phase 6 boundary.
+
+### Decisions
+
+- Keep Identity-owned user restrictions normalized as restriction plus capability scopes; evaluate active/lifted/expired rows centrally and do not exempt administrators implicitly.
+- Implement the nine currently required Moderation workflow tables. Keep copyright-notice and trust-signal reservations deferred because no public legal intake or automated trust system is approved.
+- Use the canonical Notification tables for inbox, preferences, and deliveries. Keep stable type definitions code-controlled; defer digest and push tables.
+- Make moderation actions and appeal decisions append-only; use new attributable records for correction, modification, and replacement.
+- Hide active restricted content through existing public scopes and Search projection events without changing source publication, rights, Media lifecycle, or spoiler state.
+- Render notifications for the recipient from scalar payloads and trusted route keys. Queue delivery after commit and never use Reverb for personal/moderation activity.
+- Consume Journey and rewatch completion only; do not consume progress/session/playback/private-note activity.
+
+### Consequence
+
+Prompt 10 may begin only the approved Community phase after this uncommitted change is reviewed. Community must use the report/restriction interfaces, retain backend spoiler/media gates, and must not begin Messaging or public activity-history exposure.

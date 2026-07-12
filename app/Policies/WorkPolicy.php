@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Domain\Moderation\Services\RestrictionEvaluator;
 use App\Enums\PermissionName;
 use App\Enums\PublicationStatus;
 use App\Models\User;
@@ -26,17 +27,17 @@ class WorkPolicy
 
     public function update(User $user, Work $work): bool
     {
-        return $user->hasPermission(PermissionName::CatalogUpdate) && ($user->hasPermission(PermissionName::CatalogPublish) || ($work->created_by === $user->id && $work->status === PublicationStatus::Draft));
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($work) && $user->hasPermission(PermissionName::CatalogUpdate) && ($user->hasPermission(PermissionName::CatalogPublish) || ($work->created_by === $user->id && $work->status === PublicationStatus::Draft));
     }
 
     public function publish(User $user, Work $work): bool
     {
-        return $user->hasPermission(PermissionName::CatalogPublish);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($work) && $user->hasPermission(PermissionName::CatalogPublish);
     }
 
     public function archive(User $user, Work $work): bool
     {
-        return $user->hasPermission(PermissionName::CatalogArchive);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($work) && $user->hasPermission(PermissionName::CatalogArchive);
     }
 
     public function delete(User $user, Work $work): bool

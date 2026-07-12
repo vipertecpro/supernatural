@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Domain\Moderation\Services\RestrictionEvaluator;
 use App\Enums\LoreVisibility;
 use App\Enums\PermissionName;
 use App\Enums\PublicationStatus;
@@ -39,7 +40,7 @@ class LoreEntityPolicy
      */
     public function update(User $user, LoreEntity $loreEntity): bool
     {
-        return $user->hasPermission(PermissionName::LoreUpdate) && ($user->hasPermission(PermissionName::LorePublish) || ($loreEntity->created_by === $user->id && $loreEntity->status === PublicationStatus::Draft));
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($loreEntity) && $user->hasPermission(PermissionName::LoreUpdate) && ($user->hasPermission(PermissionName::LorePublish) || ($loreEntity->created_by === $user->id && $loreEntity->status === PublicationStatus::Draft));
     }
 
     /**
@@ -68,11 +69,11 @@ class LoreEntityPolicy
 
     public function publish(User $user, LoreEntity $loreEntity): bool
     {
-        return $user->hasPermission(PermissionName::LorePublish);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($loreEntity) && $user->hasPermission(PermissionName::LorePublish);
     }
 
     public function archive(User $user, LoreEntity $loreEntity): bool
     {
-        return $user->hasPermission(PermissionName::LoreArchive);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($loreEntity) && $user->hasPermission(PermissionName::LoreArchive);
     }
 }

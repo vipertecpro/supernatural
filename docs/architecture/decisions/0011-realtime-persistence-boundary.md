@@ -8,3 +8,5 @@
 - Security implications: channel authorization repeats membership checks; payloads are minimal and spoiler filtered.
 - Migration implications: messaging tables precede broadcast events; clients use idempotency keys and monotonic IDs.
 - Future review conditions: extreme fan-out requires dedicated pub/sub or separate delivery workers.
+
+Prompt 9 persists moderation and notification records before delivery. Its notification listener and mail adapter run after commit through queues. No report, restriction, appeal, notification, progress, session, or playback event is broadcast through Reverb.

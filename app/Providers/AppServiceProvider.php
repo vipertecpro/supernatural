@@ -3,15 +3,30 @@
 namespace App\Providers;
 
 use App\Enums\PermissionName;
+use App\Events\AppealDecided;
+use App\Events\AppealSubmitted;
 use App\Events\EditorialRevisionApplied;
+use App\Events\EditorialRevisionApproved;
 use App\Events\LoreEntityPublished;
+use App\Events\MediaPublished;
+use App\Events\ModerationActionApplied;
+use App\Events\ModerationCaseAssigned;
+use App\Events\ReportClosed;
+use App\Events\ReportSubmitted;
+use App\Events\RewatchCycleCompleted;
 use App\Events\SearchProjectionRemovalRequested;
 use App\Events\SearchProjectionRequested;
 use App\Events\TimelinePublished;
+use App\Events\UserRestrictionLifted;
+use App\Events\ViewingJourneyCompleted;
+use App\Listeners\CreateDomainNotification;
 use App\Listeners\RefreshSearchProjection;
+use App\Models\Appeal;
+use App\Models\AppealDecision;
 use App\Models\AuditLog;
 use App\Models\Citation;
 use App\Models\ContentLicense;
+use App\Models\ContentRestriction;
 use App\Models\EditorialRevision;
 use App\Models\EntityAppearance;
 use App\Models\Episode;
@@ -26,8 +41,16 @@ use App\Models\MediaAsset;
 use App\Models\MediaAttachment;
 use App\Models\MediaProcessingJob;
 use App\Models\MediaVariant;
+use App\Models\ModerationAction;
+use App\Models\ModerationCase;
+use App\Models\ModerationCaseAssignment;
+use App\Models\NotificationDelivery;
+use App\Models\NotificationPreference;
 use App\Models\PersonalNote;
 use App\Models\Rating;
+use App\Models\Report;
+use App\Models\ReportCategory;
+use App\Models\ReportEvidence;
 use App\Models\RevisionBlock;
 use App\Models\RevisionItem;
 use App\Models\RewatchCycle;
@@ -45,6 +68,9 @@ use App\Models\TrendingSnapshot;
 use App\Models\Universe;
 use App\Models\User;
 use App\Models\UserFandomPreference;
+use App\Models\UserNotification;
+use App\Models\UserRestriction;
+use App\Models\UserRestrictionScope;
 use App\Models\UserSpoilerPreference;
 use App\Models\UserViewingJourney;
 use App\Models\ViewingOrder;
@@ -56,6 +82,7 @@ use App\Models\Watchlist;
 use App\Models\WatchlistItem;
 use App\Models\Work;
 use App\Models\WorkTranslation;
+use App\Policies\AppealPolicy;
 use App\Policies\AuditLogPolicy;
 use App\Policies\ContentLicensePolicy;
 use App\Policies\EditorialRevisionPolicy;
@@ -69,8 +96,11 @@ use App\Policies\LoreEntityPolicy;
 use App\Policies\LoreRelationshipPolicy;
 use App\Policies\MediaAssetPolicy;
 use App\Policies\MediaAttachmentPolicy;
+use App\Policies\ModerationCasePolicy;
+use App\Policies\NotificationPreferencePolicy;
 use App\Policies\PersonalNotePolicy;
 use App\Policies\RatingPolicy;
+use App\Policies\ReportPolicy;
 use App\Policies\RewatchCyclePolicy;
 use App\Policies\SeasonPolicy;
 use App\Policies\SourcePolicy;
@@ -80,6 +110,7 @@ use App\Policies\TimelineEntryPolicy;
 use App\Policies\TimelinePolicy;
 use App\Policies\UniversePolicy;
 use App\Policies\UserFandomPreferencePolicy;
+use App\Policies\UserNotificationPolicy;
 use App\Policies\UserViewingJourneyPolicy;
 use App\Policies\ViewingOrderPolicy;
 use App\Policies\ViewingProgressPolicy;
@@ -119,6 +150,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureAuthorization();
         $this->configureRateLimiting();
         $this->configureSearchProjectionListeners();
+        $this->configureNotificationListeners();
     }
 
     /** Keep polymorphic persistence stable across PHP namespace changes. */
@@ -171,6 +203,20 @@ class AppServiceProvider extends ServiceProvider
             'personal_note' => PersonalNote::class,
             'user_fandom_preference' => UserFandomPreference::class,
             'user_spoiler_preference' => UserSpoilerPreference::class,
+            'report_category' => ReportCategory::class,
+            'report' => Report::class,
+            'report_evidence' => ReportEvidence::class,
+            'moderation_case' => ModerationCase::class,
+            'moderation_case_assignment' => ModerationCaseAssignment::class,
+            'moderation_action' => ModerationAction::class,
+            'user_restriction' => UserRestriction::class,
+            'user_restriction_scope' => UserRestrictionScope::class,
+            'content_restriction' => ContentRestriction::class,
+            'appeal' => Appeal::class,
+            'appeal_decision' => AppealDecision::class,
+            'user_notification' => UserNotification::class,
+            'notification_preference' => NotificationPreference::class,
+            'notification_delivery' => NotificationDelivery::class,
         ]);
     }
 
@@ -230,6 +276,11 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Rating::class, RatingPolicy::class);
         Gate::policy(PersonalNote::class, PersonalNotePolicy::class);
         Gate::policy(UserFandomPreference::class, UserFandomPreferencePolicy::class);
+        Gate::policy(Report::class, ReportPolicy::class);
+        Gate::policy(ModerationCase::class, ModerationCasePolicy::class);
+        Gate::policy(Appeal::class, AppealPolicy::class);
+        Gate::policy(UserNotification::class, UserNotificationPolicy::class);
+        Gate::policy(NotificationPreference::class, NotificationPreferencePolicy::class);
 
         foreach (PermissionName::cases() as $permission) {
             Gate::define(
@@ -251,6 +302,14 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute((int) config('api.public_rate_limit_per_minute', 30))
                 ->by((string) $request->ip());
         });
+
+        RateLimiter::for('reports', function (Request $request): Limit {
+            return Limit::perMinute((int) config('moderation.report_rate_limit_per_minute', 5))->by((string) ($request->user()?->getAuthIdentifier() ?? $request->ip()));
+        });
+
+        RateLimiter::for('appeals', function (Request $request): Limit {
+            return Limit::perMinute((int) config('moderation.appeal_rate_limit_per_minute', 3))->by((string) ($request->user()?->getAuthIdentifier() ?? $request->ip()));
+        });
     }
 
     /** Register synchronous idempotent projection consumers for after-commit events. */
@@ -263,5 +322,24 @@ class AppServiceProvider extends ServiceProvider
             TimelinePublished::class,
             EditorialRevisionApplied::class,
         ], RefreshSearchProjection::class);
+    }
+
+    /** Register privacy-safe queued notification consumers. */
+    protected function configureNotificationListeners(): void
+    {
+        Event::listen([
+            ReportSubmitted::class,
+            ReportClosed::class,
+            ModerationCaseAssigned::class,
+            ModerationActionApplied::class,
+            UserRestrictionLifted::class,
+            AppealSubmitted::class,
+            AppealDecided::class,
+            EditorialRevisionApproved::class,
+            EditorialRevisionApplied::class,
+            MediaPublished::class,
+            ViewingJourneyCompleted::class,
+            RewatchCycleCompleted::class,
+        ], CreateDomainNotification::class);
     }
 }

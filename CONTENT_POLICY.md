@@ -29,4 +29,6 @@ Content must use the spoiler-classification foundation where reveals are materia
 
 Moderators may hide, restrict, label, or remove content; restrict accounts; preserve minimum audit evidence; and escalate safety or rights concerns. Decisions should record a reason without storing unnecessary personal or sensitive data. Users should have a proportionate appeal path. Repeated harassment, spam, impersonation, or infringement may lead to permanent restrictions.
 
+Reports are private to the reporter and authorized case-scoped moderators. A report never proves a violation and never applies enforcement automatically. Subjects must not receive reporter identity, private evidence, or internal notes. Severe/permanent action and rights/takedown decisions require their explicit additional authority. Notification copy must use the same spoiler, content-restriction, and privacy boundary as in-app resources.
+
 See `COPYRIGHT_AND_TAKEDOWN.md` for rights-holder requests.

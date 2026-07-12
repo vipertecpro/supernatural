@@ -99,4 +99,14 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
+
+    protected static function booted(): void
+    {
+        static::deleting(function (self $user): void {
+            $restrictionIds = UserRestriction::query()->where('user_id', $user->id)->pluck('id');
+            if ($restrictionIds->isNotEmpty()) {
+                Appeal::query()->whereIn('user_restriction_id', $restrictionIds)->update(['user_restriction_id' => null]);
+            }
+        });
+    }
 }

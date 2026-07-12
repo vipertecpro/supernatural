@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasModerationRestrictions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\CanonStatus;
 use App\Enums\DatePrecision;
@@ -34,7 +35,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Work extends Model
 {
     /** @use HasFactory<WorkFactory> */
-    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasModerationRestrictions, HasSpoilerConstraints;
 
     /** @return BelongsTo<Universe, $this> */
     public function universe(): BelongsTo
@@ -89,7 +90,8 @@ class Work extends Model
                 ->orWhereHas('franchise', fn (Builder $item) => $item
                     ->where('status', PublicationStatus::Published)
                     ->where('is_public', true)
-                    ->whereNull('archived_at')));
+                    ->whereNull('archived_at')))
+            ->withoutActivePublicRestriction();
     }
 
     /**

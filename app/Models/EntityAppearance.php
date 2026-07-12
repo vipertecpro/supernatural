@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasModerationRestrictions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\AppearanceKind;
 use App\Enums\AppearanceSignificance;
@@ -31,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class EntityAppearance extends Model
 {
     /** @use HasFactory<EntityAppearanceFactory> */
-    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasModerationRestrictions, HasSpoilerConstraints;
 
     protected $fillable = ['lore_entity_id', 'work_id', 'season_id', 'episode_id', 'kind', 'significance', 'is_credited', 'position', 'canon_classification', 'notes', 'status', 'created_by', 'updated_by', 'published_at', 'archived_at', 'lock_version'];
 

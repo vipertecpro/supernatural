@@ -12,3 +12,5 @@
 ## Prompt 8 implementation note
 
 Owner-private User Journey resources are additive v1 fields/routes. Retry-prone progress/session writes use scoped client identifiers, stale versions retain HTTP 409, page sizes remain bounded, and no route accepts a user identifier.
+
+Prompt 9 adds owner-only report/appeal/notification contracts and permission-scoped moderation contracts. Notification type plus schema version is the stable client contract; raw payloads/private notes remain internal. Case, appeal, and preference conflicts retain HTTP 409.

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasModerationRestrictions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\CanonClassification;
 use App\Enums\LoreEntityType;
@@ -35,7 +36,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class LoreEntity extends Model
 {
     /** @use HasFactory<LoreEntityFactory> */
-    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasModerationRestrictions, HasSpoilerConstraints;
 
     protected $fillable = ['universe_id', 'type', 'slug', 'canonical_name', 'short_description', 'summary', 'original_language', 'status', 'canon_classification', 'visibility', 'metadata', 'created_by', 'updated_by', 'published_at', 'archived_at', 'lock_version'];
 
@@ -143,7 +144,8 @@ class LoreEntity extends Model
         return $query->where('status', PublicationStatus::Published)
             ->where('visibility', LoreVisibility::Public)
             ->whereNull('archived_at')
-            ->whereHas('universe', fn ($universe) => $universe->where('status', PublicationStatus::Published)->where('is_public', true));
+            ->whereHas('universe', fn ($universe) => $universe->where('status', PublicationStatus::Published)->where('is_public', true))
+            ->withoutActivePublicRestriction();
     }
 
     protected function casts(): array

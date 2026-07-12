@@ -2,6 +2,7 @@
 
 namespace App\Domain\Search\Services;
 
+use App\Domain\Moderation\Services\RestrictionEvaluator;
 use App\Enums\PublicationStatus;
 use App\Enums\SearchDocumentType;
 use App\Enums\SearchProjectionStatus;
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SearchProjector
 {
+    public function __construct(private readonly RestrictionEvaluator $restrictions) {}
+
     /** @var array<class-string<Model>, SearchDocumentType> */
     public const SOURCE_TYPES = [
         Universe::class => SearchDocumentType::Universe,
@@ -39,7 +42,7 @@ class SearchProjector
     public function project(Model $source, ?string $onlyLocale = null, bool $dryRun = false): array
     {
         $counts = ['created' => 0, 'updated' => 0, 'unchanged' => 0, 'skipped' => 0, 'removed' => 0];
-        if (! isset(self::SOURCE_TYPES[$source::class]) || ! $this->isPublic($source)) {
+        if (! isset(self::SOURCE_TYPES[$source::class]) || ! $this->isPublic($source) || $this->restrictions->isHiddenFromSearch($source)) {
             $counts['removed'] = $this->remove($source, $dryRun);
 
             return $counts;

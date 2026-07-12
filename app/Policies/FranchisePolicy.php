@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Domain\Moderation\Services\RestrictionEvaluator;
 use App\Enums\PermissionName;
 use App\Enums\PublicationStatus;
 use App\Models\Franchise;
@@ -27,19 +28,19 @@ class FranchisePolicy
 
     public function update(User $user, Franchise $franchise): bool
     {
-        return $user->hasPermission(PermissionName::CatalogUpdate)
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($franchise) && $user->hasPermission(PermissionName::CatalogUpdate)
             && ($user->hasPermission(PermissionName::CatalogPublish)
                 || ($franchise->created_by === $user->id && $franchise->status === PublicationStatus::Draft));
     }
 
     public function publish(User $user, Franchise $franchise): bool
     {
-        return $user->hasPermission(PermissionName::CatalogPublish);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($franchise) && $user->hasPermission(PermissionName::CatalogPublish);
     }
 
     public function archive(User $user, Franchise $franchise): bool
     {
-        return $user->hasPermission(PermissionName::CatalogArchive);
+        return ! app(RestrictionEvaluator::class)->isEditingFrozen($franchise) && $user->hasPermission(PermissionName::CatalogArchive);
     }
 
     public function delete(User $user, Franchise $franchise): bool

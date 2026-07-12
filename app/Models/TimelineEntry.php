@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasModerationRestrictions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\CanonClassification;
 use App\Enums\DatePrecision;
@@ -43,7 +44,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class TimelineEntry extends Model
 {
     /** @use HasFactory<TimelineEntryFactory> */
-    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasModerationRestrictions, HasSpoilerConstraints;
 
     protected $fillable = ['timeline_id', 'type', 'work_id', 'season_id', 'episode_id', 'lore_event_entity_id', 'lore_relationship_id', 'title', 'summary', 'sort_key', 'sequence_number', 'in_universe_date', 'date_precision', 'relative_order', 'canon_classification', 'confidence', 'status', 'created_by', 'updated_by', 'published_at', 'archived_at', 'lock_version'];
 

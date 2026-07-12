@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AppealController;
 use App\Http\Controllers\Api\V1\ContinueWatchingController;
 use App\Http\Controllers\Api\V1\EditorialCitationController;
 use App\Http\Controllers\Api\V1\EditorialReviewController;
@@ -17,8 +18,11 @@ use App\Http\Controllers\Api\V1\LoreRelationshipController;
 use App\Http\Controllers\Api\V1\MeController;
 use App\Http\Controllers\Api\V1\MediaAssetController;
 use App\Http\Controllers\Api\V1\MediaAttachmentController;
+use App\Http\Controllers\Api\V1\ModerationCaseController;
+use App\Http\Controllers\Api\V1\NotificationPreferenceController;
 use App\Http\Controllers\Api\V1\PersonalNoteController;
 use App\Http\Controllers\Api\V1\RatingController;
+use App\Http\Controllers\Api\V1\ReportController;
 use App\Http\Controllers\Api\V1\RewatchCycleController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\SeasonController;
@@ -26,6 +30,7 @@ use App\Http\Controllers\Api\V1\SourceRightsReviewController;
 use App\Http\Controllers\Api\V1\SpoilerBoundaryController;
 use App\Http\Controllers\Api\V1\TimelineController;
 use App\Http\Controllers\Api\V1\TimelineEntryController;
+use App\Http\Controllers\Api\V1\UserNotificationController;
 use App\Http\Controllers\Api\V1\ViewingJourneyController;
 use App\Http\Controllers\Api\V1\ViewingOrderController;
 use App\Http\Controllers\Api\V1\ViewingProgressController;
@@ -74,7 +79,42 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('viewing-orders/{viewingOrder}/items', [ViewingOrderController::class, 'items'])->name('viewing-orders.items');
     });
 
-    Route::middleware(['auth:sanctum', 'verified', 'throttle:api-v1'])->scopeBindings()->group(function () {
+    Route::middleware(['auth:sanctum', 'verified', 'throttle:api-v1', 'restrictions'])->scopeBindings()->group(function () {
+        Route::get('report-categories', [ReportController::class, 'categories'])->name('report-categories.index');
+        Route::get('me/reports', [ReportController::class, 'index'])->name('me.reports.index');
+        Route::post('reports', [ReportController::class, 'store'])->middleware('throttle:reports')->name('reports.store');
+        Route::get('me/reports/{report}', [ReportController::class, 'show'])->name('me.reports.show');
+        Route::post('me/reports/{report}/withdraw', [ReportController::class, 'withdraw'])->name('me.reports.withdraw');
+        Route::post('me/reports/{report}/evidence', [ReportController::class, 'evidence'])->name('me.reports.evidence.store');
+
+        Route::get('me/appeals', [AppealController::class, 'index'])->name('me.appeals.index');
+        Route::post('appeals', [AppealController::class, 'store'])->middleware('throttle:appeals')->name('me.appeals.store');
+        Route::get('me/appeals/{appeal}', [AppealController::class, 'show'])->name('me.appeals.show');
+        Route::post('me/appeals/{appeal}/withdraw', [AppealController::class, 'withdraw'])->name('me.appeals.withdraw');
+
+        Route::get('me/notifications', [UserNotificationController::class, 'index'])->name('me.notifications.index');
+        Route::post('me/notifications/read-all', [UserNotificationController::class, 'readAll'])->name('me.notifications.read-all');
+        Route::get('me/notifications/{notification}', [UserNotificationController::class, 'show'])->name('me.notifications.show');
+        Route::post('me/notifications/{notification}/read', [UserNotificationController::class, 'read'])->name('me.notifications.read');
+        Route::post('me/notifications/{notification}/unread', [UserNotificationController::class, 'unread'])->name('me.notifications.unread');
+        Route::post('me/notifications/{notification}/archive', [UserNotificationController::class, 'archive'])->name('me.notifications.archive');
+        Route::get('me/notification-preferences', [NotificationPreferenceController::class, 'index'])->name('me.notification-preferences.index');
+        Route::patch('me/notification-preferences', [NotificationPreferenceController::class, 'update'])->name('me.notification-preferences.update');
+
+        Route::prefix('moderation')->name('moderation.')->group(function () {
+            Route::get('cases', [ModerationCaseController::class, 'index'])->name('cases.index');
+            Route::post('cases', [ModerationCaseController::class, 'store'])->name('cases.store');
+            Route::get('cases/{case}', [ModerationCaseController::class, 'show'])->name('cases.show');
+            Route::patch('cases/{case}', [ModerationCaseController::class, 'update'])->name('cases.update');
+            Route::post('cases/{case}/assign', [ModerationCaseController::class, 'assign'])->name('cases.assign');
+            Route::post('cases/{case}/actions', [ModerationCaseController::class, 'action'])->name('cases.actions.store');
+            Route::post('user-restrictions/{restriction}/lift', [ModerationCaseController::class, 'liftUserRestriction'])->name('user-restrictions.lift');
+            Route::post('content-restrictions/{restriction}/lift', [ModerationCaseController::class, 'liftContentRestriction'])->name('content-restrictions.lift');
+            Route::get('appeals', [AppealController::class, 'moderationIndex'])->name('appeals.index');
+            Route::get('appeals/{appeal}', [AppealController::class, 'moderationShow'])->name('appeals.show');
+            Route::post('appeals/{appeal}/decide', [AppealController::class, 'decide'])->name('appeals.decide');
+        });
+
         Route::get('me/journeys', [ViewingJourneyController::class, 'index'])->name('me.journeys.index');
         Route::post('me/journeys', [ViewingJourneyController::class, 'store'])->name('me.journeys.store');
         Route::get('me/journeys/{journey}', [ViewingJourneyController::class, 'show'])->name('me.journeys.show');

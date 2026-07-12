@@ -26,3 +26,5 @@ Contributors may provide a private response or counter-notice where legally appr
 Repeated knowing infringement may result in contribution or account restrictions. Removal of an asset does not necessarily remove factual source/audit records required to understand the action.
 
 Media records under a credible takedown concern must be restricted from public Media resources, attachments, variants, and Search projections while provenance is reviewed. Restoration requires an explicit authorized rights decision; provider availability and embedding permission do not establish hosting rights.
+
+The Phase 6 authenticated rights/attribution report category is not a public legal-notice channel and does not assert infringement. Rights-flagged cases require separate rights-review authority. Public legal intake, jurisdiction-specific notice fields, counter-notice deadlines, legal holds, and production retention remain owner/legal decisions.

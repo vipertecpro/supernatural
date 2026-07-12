@@ -181,3 +181,45 @@ Implemented and verified within the Phase 6 boundary.
 ### Consequence
 
 Prompt 10 may begin only the approved Community phase after this uncommitted change is reviewed. Community must use the report/restriction interfaces, retain backend spoiler/media gates, and must not begin Messaging or public activity-history exposure.
+
+## 2026-07-12 — Prompt 10 Community and Bunkers
+
+### Status
+
+Implemented within the Phase 7 persistent Community boundary.
+
+### Decisions
+
+- Implement 18 canonical tables and defer only `link_previews` under the explicit no-fetch scope.
+- Keep Bunker roles in memberships, never platform role pivots.
+- Use adjacency comments, checksums/edit indicators, and existing immutable moderation actions instead of inventing version tables.
+- Reuse normalized spoilers, Media, reports/restrictions/Appeals/notifications, and scalar after-commit events.
+- Keep bookmarks/voter identities private and add no Community Reverb or Messaging persistence.
+
+### Consequence
+
+Prompt 11 Messaging is not ready: canonical `user_blocks` and `user_mutes` persistence is still absent. Implement/review that bounded Identity prerequisite first, then preserve local/platform role separation and private Bunker, bookmark, vote, and Journey boundaries.
+
+Prompt 11 is intentionally the bounded Interaction Safety prerequisite rather than Messaging: permanent mutual-interaction blocks, private scoped/expiring mutes, query-time personalization, mandatory safety exceptions, and a reusable evaluator. Block/mute lists remain owner-only; Community Search and all Messaging persistence/delivery remain deferred.
+
+## 2026-07-12 — Prompt 12 UI/UX architecture
+
+### Status
+
+Accepted as the implementation blueprint; documentation only.
+
+### Decisions
+
+- Use the neutral codename “The Archive” until the owner approves and clears a final product name and mark.
+- Express an original night-road research archive; use no official logos, symbols, likenesses, footage, quotes, soundtrack, fonts, or promotional assets.
+- Separate Public, Fan, Contributor, Moderation, and Administration contexts. Public may be selectively cinematic; Fan is practical; workspaces are calm and dense.
+- Reuse the existing Tailwind CSS 4, shadcn/Radix, Lucide, Inertia 3, React 19, and Wayfinder foundation. Prompt 13 evolves semantic tokens and shells rather than replacing the component stack.
+- Treat Base HTML/static content as the required experience and motion/video/WebGL as lazy optional enhancement with reduced-motion/data-saver/failure fallbacks.
+- Inventory 206 screens: 154 backend-ready, 23 minor-gap, 18 major-gap, and 11 deferred. A missing API is never disguised as client-only capability.
+- Keep block direction, reporter identity, private Bunker existence, private notes, Journey data, and moderation internals out of unauthorized UI.
+- Begin visible implementation with Prompt 13 design system and shells, then authentication/onboarding, public website, public knowledge, Fan Journey, Community/Bunkers, contributor, and moderation/administration.
+- Messaging, Watch Rooms, Case Boards, gamification, events, NativePHP mobile, and other absent backend domains remain non-functional/deferred.
+
+### Consequence
+
+Prompt 13 may change frontend assets and tests only within its explicit shell/design-system objective. It must not implement domain screens, onboarding, WebGL, Messaging, realtime delivery, mobile, or backend redesign.

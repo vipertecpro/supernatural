@@ -6,6 +6,9 @@ use App\Domain\Editorial\Exceptions\InvalidEditorialOperation;
 use App\Enums\PermissionName;
 use App\Enums\SpoilerClassificationStatus;
 use App\Enums\SpoilerSeverity;
+use App\Models\Bunker;
+use App\Models\CommunityComment;
+use App\Models\CommunityPost;
 use App\Models\Episode;
 use App\Models\RevisionBlock;
 use App\Models\Season;
@@ -105,6 +108,13 @@ class UpsertSpoilerBoundary
             $revisable = $target->revision->revisable;
 
             return $this->universeId($revisable);
+        }
+
+        if ($target instanceof Bunker || $target instanceof CommunityPost) {
+            return $target->universe_id;
+        }
+        if ($target instanceof CommunityComment) {
+            return $target->post()->value('universe_id');
         }
 
         throw new InvalidEditorialOperation('This target does not support normalized spoiler boundaries.', 'invalid_spoiler_target');

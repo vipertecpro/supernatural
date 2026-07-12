@@ -28,3 +28,11 @@ Content-rights and takedown concerns are not security vulnerabilities; follow `C
 ## Moderation and notification data
 
 Report identity, evidence, case notes, appeal text, notification payloads, delivery failures, and user restrictions are sensitive application data. Access must remain owner- or case-scoped and audited. Do not place report/appeal bodies, reporter identity, rendered email content, provider responses, private Journey history, playback positions, tokens, or headers in logs or public issues. Delivery retries must remain bounded and must not bypass notification preferences or mandatory safety rules.
+
+## Community data
+
+Private Bunker existence/membership, join messages, invitation tokens, local notes, bookmarks, voter identity, mentions, and removed content are sensitive. Enforce membership before pagination/Media URLs, store token hashes, bound comment/mention/poll inputs, allowlist morphs/reactions, and keep local roles separate from platform permissions. Community events do not broadcast in this phase.
+
+## Interaction safety data
+
+Block/mute lists, direction, reason codes, scopes, and expiry are private owner data. Do not expose arbitrary-user lookup/count endpoints, target notifications, direction-specific errors, or preference contents in logs. Mandatory moderation/security notices and report/appeal access must not be suppressed. Realtime presence must not be implemented until it can enforce the same evaluator.

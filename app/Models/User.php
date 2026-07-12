@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -47,6 +48,18 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    /** @return HasMany<UserBlock, $this> */
+    public function blocks(): HasMany
+    {
+        return $this->hasMany(UserBlock::class, 'blocker_user_id');
+    }
+
+    /** @return HasMany<UserMute, $this> */
+    public function mutes(): HasMany
+    {
+        return $this->hasMany(UserMute::class, 'muting_user_id');
     }
 
     /**
@@ -103,6 +116,13 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
     protected static function booted(): void
     {
         static::deleting(function (self $user): void {
+            UserBlock::query()->where('blocker_user_id', $user->id)->orWhere('blocked_user_id', $user->id)->delete();
+            UserMute::query()->where('muting_user_id', $user->id)->orWhere('muted_user_id', $user->id)->delete();
+            Bunker::query()->where('owner_user_id', $user->id)->whereNotIn('status', ['archived'])->update(['status' => 'archived', 'archived_at' => now(), 'owner_membership_key' => null]);
+            BunkerMembership::query()->where('user_id', $user->id)->where('status', 'active')->update(['status' => 'left', 'active_key' => null, 'left_at' => now()]);
+            BunkerJoinRequest::query()->where('user_id', $user->id)->where('status', 'pending')->update(['status' => 'withdrawn', 'active_key' => null]);
+            BunkerInvitation::query()->where('invited_user_id', $user->id)->where('status', 'pending')->update(['status' => 'revoked', 'active_key' => null, 'revoked_at' => now()]);
+            CommunityMention::query()->where('mentioned_user_id', $user->id)->update(['inactive_at' => now(), 'notification_key' => null]);
             $restrictionIds = UserRestriction::query()->where('user_id', $user->id)->pluck('id');
             if ($restrictionIds->isNotEmpty()) {
                 Appeal::query()->whereIn('user_restriction_id', $restrictionIds)->update(['user_restriction_id' => null]);

@@ -33,3 +33,7 @@ Relational projections cover public universe, franchise, work, season, episode, 
 ## Prompt 8 implementation
 
 Authenticated Search results may include the viewer's exact current progress status and basis points. Candidate scope keys are joined in one private query after global candidates are selected. Guests receive no personal-state keys. Progress never changes the shared document, suggestion, query-analytics row, or global ranking.
+
+## Prompt 10 implementation
+
+Media attachments now allow `bunker` and `community_post` targets through existing rights, moderation, publication, universe, restriction, ordering, and spoiler gates. Comment media and Community Search projections remain deferred. Search receives no private Bunker, bookmark, reaction, vote, or Journey data.

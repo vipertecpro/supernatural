@@ -9,6 +9,9 @@ use App\Enums\SpoilerClassificationStatus;
 use App\Enums\SpoilerSeverity;
 use App\Enums\SpoilerTolerance;
 use App\Enums\SpoilerVisibility;
+use App\Models\Bunker;
+use App\Models\CommunityComment;
+use App\Models\CommunityPost;
 use App\Models\EntityAppearance;
 use App\Models\Episode;
 use App\Models\LoreAlias;
@@ -142,6 +145,8 @@ class SpoilerVisibilityService
             $model instanceof LoreEntityTranslation, $model instanceof LoreAlias, $model instanceof EntityAppearance => (int) $model->loreEntity()->value('universe_id'),
             $model instanceof LoreRelationship => (int) $model->sourceEntity()->value('universe_id'),
             $model instanceof TimelineEntry => (int) $model->timeline()->value('universe_id'),
+            $model instanceof Bunker, $model instanceof CommunityPost => (int) $model->getAttribute('universe_id'),
+            $model instanceof CommunityComment => (int) $model->post()->value('universe_id'),
             default => (int) $model->getAttribute('universe_id'),
         };
     }

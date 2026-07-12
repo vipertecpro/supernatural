@@ -69,3 +69,15 @@ Phase 5 implements Catalog viewing orders plus the owner-private User Journey li
 ## Prompt 9 completion note
 
 Phase 6 implements controlled reports/evidence, cases/assignments/actions, Identity and content restrictions, appeals/decisions, explicit existing-module enforcement, stable recipient/versioned notification records, preferences, in-app/email attempts, spoiler-safe rendering, queued scalar event consumers, API v1, deletion behavior, factories, and tests. Community remains Phase 7 and may begin only after owner review of this uncommitted diff; it must use these report/restriction interfaces without expanding into Messaging.
+
+## Prompt 10 completion note
+
+Phase 7 implements persistent Community/Bunkers with local roles, membership lifecycles, UGC/interactions, polls, chronological feeds, and spoiler/Media/moderation/notification reuse. `link_previews`, Community Search, frontend, Messaging, and real-time delivery remain deferred. Prompt 11 implements/reviews the canonical `user_blocks` and `user_mutes` Identity prerequisite. Prompt 12 defines UI/UX architecture only; future Messaging must preserve Bunker-local and conversation authority boundaries.
+
+## Prompt 11 interaction-safety prerequisite
+
+The bounded Identity prerequisite now implements private `user_blocks` and scoped/expiring `user_mutes`, centralized evaluation, Community/Bunker/notification/feed enforcement, and owner-only API v1. Messaging remains unimplemented and must reuse this evaluator in the next phase.
+
+## Prompt 12 UI/UX architecture and visible-product sequence
+
+Prompt 12 documents 206 screens, five separate experience contexts, a reusable semantic design system, accessibility/motion/spoiler/safety contracts, API readiness, and the exact Prompt 13–20 frontend roadmap. Prompt 13 implements design-system foundations and shells only; Prompts 14–20 then deliver authentication/onboarding, public site, public knowledge, Fan Journey, Community/Bunkers, contributor, and moderation/administration surfaces. Messaging and other backend-deferred domains do not enter this visible-product sequence as functional UI.

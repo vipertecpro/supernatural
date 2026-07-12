@@ -5,6 +5,11 @@ namespace App\Providers;
 use App\Enums\PermissionName;
 use App\Events\AppealDecided;
 use App\Events\AppealSubmitted;
+use App\Events\BunkerInvitationCreated;
+use App\Events\BunkerMemberBanned;
+use App\Events\BunkerMembershipApproved;
+use App\Events\BunkerMembershipRequested;
+use App\Events\CommunityMentionCreated;
 use App\Events\EditorialRevisionApplied;
 use App\Events\EditorialRevisionApproved;
 use App\Events\LoreEntityPublished;
@@ -17,14 +22,33 @@ use App\Events\RewatchCycleCompleted;
 use App\Events\SearchProjectionRemovalRequested;
 use App\Events\SearchProjectionRequested;
 use App\Events\TimelinePublished;
+use App\Events\UserBlocked;
 use App\Events\UserRestrictionLifted;
 use App\Events\ViewingJourneyCompleted;
 use App\Listeners\CreateDomainNotification;
+use App\Listeners\DeactivateBlockedCommunityMentions;
 use App\Listeners\RefreshSearchProjection;
 use App\Models\Appeal;
 use App\Models\AppealDecision;
 use App\Models\AuditLog;
+use App\Models\Bunker;
+use App\Models\BunkerBan;
+use App\Models\BunkerCategory;
+use App\Models\BunkerInvitation;
+use App\Models\BunkerJoinRequest;
+use App\Models\BunkerMembership;
+use App\Models\BunkerRule;
 use App\Models\Citation;
+use App\Models\CommunityBookmark;
+use App\Models\CommunityComment;
+use App\Models\CommunityMention;
+use App\Models\CommunityPoll;
+use App\Models\CommunityPollOption;
+use App\Models\CommunityPollVote;
+use App\Models\CommunityPost;
+use App\Models\CommunityReaction;
+use App\Models\CommunityTag;
+use App\Models\CommunityTaggable;
 use App\Models\ContentLicense;
 use App\Models\ContentRestriction;
 use App\Models\EditorialRevision;
@@ -67,7 +91,9 @@ use App\Models\TimelineEntry;
 use App\Models\TrendingSnapshot;
 use App\Models\Universe;
 use App\Models\User;
+use App\Models\UserBlock;
 use App\Models\UserFandomPreference;
+use App\Models\UserMute;
 use App\Models\UserNotification;
 use App\Models\UserRestriction;
 use App\Models\UserRestrictionScope;
@@ -84,6 +110,9 @@ use App\Models\Work;
 use App\Models\WorkTranslation;
 use App\Policies\AppealPolicy;
 use App\Policies\AuditLogPolicy;
+use App\Policies\BunkerPolicy;
+use App\Policies\CommunityCommentPolicy;
+use App\Policies\CommunityPostPolicy;
 use App\Policies\ContentLicensePolicy;
 use App\Policies\EditorialRevisionPolicy;
 use App\Policies\EntityAppearancePolicy;
@@ -109,7 +138,9 @@ use App\Policies\SpoilerBoundaryPolicy;
 use App\Policies\TimelineEntryPolicy;
 use App\Policies\TimelinePolicy;
 use App\Policies\UniversePolicy;
+use App\Policies\UserBlockPolicy;
 use App\Policies\UserFandomPreferencePolicy;
+use App\Policies\UserMutePolicy;
 use App\Policies\UserNotificationPolicy;
 use App\Policies\UserViewingJourneyPolicy;
 use App\Policies\ViewingOrderPolicy;
@@ -217,6 +248,25 @@ class AppServiceProvider extends ServiceProvider
             'user_notification' => UserNotification::class,
             'notification_preference' => NotificationPreference::class,
             'notification_delivery' => NotificationDelivery::class,
+            'bunker_category' => BunkerCategory::class,
+            'bunker' => Bunker::class,
+            'bunker_membership' => BunkerMembership::class,
+            'bunker_join_request' => BunkerJoinRequest::class,
+            'bunker_invitation' => BunkerInvitation::class,
+            'bunker_ban' => BunkerBan::class,
+            'bunker_rule' => BunkerRule::class,
+            'community_post' => CommunityPost::class,
+            'community_comment' => CommunityComment::class,
+            'community_reaction' => CommunityReaction::class,
+            'community_bookmark' => CommunityBookmark::class,
+            'community_tag' => CommunityTag::class,
+            'community_taggable' => CommunityTaggable::class,
+            'community_mention' => CommunityMention::class,
+            'community_poll' => CommunityPoll::class,
+            'community_poll_option' => CommunityPollOption::class,
+            'community_poll_vote' => CommunityPollVote::class,
+            'user_block' => UserBlock::class,
+            'user_mute' => UserMute::class,
         ]);
     }
 
@@ -281,6 +331,11 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Appeal::class, AppealPolicy::class);
         Gate::policy(UserNotification::class, UserNotificationPolicy::class);
         Gate::policy(NotificationPreference::class, NotificationPreferencePolicy::class);
+        Gate::policy(Bunker::class, BunkerPolicy::class);
+        Gate::policy(CommunityPost::class, CommunityPostPolicy::class);
+        Gate::policy(CommunityComment::class, CommunityCommentPolicy::class);
+        Gate::policy(UserBlock::class, UserBlockPolicy::class);
+        Gate::policy(UserMute::class, UserMutePolicy::class);
 
         foreach (PermissionName::cases() as $permission) {
             Gate::define(
@@ -310,6 +365,12 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('appeals', function (Request $request): Limit {
             return Limit::perMinute((int) config('moderation.appeal_rate_limit_per_minute', 3))->by((string) ($request->user()?->getAuthIdentifier() ?? $request->ip()));
         });
+
+        RateLimiter::for('interaction-safety', fn (Request $request): Limit => Limit::perMinute(20)->by((string) ($request->user()?->getAuthIdentifier() ?? $request->ip())));
+
+        foreach (['bunker-create' => 'bunker_create_rate_limit_per_minute', 'community-posts' => 'post_rate_limit_per_minute', 'community-comments' => 'comment_rate_limit_per_minute', 'community-interactions' => 'interaction_rate_limit_per_minute'] as $name => $key) {
+            RateLimiter::for($name, fn (Request $request): Limit => Limit::perMinute((int) config('community.'.$key))->by((string) ($request->user()?->getAuthIdentifier() ?? $request->ip())));
+        }
     }
 
     /** Register synchronous idempotent projection consumers for after-commit events. */
@@ -327,6 +388,8 @@ class AppServiceProvider extends ServiceProvider
     /** Register privacy-safe queued notification consumers. */
     protected function configureNotificationListeners(): void
     {
+        Event::listen(UserBlocked::class, DeactivateBlockedCommunityMentions::class);
+
         Event::listen([
             ReportSubmitted::class,
             ReportClosed::class,
@@ -340,6 +403,11 @@ class AppServiceProvider extends ServiceProvider
             MediaPublished::class,
             ViewingJourneyCompleted::class,
             RewatchCycleCompleted::class,
+            BunkerInvitationCreated::class,
+            BunkerMembershipRequested::class,
+            BunkerMembershipApproved::class,
+            BunkerMemberBanned::class,
+            CommunityMentionCreated::class,
         ], CreateDomainNotification::class);
     }
 }

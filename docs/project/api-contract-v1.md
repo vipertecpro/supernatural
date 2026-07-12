@@ -98,3 +98,11 @@ Breaking response, authentication, or semantic changes require a new URL version
 ## Mobile Compatibility
 
 The contract avoids Inertia/browser-only response semantics and is suitable for a future NativePHP Mobile client. Token issuance, device registration, push notifications, offline synchronization, refresh/revocation UX, and product endpoints are intentionally deferred until the web/domain foundation is stable.
+
+## Prompt 10 Community contract
+
+Community reads expose published public records or authenticated active-member records. Verified writes use policies, local-role checks, central restrictions, enum Form Requests, named limits, and transactions. Private Bunkers are non-enumerating, bookmarks are owner-only, poll voters are never serialized, and no endpoint exposes another user's private Community state.
+
+## Prompt 11 Interaction Safety contract
+
+Verified owners may list/create/delete only their `/me/blocks` and `/me/mutes`. Resources expose the selected target and the owner's own bounded reason/scope/expiry only. Duplicate creates are idempotent, lists are cursor-bounded, request IDs remain present, and no target-facing state/direction endpoint exists.

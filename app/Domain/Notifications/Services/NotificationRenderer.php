@@ -60,6 +60,11 @@ class NotificationRenderer
             'media.review.approved' => ['Media approved', 'Your media record passed review.', null, null, []],
             'journey.completed' => ['Journey completed', 'You completed a private viewing journey.', 'View journey', 'api.v1.me.journeys.show', ['journey' => (int) $notification->payload['journey_id']]],
             'rewatch.completed' => ['Rewatch completed', 'You completed a private rewatch cycle.', null, null, []],
+            'community.bunker.invited' => ['Bunker invitation', 'You received a Bunker invitation.', null, null, []],
+            'community.bunker.join_requested' => ['Join request', 'A user requested to join your Bunker.', null, null, []],
+            'community.bunker.join_approved' => ['Join request approved', 'Your Bunker join request was approved.', 'View Bunker', 'api.v1.bunkers.show', ['bunker' => (int) $notification->payload['bunker_id']]],
+            'community.bunker.banned' => ['Bunker access restricted', 'Your access to a Bunker was restricted.', null, null, []],
+            'community.post.mentioned' => ['Community mention', 'You were mentioned in eligible Community content.', null, null, []],
             default => ['Notification update', 'An account update is available.', null, null, []],
         };
     }

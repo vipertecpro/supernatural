@@ -28,3 +28,7 @@ erDiagram
     USERS ||--o{ NOTIFICATIONS : receives
     NOTIFICATIONS ||--o{ NOTIFICATION_DELIVERIES : delivers
 ```
+
+Prompt 10 adds Bunker, post, comment, and poll report targets plus Community capability scopes without creating another case or Appeals system. Stable Community notifications cover invitations, join requests/approval, local bans, and mentions using scalar IDs only. No body, raw invitation token, private local note, membership list, reporter identity, or Reverb payload is emitted.
+
+Prompt 11 suppresses optional actor-caused mention and invitation notifications before record/delivery creation when a mutual block or applicable recipient mute exists. Moderation actions, restrictions, appeals, security/account, rights/takedown, and integrity notices bypass personal suppression. Block/mute events are scalar after-commit facts with no notification or broadcast consumer.

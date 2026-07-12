@@ -104,3 +104,11 @@ Prompt 8 implements Catalog-owned `viewing_orders` and `viewing_order_items`; ad
 ## Prompt 9 implemented Moderation and Notification subset
 
 Prompt 9 implements Identity-owned `user_restrictions` and `user_restriction_scopes`; Moderation-owned `report_categories`, `reports`, `report_evidence`, `moderation_cases`, `moderation_case_assignments`, `moderation_actions`, `content_restrictions`, `appeals`, and `appeal_decisions`; and Notification-owned `notifications`, `notification_preferences`, and `notification_deliveries`. Stable notification types are code-controlled. Reserved `copyright_notices`, `trust_signals`, `digest_preferences`, and `push_devices` remain unimplemented because public legal intake, trust automation, digests, and push are outside Phase 6. No existing table or row is removed.
+
+## Prompt 10 implemented Community subset
+
+Prompt 10 implements 18 canonical Community tables: all Bunker/category/membership/request/invitation/ban/rule records plus posts, comments, reactions, bookmarks, polls/options/votes, tags/taggables, and mentions. `link_previews` remains the sole deferred inventory reservation because this phase forbids external fetching and no approved SSRF-safe preview service exists. Separate post/comment version tables are not canonical; checksums, edit indicators, audit events, soft deletion, and immutable moderation actions are the selected current history boundary.
+
+## Prompt 11 implemented Identity subset
+
+Prompt 11 implements canonical `user_blocks` and `user_mutes`. Blocks use a unique directional user pair and reverse lookup. Mutes use a unique `(muting_user_id, muted_user_id, scope)` tuple plus active-expiration and reverse indexes. Both cascade on either user deletion and contain no public aggregate or free-text note.

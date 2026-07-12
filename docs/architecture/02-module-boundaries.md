@@ -56,3 +56,5 @@ flowchart TD
 ```
 
 Arrows mean “may depend on.” Notifications and Search primarily consume after-commit events; they must not become prerequisites for source-domain commits. Where the diagram visually suggests a later module feeding an earlier concern (for example moderation restricting community), the integration occurs through Identity restrictions or a source-module visibility projection, not direct reverse table mutation.
+
+Prompt 11 implements Identity-owned private block/mute records and a stateless evaluator consumed synchronously by Community and Notifications. Product modules ask Identity for decisions but never write these tables; Search applies viewer-specific decisions at query time without personalized projections.

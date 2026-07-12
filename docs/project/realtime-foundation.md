@@ -33,4 +33,8 @@ Scaling uses the configured Redis connection only when explicitly enabled. Capac
 
 ## Deferred Until Chat
 
-Conversation/message persistence, memberships, presence payloads, receipts, typing, message moderation, blocks/mutes, retention, encryption decisions and client reconnection UX remain deferred until Messaging. Prompt 9 implements durable moderation and notification routing without Reverb: personal/moderation notifications recover through API v1, and progress/session/playback activity is never broadcast.
+Conversation/message persistence, memberships, presence payloads, receipts, typing, message moderation, retention, encryption decisions and client reconnection UX remain deferred until Messaging. Prompt 11 implements blocks/mutes and their reusable evaluator without Reverb. Prompt 9 implements durable moderation and notification routing without Reverb: personal/moderation notifications recover through API v1, and progress/session/playback activity is never broadcast.
+
+Prompt 10 is database/API only. Its scalar events dispatch after commit for notifications and future consumers, but none implements `ShouldBroadcast`; there are no Community channels, chat, presence, typing, receipts, or live-feed payloads.
+
+Prompt 11 adds scalar after-commit block/mute lifecycle events but no `ShouldBroadcast`, channel, presence, typing, receipt, conversation, or message behavior. Future realtime authorization must call the same interaction evaluator before exposing activity.

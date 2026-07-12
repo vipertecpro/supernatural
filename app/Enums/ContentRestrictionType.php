@@ -10,4 +10,5 @@ enum ContentRestrictionType: string
     case AttachmentsBlocked = 'attachments_blocked';
     case TakedownRestricted = 'takedown_restricted';
     case RightsReviewRequired = 'rights_review_required';
+    case CommentsBlocked = 'comments_blocked';
 }

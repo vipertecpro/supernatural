@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RolePermissionSeeder::class);
         $this->call(RelationshipTypeSeeder::class);
         $this->call(ReportCategorySeeder::class);
+        $this->call(BunkerCategorySeeder::class);
     }
 }

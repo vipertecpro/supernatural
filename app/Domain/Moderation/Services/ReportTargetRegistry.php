@@ -4,6 +4,10 @@ namespace App\Domain\Moderation\Services;
 
 use App\Domain\Moderation\Exceptions\InvalidModerationOperation;
 use App\Enums\PublicationStatus;
+use App\Models\Bunker;
+use App\Models\CommunityComment;
+use App\Models\CommunityPoll;
+use App\Models\CommunityPost;
 use App\Models\EntityAppearance;
 use App\Models\Episode;
 use App\Models\ExternalEmbed;
@@ -27,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 class ReportTargetRegistry
 {
     /** @var list<string> */
-    public const ALIASES = ['user', 'universe', 'franchise', 'work', 'work_translation', 'season', 'episode', 'lore_entity', 'lore_alias', 'entity_appearance', 'lore_relationship', 'timeline', 'timeline_entry', 'media_asset', 'external_embed', 'media_attachment', 'viewing_order'];
+    public const ALIASES = ['user', 'universe', 'franchise', 'work', 'work_translation', 'season', 'episode', 'lore_entity', 'lore_alias', 'entity_appearance', 'lore_relationship', 'timeline', 'timeline_entry', 'media_asset', 'external_embed', 'media_attachment', 'viewing_order', 'bunker', 'community_post', 'community_comment', 'community_poll'];
 
     public function resolve(string $alias, int $id): Model
     {
@@ -57,6 +61,10 @@ class ReportTargetRegistry
             $target instanceof LoreRelationship => $target->status->value === 'published' && LoreEntity::query()->visibleToPublic()->whereKey($target->source_entity_id)->exists(),
             $target instanceof TimelineEntry => $target->status === PublicationStatus::Published && Timeline::query()->visibleToPublic()->whereKey($target->timeline_id)->exists(),
             $target instanceof MediaAttachment => $target->status === PublicationStatus::Published,
+            $target instanceof Bunker => $target->visibility->value === 'public' || $target->memberships()->where(['user_id' => $reporter->id, 'status' => 'active'])->whereNotNull('active_key')->exists(),
+            $target instanceof CommunityPost => $target->bunker === null || $target->bunker->visibility->value === 'public' || $target->bunker->memberships()->where(['user_id' => $reporter->id, 'status' => 'active'])->whereNotNull('active_key')->exists(),
+            $target instanceof CommunityComment => $this->isAccessibleToReporter($target->post, $reporter),
+            $target instanceof CommunityPoll => $this->isAccessibleToReporter($target->post, $reporter),
             default => false,
         };
     }

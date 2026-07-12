@@ -17,3 +17,7 @@ Report conduct concerns privately through an available repository-owner contact 
 Application reports and appeals follow the same confidentiality rule: reporter identity and private evidence are limited to authorized review, subjects receive only public-safe reasons, conflicted reviewers must recuse, and retaliation or abusive reporting may itself be addressed through an explicit attributable action.
 
 Enforcement decisions may be appealed once with concise new context. Appeals do not permit continued harmful behavior while under review.
+
+Bunker owners and local moderators may enforce published local rules inside their group, but must not impersonate platform moderators, retaliate against reporters, expose private notes/membership data, or claim editorial, rights-review, or administrator powers.
+
+Users may privately block or mute others without that preference being published or treated as proof of misconduct. Platform reporting and emergency/safety notices remain available regardless of a personal preference.

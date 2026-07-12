@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AppealController;
+use App\Http\Controllers\Api\V1\BunkerController;
+use App\Http\Controllers\Api\V1\CommunityInteractionController;
+use App\Http\Controllers\Api\V1\CommunityPostController;
 use App\Http\Controllers\Api\V1\ContinueWatchingController;
 use App\Http\Controllers\Api\V1\EditorialCitationController;
 use App\Http\Controllers\Api\V1\EditorialReviewController;
@@ -11,6 +14,7 @@ use App\Http\Controllers\Api\V1\ExternalEmbedController;
 use App\Http\Controllers\Api\V1\FavouriteController;
 use App\Http\Controllers\Api\V1\FranchiseController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\InteractionSafetyController;
 use App\Http\Controllers\Api\V1\JourneyPreferenceController;
 use App\Http\Controllers\Api\V1\LoreAliasController;
 use App\Http\Controllers\Api\V1\LoreEntityController;
@@ -77,9 +81,25 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('universes/{universe}/viewing-orders', [ViewingOrderController::class, 'index'])->name('universes.viewing-orders.index');
         Route::get('viewing-orders/{viewingOrder}', [ViewingOrderController::class, 'show'])->name('viewing-orders.show');
         Route::get('viewing-orders/{viewingOrder}/items', [ViewingOrderController::class, 'items'])->name('viewing-orders.items');
+        Route::get('bunker-categories', [BunkerController::class, 'categories'])->name('bunker-categories.index');
+        Route::get('universes/{universe}/bunkers', [BunkerController::class, 'index'])->name('universes.bunkers.index');
+        Route::get('bunkers/{bunker}', [BunkerController::class, 'show'])->name('bunkers.show');
+        Route::get('bunkers/{bunker}/rules', [BunkerController::class, 'rules'])->name('bunkers.rules.index');
+        Route::get('bunkers/{bunker}/members', [BunkerController::class, 'members'])->name('bunkers.members.index');
+        Route::get('community/feed', [CommunityPostController::class, 'feed'])->name('community.feed');
+        Route::get('universes/{universe}/community/feed', [CommunityPostController::class, 'universeFeed'])->name('universes.community.feed');
+        Route::get('bunkers/{bunker}/feed', [CommunityPostController::class, 'bunkerFeed'])->name('bunkers.feed');
+        Route::get('community/posts/{post}', [CommunityPostController::class, 'show'])->name('community.posts.show');
+        Route::get('community/posts/{post}/comments', [CommunityPostController::class, 'comments'])->name('community.posts.comments.index');
     });
 
     Route::middleware(['auth:sanctum', 'verified', 'throttle:api-v1', 'restrictions'])->scopeBindings()->group(function () {
+        Route::get('me/blocks', [InteractionSafetyController::class, 'blocks'])->name('me.blocks.index');
+        Route::post('me/blocks', [InteractionSafetyController::class, 'block'])->middleware('throttle:interaction-safety')->name('me.blocks.store');
+        Route::delete('me/blocks/{block}', [InteractionSafetyController::class, 'unblock'])->name('me.blocks.destroy');
+        Route::get('me/mutes', [InteractionSafetyController::class, 'mutes'])->name('me.mutes.index');
+        Route::post('me/mutes', [InteractionSafetyController::class, 'mute'])->middleware('throttle:interaction-safety')->name('me.mutes.store');
+        Route::delete('me/mutes/{mute}', [InteractionSafetyController::class, 'unmute'])->name('me.mutes.destroy');
         Route::get('report-categories', [ReportController::class, 'categories'])->name('report-categories.index');
         Route::get('me/reports', [ReportController::class, 'index'])->name('me.reports.index');
         Route::post('reports', [ReportController::class, 'store'])->middleware('throttle:reports')->name('reports.store');
@@ -100,6 +120,47 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::post('me/notifications/{notification}/archive', [UserNotificationController::class, 'archive'])->name('me.notifications.archive');
         Route::get('me/notification-preferences', [NotificationPreferenceController::class, 'index'])->name('me.notification-preferences.index');
         Route::patch('me/notification-preferences', [NotificationPreferenceController::class, 'update'])->name('me.notification-preferences.update');
+
+        Route::post('universes/{universe}/bunkers', [BunkerController::class, 'store'])->middleware('throttle:bunker-create')->name('universes.bunkers.store');
+        Route::patch('bunkers/{bunker}', [BunkerController::class, 'update'])->name('bunkers.update');
+        Route::post('bunkers/{bunker}/publish', [BunkerController::class, 'publish'])->name('bunkers.publish');
+        Route::post('bunkers/{bunker}/archive', [BunkerController::class, 'archive'])->name('bunkers.archive');
+        Route::post('bunkers/{bunker}/transfer-ownership', [BunkerController::class, 'transfer'])->name('bunkers.transfer-ownership');
+        Route::post('bunkers/{bunker}/join-requests', [BunkerController::class, 'join'])->middleware('throttle:bunker-create')->name('bunkers.join-requests.store');
+        Route::post('bunker-join-requests/{joinRequest}/approve', [BunkerController::class, 'approveJoin'])->name('bunker-join-requests.approve');
+        Route::post('bunker-join-requests/{joinRequest}/reject', [BunkerController::class, 'rejectJoin'])->name('bunker-join-requests.reject');
+        Route::post('bunker-join-requests/{joinRequest}/withdraw', [BunkerController::class, 'withdrawJoin'])->name('bunker-join-requests.withdraw');
+        Route::post('bunkers/{bunker}/invitations', [BunkerController::class, 'invite'])->name('bunkers.invitations.store');
+        Route::post('bunker-invitations/{invitation}/accept', [BunkerController::class, 'acceptInvitation'])->name('bunker-invitations.accept');
+        Route::post('bunker-invitations/{invitation}/decline', [BunkerController::class, 'declineInvitation'])->name('bunker-invitations.decline');
+        Route::post('bunker-invitations/{invitation}/revoke', [BunkerController::class, 'revokeInvitation'])->name('bunker-invitations.revoke');
+        Route::get('me/bunker-memberships', [BunkerController::class, 'myMemberships'])->name('me.bunker-memberships.index');
+        Route::patch('bunker-memberships/{membership}', [BunkerController::class, 'updateMembership'])->name('bunker-memberships.update');
+        Route::delete('bunker-memberships/{membership}', [BunkerController::class, 'removeMembership'])->name('bunker-memberships.destroy');
+        Route::post('bunkers/{bunker}/bans', [BunkerController::class, 'ban'])->name('bunkers.bans.store');
+        Route::post('bunker-bans/{ban}/lift', [BunkerController::class, 'liftBan'])->name('bunker-bans.lift');
+        Route::post('bunkers/{bunker}/rules', [BunkerController::class, 'storeRule'])->name('bunkers.rules.store');
+        Route::patch('bunker-rules/{rule}', [BunkerController::class, 'updateRule'])->name('bunker-rules.update');
+        Route::delete('bunker-rules/{rule}', [BunkerController::class, 'deleteRule'])->name('bunker-rules.destroy');
+        Route::post('bunkers/{bunker}/rules/reorder', [BunkerController::class, 'reorderRules'])->name('bunkers.rules.reorder');
+
+        Route::post('community/posts', [CommunityPostController::class, 'store'])->middleware('throttle:community-posts')->name('community.posts.store');
+        Route::patch('community/posts/{post}', [CommunityPostController::class, 'update'])->name('community.posts.update');
+        Route::delete('community/posts/{post}', [CommunityPostController::class, 'destroy'])->name('community.posts.destroy');
+        Route::post('community/posts/{post}/lock', [CommunityPostController::class, 'lock'])->name('community.posts.lock');
+        Route::post('community/posts/{post}/unlock', [CommunityPostController::class, 'unlock'])->name('community.posts.unlock');
+        Route::post('community/posts/{post}/comments', [CommunityPostController::class, 'storeComment'])->middleware('throttle:community-comments')->name('community.posts.comments.store');
+        Route::patch('community/comments/{comment}', [CommunityPostController::class, 'updateComment'])->name('community.comments.update');
+        Route::delete('community/comments/{comment}', [CommunityPostController::class, 'destroyComment'])->name('community.comments.destroy');
+        Route::put('community/{type}/{id}/reactions/{reaction}', [CommunityInteractionController::class, 'react'])->whereIn('type', ['post', 'comment'])->whereIn('reaction', ['like', 'love', 'insightful', 'funny', 'support'])->whereNumber('id')->middleware('throttle:community-interactions')->name('community.reactions.store');
+        Route::delete('community/{type}/{id}/reactions/{reaction}', [CommunityInteractionController::class, 'unreact'])->whereIn('type', ['post', 'comment'])->whereIn('reaction', ['like', 'love', 'insightful', 'funny', 'support'])->whereNumber('id')->name('community.reactions.destroy');
+        Route::get('me/community-bookmarks', [CommunityInteractionController::class, 'bookmarks'])->name('me.community-bookmarks.index');
+        Route::post('me/community-bookmarks/{post}', [CommunityInteractionController::class, 'bookmark'])->name('me.community-bookmarks.store');
+        Route::delete('me/community-bookmarks/{bookmark}', [CommunityInteractionController::class, 'removeBookmark'])->name('me.community-bookmarks.destroy');
+        Route::post('community/posts/{post}/poll', [CommunityInteractionController::class, 'createPoll'])->name('community.polls.store');
+        Route::post('community/polls/{poll}/votes', [CommunityInteractionController::class, 'vote'])->name('community.polls.votes.store');
+        Route::delete('community/polls/{poll}/votes', [CommunityInteractionController::class, 'removeVote'])->name('community.polls.votes.destroy');
+        Route::post('community/polls/{poll}/close', [CommunityInteractionController::class, 'close'])->name('community.polls.close');
 
         Route::prefix('moderation')->name('moderation.')->group(function () {
             Route::get('cases', [ModerationCaseController::class, 'index'])->name('cases.index');

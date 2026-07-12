@@ -10,3 +10,5 @@
 - Future review conditions: extreme fan-out requires dedicated pub/sub or separate delivery workers.
 
 Prompt 9 persists moderation and notification records before delivery. Its notification listener and mail adapter run after commit through queues. No report, restriction, appeal, notification, progress, session, or playback event is broadcast through Reverb.
+
+Prompt 10 persists every Community write before scalar after-commit events. No Community event implements a broadcasting contract; feeds and comments recover from API/database state. Messaging and Bunker chat remain Phase 8.

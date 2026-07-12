@@ -18,3 +18,5 @@ Prompt 6 adds Lore morph aliases and target-aware relationship serialization. Hi
 Prompt 8 expands viewer knowledge to exact completed scopes, legacy positional progress, append-only completion events, and rewatch history. A normal progress reset does not make a user unknow completed content; only an explicit full spoiler-reset event changes that scope's historical basis.
 
 Prompt 9 routes notification API and email copy through the recipient-aware spoiler service. Missing, moderation-restricted, deleted, redacted, warning, and visible subjects have explicit render outcomes; payloads never depend on frontend blur or store protected titles.
+
+Prompt 10 adds Bunker, post, and comment targets to the same normalized evaluator. Author classifications begin conservatively, feeds filter before output, mentions store no body, polls inherit post boundaries, and Bunker defaults cannot weaken stricter content constraints.

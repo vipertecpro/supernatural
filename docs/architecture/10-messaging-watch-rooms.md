@@ -6,6 +6,8 @@ Conversations are `direct`, `group`, `bunker`, `watch_room`, or `system`. Partic
 
 Blocks prevent new direct messages and channel authorization; mutes suppress delivery/notifications but do not silently leave membership. “Delete for me” is participant state; “remove for everyone” tombstones under policy; account deletion pseudonymizes authorship where retention/moderation requires it. Typing and presence use short-lived Reverb/client state and are never database history.
 
+Prompt 11 provides the canonical `InteractionSafetyEvaluator`. Prompt 12 must call it before direct conversation creation, message send, participant search, channel authorization, presence, typing, and receipt disclosure. Either-direction blocks deny with a generic error; existing history remains; group membership is not corrupted. Mutes do not authorize or deny sending and affect optional delivery only. Mandatory moderation messages bypass suppression.
+
 ```mermaid
 sequenceDiagram
     participant C as Sender client

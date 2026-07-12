@@ -2,9 +2,15 @@
 
 namespace App\Listeners;
 
+use App\Domain\Identity\Services\InteractionSafetyEvaluator;
 use App\Domain\Notifications\Actions\CreateUserNotification;
 use App\Events\AppealDecided;
 use App\Events\AppealSubmitted;
+use App\Events\BunkerInvitationCreated;
+use App\Events\BunkerMemberBanned;
+use App\Events\BunkerMembershipApproved;
+use App\Events\BunkerMembershipRequested;
+use App\Events\CommunityMentionCreated;
 use App\Events\EditorialRevisionApplied;
 use App\Events\EditorialRevisionApproved;
 use App\Events\MediaPublished;
@@ -16,6 +22,11 @@ use App\Events\RewatchCycleCompleted;
 use App\Events\UserRestrictionLifted;
 use App\Events\ViewingJourneyCompleted;
 use App\Models\Appeal;
+use App\Models\Bunker;
+use App\Models\BunkerBan;
+use App\Models\BunkerInvitation;
+use App\Models\BunkerJoinRequest;
+use App\Models\CommunityMention;
 use App\Models\EditorialRevision;
 use App\Models\ModerationAction;
 use App\Models\ModerationCase;
@@ -34,7 +45,7 @@ class CreateDomainNotification implements ShouldQueueAfterCommit
 
     public int $tries = 3;
 
-    public function __construct(private readonly CreateUserNotification $notifications) {}
+    public function __construct(private readonly CreateUserNotification $notifications, private readonly InteractionSafetyEvaluator $interactionSafety) {}
 
     public function handle(object $event): void
     {
@@ -51,6 +62,11 @@ class CreateDomainNotification implements ShouldQueueAfterCommit
             $event instanceof MediaPublished => $this->mediaPublished($event),
             $event instanceof ViewingJourneyCompleted => $this->journeyCompleted($event),
             $event instanceof RewatchCycleCompleted => $this->rewatchCompleted($event),
+            $event instanceof BunkerInvitationCreated => $this->bunkerInvited($event),
+            $event instanceof BunkerMembershipRequested => $this->bunkerJoinRequested($event),
+            $event instanceof BunkerMembershipApproved => $this->bunkerJoinApproved($event),
+            $event instanceof BunkerMemberBanned => $this->bunkerBanned($event),
+            $event instanceof CommunityMentionCreated => $this->communityMention($event),
             default => null,
         };
     }
@@ -122,6 +138,40 @@ class CreateDomainNotification implements ShouldQueueAfterCommit
     private function rewatchCompleted(RewatchCycleCompleted $event): void
     {
         $this->create(User::query()->find($event->userId), 'rewatch.completed', 'rewatch-completed:'.$event->rewatchCycleId, ['rewatch_cycle_id' => $event->rewatchCycleId], RewatchCycle::query()->find($event->rewatchCycleId));
+    }
+
+    private function bunkerInvited(BunkerInvitationCreated $event): void
+    {
+        $invitation = BunkerInvitation::query()->find($event->invitationId);
+        if ($invitation !== null && $invitation->inviter_user_id !== null && $this->interactionSafety->shouldSuppressOptionalNotification($event->invitedUserId, $invitation->inviter_user_id, 'community.bunker.invited')) {
+            return;
+        }
+        $this->create(User::query()->find($event->invitedUserId), 'community.bunker.invited', 'bunker-invited:'.$event->invitationId, ['invitation_id' => $event->invitationId, 'bunker_id' => $event->bunkerId], BunkerInvitation::query()->find($event->invitationId));
+    }
+
+    private function bunkerJoinRequested(BunkerMembershipRequested $event): void
+    {
+        $bunker = Bunker::query()->find($event->bunkerId);
+        $this->create($bunker?->owner, 'community.bunker.join_requested', 'bunker-join-requested:'.$event->joinRequestId, ['join_request_id' => $event->joinRequestId, 'bunker_id' => $event->bunkerId], BunkerJoinRequest::query()->find($event->joinRequestId));
+    }
+
+    private function bunkerJoinApproved(BunkerMembershipApproved $event): void
+    {
+        $this->create(User::query()->find($event->userId), 'community.bunker.join_approved', 'bunker-join-approved:'.$event->joinRequestId, ['join_request_id' => $event->joinRequestId, 'bunker_id' => $event->bunkerId], Bunker::query()->find($event->bunkerId));
+    }
+
+    private function bunkerBanned(BunkerMemberBanned $event): void
+    {
+        $this->create(User::query()->find($event->userId), 'community.bunker.banned', 'bunker-banned:'.$event->banId, ['ban_id' => $event->banId, 'bunker_id' => $event->bunkerId], BunkerBan::query()->find($event->banId));
+    }
+
+    private function communityMention(CommunityMentionCreated $event): void
+    {
+        $mention = CommunityMention::query()->find($event->mentionId);
+        if ($this->interactionSafety->shouldSuppressOptionalNotification($event->mentionedUserId, $event->mentioningUserId, 'community.post.mentioned')) {
+            return;
+        }
+        $this->create(User::query()->find($event->mentionedUserId), 'community.post.mentioned', 'community-mention:'.$event->mentionId, ['mention_id' => $event->mentionId], $mention?->mentionable);
     }
 
     /** @param array<string, mixed> $payload */

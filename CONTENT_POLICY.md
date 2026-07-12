@@ -32,3 +32,7 @@ Moderators may hide, restrict, label, or remove content; restrict accounts; pres
 Reports are private to the reporter and authorized case-scoped moderators. A report never proves a violation and never applies enforcement automatically. Subjects must not receive reporter identity, private evidence, or internal notes. Severe/permanent action and rights/takedown decisions require their explicit additional authority. Notification copy must use the same spoiler, content-restriction, and privacy boundary as in-app resources.
 
 See `COPYRIGHT_AND_TAKEDOWN.md` for rights-holder requests.
+
+Prompt 10 Community content is plain text, spoiler-classified, reportable, and rate limited. Local moderators cannot apply platform restrictions or see reporter identity. Private Bunkers, bookmarks, voter identities, invitation tokens, and local private notes must not enter feeds, notifications, or logs.
+
+Personal blocks and mutes are private safety preferences, not public accusations or moderation findings. They do not delete public content or prevent reporting/appeal, and targets must not be notified or told the direction of a block.

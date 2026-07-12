@@ -1,6 +1,7 @@
 <?php
 
 use App\Domain\Catalog\Exceptions\InvalidCatalogOperation;
+use App\Domain\Community\Exceptions\InvalidCommunityOperation;
 use App\Domain\Editorial\Exceptions\InvalidEditorialOperation;
 use App\Domain\Editorial\Exceptions\OptimisticLockConflict;
 use App\Domain\Lore\Exceptions\InvalidLoreOperation;
@@ -110,6 +111,12 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $exceptions->render(function (InvalidJourneyOperation $exception, Request $request): ?JsonResponse {
+            return $request->is('api/v1/*')
+                ? ApiResponse::error($request, $exception->errorCode, $exception->getMessage(), 409)
+                : null;
+        });
+
+        $exceptions->render(function (InvalidCommunityOperation $exception, Request $request): ?JsonResponse {
             return $request->is('api/v1/*')
                 ? ApiResponse::error($request, $exception->errorCode, $exception->getMessage(), 409)
                 : null;

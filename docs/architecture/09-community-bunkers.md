@@ -20,3 +20,9 @@ erDiagram
 ```
 
 All public UGC requires verified identity, rate limits, spoiler declaration/default, reportability, ownership policy, edit history, and moderation readiness. Private group visibility is enforced before query pagination and media URL generation.
+
+## Prompt 10 implementation
+
+The persistent slice uses canonical names except deferred `link_previews`. Bunker and post attachments reuse Media; comments have no attachment target. Feeds are chronological cursor queries. Private Bunkers return 404 to non-members. Local membership roles remain separate from platform roles, and Community events are scalar after-commit facts without Reverb broadcasting.
+
+Prompt 11 adds mutual block enforcement to mentions, targeted replies, reactions, and invitations, plus authenticated feed suppression for active blocks/mutes. Blocks do not remove shared membership or become local bans; join requests remain available through normal authorized reviewers. Mutes never change authorization or member lists.

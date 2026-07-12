@@ -6,6 +6,8 @@ use App\Domain\Editorial\Exceptions\OptimisticLockConflict;
 use App\Domain\Media\Exceptions\InvalidMediaOperation;
 use App\Domain\Moderation\Services\RestrictionEvaluator;
 use App\Enums\PublicationStatus;
+use App\Models\Bunker;
+use App\Models\CommunityPost;
 use App\Models\Episode;
 use App\Models\ExternalEmbed;
 use App\Models\Franchise;
@@ -25,7 +27,7 @@ use Illuminate\Support\Facades\DB;
 class AttachMedia
 {
     /** @var list<string> */
-    private const TARGET_TYPES = ['universe', 'franchise', 'work', 'work_translation', 'season', 'episode', 'lore_entity', 'lore_entity_translation', 'lore_alias', 'entity_appearance', 'lore_relationship', 'timeline', 'timeline_entry'];
+    private const TARGET_TYPES = ['universe', 'franchise', 'work', 'work_translation', 'season', 'episode', 'lore_entity', 'lore_entity_translation', 'lore_alias', 'entity_appearance', 'lore_relationship', 'timeline', 'timeline_entry', 'bunker', 'community_post'];
 
     public function __construct(private readonly AuditLogger $auditLogger, private readonly RestrictionEvaluator $restrictions) {}
 
@@ -137,6 +139,8 @@ class AttachMedia
             $target instanceof Episode => Episode::query()->visibleToPublic()->whereKey($target)->exists(),
             $target instanceof LoreEntity => LoreEntity::query()->visibleToPublic()->whereKey($target)->exists(),
             $target instanceof Timeline => Timeline::query()->visibleToPublic()->whereKey($target)->exists(),
+            $target instanceof Bunker => $target->status->value === 'published' && $target->visibility->value === 'public' && Bunker::query()->withoutActivePublicRestriction()->whereKey($target)->exists(),
+            $target instanceof CommunityPost => $target->status->value === 'published' && CommunityPost::query()->withoutActivePublicRestriction()->whereKey($target)->exists(),
             default => $target->getAttribute('status') === PublicationStatus::Published,
         };
     }

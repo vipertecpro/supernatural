@@ -75,6 +75,11 @@ enum PermissionName: string
     case NotificationTypesManage = 'notifications.types.manage';
     case NotificationDeliveriesInspect = 'notifications.inspect-deliveries';
     case NotificationDeliveriesRetry = 'notifications.retry-deliveries';
+    case CommunityBunkersCreate = 'community.bunkers.create';
+    case CommunityBunkersViewPrivateForSafety = 'community.bunkers.view-private-for-safety';
+    case CommunityContentModeratePlatform = 'community.content.moderate-platform';
+    case CommunityContentRestore = 'community.content.restore';
+    case CommunityTagsManage = 'community.tags.manage';
 
     /**
      * Get the human-readable permission label.

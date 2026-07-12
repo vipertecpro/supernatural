@@ -29,7 +29,7 @@ class RolePermissionSeeder extends Seeder
             });
 
         $rolePermissions = [
-            RoleName::Fan->value => [PermissionName::DashboardAccess],
+            RoleName::Fan->value => [PermissionName::DashboardAccess, PermissionName::CommunityBunkersCreate],
             RoleName::Contributor->value => [
                 PermissionName::DashboardAccess,
                 PermissionName::ContentContribute,
@@ -49,6 +49,7 @@ class RolePermissionSeeder extends Seeder
                 PermissionName::MediaCreate,
                 PermissionName::MediaUpdateOwnDrafts,
                 PermissionName::MediaAttach,
+                PermissionName::CommunityBunkersCreate,
             ],
             RoleName::Moderator->value => [
                 PermissionName::DashboardAccess,
@@ -65,6 +66,7 @@ class RolePermissionSeeder extends Seeder
                 PermissionName::ModerationUserRestrictionsApply,
                 PermissionName::ModerationContentRestrictionsApply,
                 PermissionName::ModerationAppealsReview,
+                PermissionName::CommunityContentModeratePlatform,
             ],
             RoleName::Administrator->value => PermissionName::cases(),
         ];

@@ -12,3 +12,5 @@
 ## Prompt 7 implementation note
 
 Implemented private quarantine admission with server-generated paths, MIME/extension/size/image checks, checksum and dimensions. Hosted and external records remain distinct; provider parsing never fetches or downloads. Processing/variant tables are present but transformation and signed delivery are deferred. Publication is versioned and requires moderation plus effective hosting/embedding rights.
+
+Prompt 10 extends the attachment allowlist only to Bunkers and posts. Community receives no parallel upload/embed path; comment attachments remain deferred, and removing content never deletes reusable Media.

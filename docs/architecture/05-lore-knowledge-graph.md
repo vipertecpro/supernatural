@@ -29,3 +29,7 @@ erDiagram
 Adjacency indexes support “outgoing by type/status” and “incoming by type/status.” Two-hop queries fetch approved neighbors in two bounded queries or a recursive CTE with depth/row limits. Example: character → `used` → artifact; artifact → `owned_by` → character. Timeline queries order an explicit sortable chronology key within a universe, while retaining uncertain/display dates separately.
 
 No graph assertion is public until approved. Disputed edges remain visible only under an explicit editorial presentation policy. Source/citation, spoiler, media, revision, moderation, and audit hooks attach at the assertion/entity level.
+
+## Prompt 6 implementation
+
+The relational foundation now implements the approved root, seven extensions (`lore_event_details` is the canonical event table name), translations, aliases, taxonomies, appearances, relationship types/rules/assertions, named timelines, ordered entries, and entity-entry associations. Symmetric edges use lower-ID canonical order; API traversal is one hop and cursor-bounded to 50. Verified citations and approved spoiler classification gate relationship publication according to its controlled type. Search/media projections and recursive traversal remain deferred.

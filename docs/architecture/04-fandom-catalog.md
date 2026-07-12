@@ -40,3 +40,7 @@ Common lists use keyset pagination `(published_at,id)` and eager-load bounded tr
 ## Prompt 4 lifecycle clarification
 
 Catalog roots use `draft`, `published`, and `archived` in the bounded first implementation. Archive is a retained business state and remains separate from exceptional hard deletion. Catalog roots do not use `SoftDeletes`: durable parent foreign keys restrict deletion, child-bearing roots must be archived, and public scopes require published non-archived ancestors. The later editorial phase may add submitted/review/approved/unpublished/restricted states through an explicit migration rather than implying them before revisions and rights review exist.
+
+## Prompt 5 governance integration
+
+Franchises, works, work translations, seasons, and episodes now expose integer concurrency versions and accept approved changes through Catalog-specific editorial revisions. Revision application and publication remain separate actions. Direct API updates and publish/archive transitions require an expected version and return a stable conflict instead of last-write-wins. Proposal/review state belongs to `editorial_revisions`, not the Catalog root.

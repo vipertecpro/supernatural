@@ -42,3 +42,11 @@ erDiagram
     EPISODES o|--o{ SPOILER_BOUNDARIES : bounds
     SPOILER_CONSTRAINTS ||--o{ SPOILER_CORRECTIONS : corrected
 ```
+
+## Prompt 5 implementation
+
+Legacy severity data is preserved through the explicit `mild → minor` and `critical → finale` migration. Constraints now carry draft/approved/rejected classification state and attributable classifier/reviewer fields. `spoiler_boundaries` stores normalized work, season, and episode foreign keys and the write action rejects cross-universe or mismatched paths. Minimal per-universe tolerance and per-work highest progress support deterministic visible, warning, redacted, and hidden decisions. Missing/draft classifications remain conservative; explicit bypass is permission-based.
+
+## Prompt 6 implementation
+
+Lore entities, translations, aliases, appearances, relationships, timelines, and entries use stable spoiler morph aliases and the existing backend decision service. Public resources redact protected Lore text, remove hidden children before output, and separately evaluate relationship targets so identity and edge counts do not reveal hidden nodes. Search indexing remains deferred.

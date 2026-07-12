@@ -3,6 +3,7 @@
 namespace App\Domain\Catalog\Actions;
 
 use App\Domain\Catalog\Exceptions\InvalidCatalogOperation;
+use App\Domain\Editorial\Exceptions\OptimisticLockConflict;
 use App\Enums\WorkType;
 use App\Models\Franchise;
 use App\Models\User;
@@ -17,6 +18,8 @@ class UpdateWork
     /** @param array<string, mixed> $attributes */
     public function handle(Work $work, array $attributes, User $actor): Work
     {
+        $expectedVersion = (int) ($attributes['expected_version'] ?? $work->lock_version);
+        unset($attributes['expected_version']);
         $seriesDetails = $attributes['series_details'] ?? null;
         unset($attributes['series_details']);
 
@@ -40,12 +43,19 @@ class UpdateWork
             throw new InvalidCatalogOperation('Series details require a series work.');
         }
 
-        return DB::transaction(function () use ($work, $attributes, $seriesDetails, $requestedType, $actor): Work {
+        return DB::transaction(function () use ($work, $attributes, $seriesDetails, $requestedType, $actor, $expectedVersion): Work {
+            $work = Work::query()->lockForUpdate()->findOrFail($work->id);
+            if ($work->lock_version !== $expectedVersion) {
+                throw new OptimisticLockConflict;
+            }
+            if ($requestedType !== $work->type && ($work->seriesDetail()->exists() || $work->seasons()->exists() || $work->episodes()->exists())) {
+                throw new InvalidCatalogOperation('A work type cannot change while type-specific catalog records exist.');
+            }
             $originalType = $work->type;
             $work->update([
                 ...$attributes,
                 'updated_by' => $actor->id,
-                'lock_version' => $work->lock_version + 1,
+                'lock_version' => $expectedVersion + 1,
             ]);
 
             if (is_array($seriesDetails)) {

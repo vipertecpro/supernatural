@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /** @property SourceType $source_type */
 #[Fillable(['universe_id', 'content_license_id', 'title', 'canonical_url', 'source_type', 'publisher', 'author', 'published_at', 'accessed_at', 'attribution_text', 'usage_notes', 'metadata'])]
@@ -27,6 +28,12 @@ class Source extends Model
     public function contentLicense(): BelongsTo
     {
         return $this->belongsTo(ContentLicense::class);
+    }
+
+    /** @return HasMany<SourceRightsReview, $this> */
+    public function rightsReviews(): HasMany
+    {
+        return $this->hasMany(SourceRightsReview::class);
     }
 
     /** @return array<string, string> */

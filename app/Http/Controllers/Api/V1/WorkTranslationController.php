@@ -38,6 +38,6 @@ class WorkTranslationController extends Controller
         $translation = $work->translations()->where('locale', str($locale)->replace('_', '-')->lower())->firstOrFail();
         Gate::authorize('publish', $translation);
 
-        return ApiResponse::success($request, (new WorkTranslationResource($action->publish($translation, $request->user())))->resolve($request));
+        return ApiResponse::success($request, (new WorkTranslationResource($action->publish($translation, $request->user(), true, $request->expectedVersion())))->resolve($request));
     }
 }

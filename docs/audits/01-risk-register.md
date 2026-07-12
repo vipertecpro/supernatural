@@ -76,3 +76,27 @@ This append-only section records architecture-phase risks. Prompt 3 changed no a
 | R-034 | Open — Medium | Viewer progress is not implemented, so missing/non-safe Catalog spoiler classification conservatively redacts summaries and synopses. Prompt 5 should normalize boundaries; User Journey later supplies viewer progress. |
 | R-035 | Open — Medium | Approved revision, source/citation minimum, and rights review requirements cannot yet be enforced truthfully. Prompt 5 must implement them before broad publication tooling. |
 | R-036 | Mitigated — Low | Cross-table work-type and episode/season-work equality are not portable database checks. Central actions, restricted FKs, scoped uniques, nested routes, and focused tests enforce them; bypass writes remain prohibited. |
+
+## Prompt 5 reassessment — 2026-07-12
+
+| ID | Status / severity | Editorial consequence and mitigation |
+| --- | --- | --- |
+| R-031 | Resolved for Catalog | Legacy spoiler severity has an explicit reversible map and normalized boundaries preserve Catalog foreign keys. |
+| R-034 | Mitigated — Low | Minimal preference/progress now supports backend decisions; complex viewing orders/sessions remain conservative and deferred. |
+| R-035 | Resolved for Catalog revisions | Approval now enforces code-owned citation, tri-state rights, and spoiler requirements before transactional application. |
+| R-037 | Open — High | Exact quotation, metadata reuse, expiry, takedown, legal-hold, and dual-review rules require owner/legal approval; implementation does not constitute legal advice. |
+| R-038 | Open — Medium | The minimal highest-progress projection cannot model alternate orders, multiple sessions, or rewatch selection. Missing certainty remains redacted until User Journey expands. |
+| R-039 | Mitigated — Low | Polymorphic revision/citation/spoiler targets are limited by request allowlists and the enforced morph map. Every future target still requires policy, registry, and leakage review. |
+| R-040 | Mitigated — Low | Cross-table spoiler path equality is enforced transactionally because portable SQL checks cannot express it. Direct bypass writes remain prohibited. |
+
+## Prompt 6 reassessment — 2026-07-12
+
+| ID | Status / severity | Lore consequence and mitigation |
+| --- | --- | --- |
+| R-027 | Open — High | Prompt 5 and Prompt 6 remain uncommitted by explicit instruction. Preserve and review the combined dirty tree before unrelated cleanup or Prompt 7. |
+| R-039 | Mitigated — Low | Lore revision/citation/spoiler targets are explicit stable morph aliases with policy and field-registry coverage. Future targets still require deliberate opt-in. |
+| R-041 | Mitigated — Medium | Portable SQL cannot express all universe/type/Catalog path invariants. Transactional actions, restricted FKs, allowlisted rules and focused tests enforce them; bypass writes remain prohibited. |
+| R-042 | Mitigated — Low | Symmetric duplicate races use lower-ID canonicalization plus a composite unique index. Definitions that intentionally allow multiple assertions require a future claim discriminator before enabling duplicates. |
+| R-043 | Open — Medium | Cursor pages filter hidden candidates after retrieval, so a page may contain fewer safe rows than requested. It leaks no total, but a future query projection should prefilter spoiler reachability for dense hidden sets. |
+| R-044 | Accepted/deferred — Low | Relational one-hop traversal is intentionally bounded. Recursive traversal, graph analytics and a graph database require measured latency/scale evidence under ADR 0005. |
+| R-045 | Open — High | Exact rights/takedown/dual-review policy remains an owner/legal decision. Lore citation enforcement does not grant hosting or derivative rights. |

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HasEditorialRevisions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\DatePrecision;
 use App\Enums\PublicationStatus;
@@ -22,12 +23,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property CarbonImmutable|null $original_release_date
  * @property CarbonImmutable|null $published_at
  * @property CarbonImmutable|null $archived_at
+ * @property int $lock_version
  */
-#[Fillable(['work_id', 'type', 'number', 'display_number', 'title', 'slug', 'summary', 'position', 'original_release_date', 'release_date_precision', 'status', 'is_public', 'metadata', 'published_at', 'archived_at', 'created_by', 'updated_by'])]
+#[Fillable(['work_id', 'type', 'number', 'display_number', 'title', 'slug', 'summary', 'position', 'original_release_date', 'release_date_precision', 'status', 'is_public', 'metadata', 'published_at', 'archived_at', 'lock_version', 'created_by', 'updated_by'])]
 class Season extends Model
 {
     /** @use HasFactory<SeasonFactory> */
-    use HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
 
     /** @return BelongsTo<Work, $this> */
     public function work(): BelongsTo
@@ -71,6 +73,7 @@ class Season extends Model
             'metadata' => 'array',
             'published_at' => 'immutable_datetime',
             'archived_at' => 'immutable_datetime',
+            'lock_version' => 'integer',
         ];
     }
 }

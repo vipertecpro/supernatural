@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api\V1;
 
 use App\Domain\Catalog\Services\SpoilerVisibilityService;
 use App\Enums\PublicationStatus;
+use App\Enums\SpoilerVisibility;
 use App\Models\Work;
 use App\Models\WorkTranslation;
 use Illuminate\Http\Request;
@@ -26,7 +27,11 @@ class WorkResource extends JsonResource
         $publishedTranslations = $this->translations
             ->where('status', PublicationStatus::Published)
             ->values();
-        $redacted = app(SpoilerVisibilityService::class)->shouldRedact($this->resource);
+        $visibilityService = app(SpoilerVisibilityService::class);
+        $visibility = $visibilityService->decide($this->resource, $request->user());
+        $translationVisibility = $translation === null ? $visibility : $visibilityService->decide($translation, $request->user());
+        $redacted = in_array($visibility, [SpoilerVisibility::Redacted, SpoilerVisibility::Hidden], true);
+        $translationRedacted = in_array($translationVisibility, [SpoilerVisibility::Redacted, SpoilerVisibility::Hidden], true);
 
         return [
             'id' => $this->id,
@@ -38,8 +43,11 @@ class WorkResource extends JsonResource
             'canonical_title' => $this->original_title,
             'title' => $hasTranslation ? $translation->title : $this->original_title,
             'locale' => $hasTranslation ? $translation->locale : $this->original_language,
-            'summary' => $redacted ? null : ($hasTranslation ? ($translation->summary ?? $this->summary) : $this->summary),
+            'summary' => $hasTranslation
+                ? ($translationRedacted ? null : ($translation->summary ?? ($redacted ? null : $this->summary)))
+                : ($redacted ? null : $this->summary),
             'spoiler_redacted' => $redacted,
+            'spoiler_visibility' => $visibility->value,
             'original_language' => $this->original_language,
             'runtime_minutes' => $this->runtime_minutes,
             'release_status' => $this->release_status->value,
@@ -48,6 +56,7 @@ class WorkResource extends JsonResource
             'release_date_precision' => $this->release_date_precision?->value,
             'status' => $this->status->value,
             'is_public' => $this->is_public,
+            'version' => $this->lock_version,
             'published_at' => $this->published_at?->toIso8601String(),
             'archived_at' => $this->archived_at?->toIso8601String(),
             'series_detail' => new SeriesDetailResource($this->whenLoaded('seriesDetail')),

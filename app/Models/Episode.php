@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HasEditorialRevisions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\DatePrecision;
 use App\Enums\EpisodeType;
@@ -21,12 +22,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property CarbonImmutable|null $original_release_date
  * @property CarbonImmutable|null $published_at
  * @property CarbonImmutable|null $archived_at
+ * @property int $lock_version
  */
-#[Fillable(['work_id', 'season_id', 'episode_number', 'display_number', 'absolute_number', 'production_code', 'type', 'title', 'slug', 'summary', 'synopsis', 'runtime_minutes', 'original_release_date', 'release_date_precision', 'position', 'status', 'is_public', 'metadata', 'published_at', 'archived_at', 'created_by', 'updated_by'])]
+#[Fillable(['work_id', 'season_id', 'episode_number', 'display_number', 'absolute_number', 'production_code', 'type', 'title', 'slug', 'summary', 'synopsis', 'runtime_minutes', 'original_release_date', 'release_date_precision', 'position', 'status', 'is_public', 'metadata', 'published_at', 'archived_at', 'lock_version', 'created_by', 'updated_by'])]
 class Episode extends Model
 {
     /** @use HasFactory<EpisodeFactory> */
-    use HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
 
     /** @return BelongsTo<Work, $this> */
     public function work(): BelongsTo
@@ -76,6 +78,7 @@ class Episode extends Model
             'metadata' => 'array',
             'published_at' => 'immutable_datetime',
             'archived_at' => 'immutable_datetime',
+            'lock_version' => 'integer',
         ];
     }
 }

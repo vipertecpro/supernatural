@@ -3,6 +3,7 @@
 namespace App\Domain\Catalog\Actions;
 
 use App\Domain\Catalog\Exceptions\InvalidCatalogOperation;
+use App\Domain\Editorial\Exceptions\OptimisticLockConflict;
 use App\Enums\PublicationStatus;
 use App\Models\Episode;
 use App\Models\Franchise;
@@ -18,11 +19,12 @@ class TransitionCatalogRecord
 {
     public function __construct(private readonly AuditLogger $auditLogger) {}
 
-    public function publish(Model $record, User $actor, bool $isPublic = true): Model
+    public function publish(Model $record, User $actor, bool $isPublic = true, ?int $expectedVersion = null): Model
     {
-        $this->ensurePublishable($record);
-
-        return DB::transaction(function () use ($record, $actor, $isPublic): Model {
+        return DB::transaction(function () use ($record, $actor, $isPublic, $expectedVersion): Model {
+            $record = $this->lockRecord($record);
+            $this->ensureVersion($record, $expectedVersion);
+            $this->ensurePublishable($record);
             $attributes = [
                 'status' => PublicationStatus::Published,
                 'published_at' => now(),
@@ -35,6 +37,9 @@ class TransitionCatalogRecord
             }
             if ($record->isFillable('updated_by')) {
                 $attributes['updated_by'] = $actor->id;
+            }
+            if ($record->isFillable('lock_version')) {
+                $attributes['lock_version'] = (int) $record->getAttribute('lock_version') + 1;
             }
 
             $record->update($attributes);
@@ -49,13 +54,14 @@ class TransitionCatalogRecord
         });
     }
 
-    public function archive(Model $record, User $actor): Model
+    public function archive(Model $record, User $actor, ?int $expectedVersion = null): Model
     {
-        if ($record->getAttribute('status') === PublicationStatus::Archived) {
-            throw new InvalidCatalogOperation('The catalog record is already archived.');
-        }
-
-        return DB::transaction(function () use ($record, $actor): Model {
+        return DB::transaction(function () use ($record, $actor, $expectedVersion): Model {
+            $record = $this->lockRecord($record);
+            $this->ensureVersion($record, $expectedVersion);
+            if ($record->getAttribute('status') === PublicationStatus::Archived) {
+                throw new InvalidCatalogOperation('The catalog record is already archived.');
+            }
             $attributes = ['status' => PublicationStatus::Archived];
             if ($record->isFillable('is_public')) {
                 $attributes['is_public'] = false;
@@ -65,6 +71,9 @@ class TransitionCatalogRecord
             }
             if ($record->isFillable('updated_by')) {
                 $attributes['updated_by'] = $actor->id;
+            }
+            if ($record->isFillable('lock_version')) {
+                $attributes['lock_version'] = (int) $record->getAttribute('lock_version') + 1;
             }
 
             $record->update($attributes);
@@ -99,5 +108,25 @@ class TransitionCatalogRecord
         if (! $parentIsVisible) {
             throw new InvalidCatalogOperation('Catalog content cannot be published before its parent is public and published.');
         }
+    }
+
+    private function ensureVersion(Model $record, ?int $expectedVersion): void
+    {
+        if ($record->isFillable('lock_version') && $expectedVersion !== null && (int) $record->getAttribute('lock_version') !== $expectedVersion) {
+            throw new OptimisticLockConflict;
+        }
+    }
+
+    /**
+     * @template TModel of Model
+     *
+     * @param  TModel  $record
+     * @return TModel
+     */
+    private function lockRecord(Model $record): Model
+    {
+        $record->newQuery()->whereKey($record->getKey())->lockForUpdate()->firstOrFail();
+
+        return $record->refresh();
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Concerns\HasEditorialRevisions;
+use App\Concerns\HasSpoilerConstraints;
 use App\Enums\PublicationStatus;
 use Carbon\CarbonImmutable;
 use Database\Factories\WorkTranslationFactory;
@@ -13,12 +15,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property PublicationStatus $status
  * @property CarbonImmutable|null $published_at
+ * @property int $lock_version
  */
-#[Fillable(['work_id', 'locale', 'title', 'short_title', 'summary', 'synopsis', 'translated_from_locale', 'status', 'published_at', 'created_by', 'updated_by'])]
+#[Fillable(['work_id', 'locale', 'title', 'short_title', 'summary', 'synopsis', 'translated_from_locale', 'status', 'published_at', 'lock_version', 'created_by', 'updated_by'])]
 class WorkTranslation extends Model
 {
     /** @use HasFactory<WorkTranslationFactory> */
-    use HasFactory;
+    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
 
     /** @return BelongsTo<Work, $this> */
     public function work(): BelongsTo
@@ -44,6 +47,7 @@ class WorkTranslation extends Model
         return [
             'status' => PublicationStatus::class,
             'published_at' => 'immutable_datetime',
+            'lock_version' => 'integer',
         ];
     }
 }

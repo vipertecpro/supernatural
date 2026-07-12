@@ -16,6 +16,14 @@ All version-one endpoints use `/api/v1`.
 | GET | `/api/v1/seasons/{season}/episodes` | Public or draft-authorized | Ancestor-filtered episode cursor collection |
 | POST/PATCH | Catalog roots and translations | Sanctum, verified, policy, rate limited | Validated contributor/editor actions |
 | POST | `.../{record}/publish` or `.../{record}/archive` | Sanctum, verified, explicit permission | Audited lifecycle transition |
+| GET/POST/PATCH | `/api/v1/editorial/revisions` and nested items/blocks/actions | Sanctum, verified, explicit editorial policy | Attributable proposal and review workflow |
+| GET/POST/DELETE | `/api/v1/editorial/revisions/{revision}/citations` | Sanctum, verified, revision citation policy | Normalized source evidence |
+| GET/POST | `/api/v1/editorial/rights-assessments` | Sanctum, verified, rights permission | Append-only tri-state source rights |
+| GET/POST/PATCH | `/api/v1/editorial/spoiler-boundaries` | Sanctum, verified, spoiler permissions | Normalized classification paths |
+| GET | `/api/v1/universes/{universe}/lore`, `/api/v1/lore/{entity}` and nested Lore resources | Public, rate limited, spoiler filtered | Published entities, aliases, appearances, one-hop relationships and timeline entries |
+| GET | `/api/v1/universes/{universe}/timelines`, `/api/v1/timelines/{timeline}/entries` | Public, rate limited, spoiler filtered | Published named timelines and deterministic entries |
+| POST/PATCH | Lore roots, translations, aliases, appearances, relationships, timelines and entries | Sanctum, verified, policy, rate limited | Validated draft mutation and optimistic locking |
+| POST | Lore `publish` or `archive` actions | Sanctum, verified, explicit permission | Evidence/spoiler-gated audited lifecycle transition |
 
 The legacy unversioned `/api/user` endpoint has been removed.
 
@@ -58,7 +66,11 @@ Resources may return an object or list in `data`. Pagination will use Laravel re
 }
 ```
 
-Stable error codes currently include `unauthenticated` (401), `email_unverified` (403), `forbidden` (403), `not_found` (404), `validation_failed` (422), `rate_limited` (429), `http_error`, and `unexpected_error` (500). Internal exception details, paths, SQL, credentials, and configuration are never returned. Validation details are field-keyed and authorization is enforced before controller output.
+Stable error codes currently include `unauthenticated` (401), `email_unverified` (403), `forbidden` (403), `not_found` (404), `validation_failed` (422), `optimistic_lock_conflict` (409), `invalid_editorial_transition` and its specific governance variants (409), `rate_limited` (429), `http_error`, and `unexpected_error` (500). Internal exception details, paths, SQL, credentials, and configuration are never returned. Validation details are field-keyed and authorization is enforced before controller output.
+
+Catalog and Lore update, publish, and archive requests include `expected_version`. Successful mutation increments the target version once; stale requests never overwrite current state. Revision resources expose base and current target versions. Editorial resources never serialize private reviewer, assignment, legal, or Lore editorial notes.
+
+Lore errors add `invalid_lore_operation`, `invalid_relationship_semantics`, `duplicate_lore_relationship`, `invalid_catalog_boundary`, `cross_universe_lore_reference`, `lore_evidence_required`, and `lore_spoiler_classification_required`. Relationship resources never recursively embed edges.
 
 ## Rate Limits
 

@@ -49,3 +49,11 @@ Prompt 4 must not begin until Prompt 2 and Prompt 3 are reviewed/committed or ot
 ## Prompt 4 completion note
 
 The uncommitted Prompt 1–3 tree was explicitly preserved, the three Prompt 2 migrations were inspected and applied to the verified local database, and the six-table bounded Catalog Core was implemented without beginning Phase 2 editorial work. Prompt 5 should implement attributable editorial revisions, source/citation minimums, rights decisions, and normalized spoiler boundaries for these Catalog identifiers.
+
+## Prompt 5 completion note
+
+Phase 2 is implemented for Catalog targets only: attributable revisions and decisions, normalized evidence/rights/spoiler records, optimistic locking, minimal viewer context, backend redaction, API routes, audit records, after-commit events, factories, and tests. Prompt 6 should begin the next approved architecture phase only after this governance diff is reviewed; it must reuse these evidence and spoiler interfaces rather than duplicate them.
+
+## Prompt 6 completion note
+
+Phase 3 is implemented as the 19-table relational Lore foundation, reusing Prompt 5 revisions, citations, rights, spoiler decisions, optimistic locking, audit, and permissions. The missing named `timelines` inventory root was corrected without broad redesign. Prompt 7 may begin only the next approved phase after this diff is reviewed; it must not duplicate Lore evidence, search, or media infrastructure.

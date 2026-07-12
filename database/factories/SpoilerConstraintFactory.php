@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\SpoilerClassificationStatus;
 use App\Enums\SpoilerSeverity;
 use App\Models\Source;
 use App\Models\SpoilerConstraint;
@@ -22,12 +23,18 @@ class SpoilerConstraintFactory extends Factory
     {
         return [
             'universe_id' => Universe::factory(),
-            'spoilerable_type' => Source::class,
+            'spoilerable_type' => 'source',
             'spoilerable_id' => Source::factory(),
             'severity' => fake()->randomElement(SpoilerSeverity::cases()),
+            'classification_status' => SpoilerClassificationStatus::Draft,
             'earliest_progress' => ['type' => 'ordinal', 'value' => fake()->numberBetween(1, 100)],
             'warning' => fake()->optional()->sentence(),
             'metadata' => [],
         ];
+    }
+
+    public function approved(): static
+    {
+        return $this->state(fn (): array => ['classification_status' => SpoilerClassificationStatus::Approved, 'reviewed_at' => now()]);
     }
 }

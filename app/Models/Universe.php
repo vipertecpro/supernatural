@@ -47,6 +47,18 @@ class Universe extends Model
         return $this->hasMany(Work::class);
     }
 
+    /** @return HasMany<LoreEntity, $this> */
+    public function loreEntities(): HasMany
+    {
+        return $this->hasMany(LoreEntity::class);
+    }
+
+    /** @return HasMany<Timeline, $this> */
+    public function timelines(): HasMany
+    {
+        return $this->hasMany(Timeline::class);
+    }
+
     /** @return HasMany<SpoilerConstraint, $this> */
     public function spoilerConstraints(): HasMany
     {

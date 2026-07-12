@@ -64,14 +64,14 @@ class FranchiseController extends Controller
     {
         Gate::authorize('publish', $franchise);
 
-        return ApiResponse::success($request, (new FranchiseResource($action->publish($franchise, $request->user(), $request->isPublic())))->resolve($request));
+        return ApiResponse::success($request, (new FranchiseResource($action->publish($franchise, $request->user(), $request->isPublic(), $request->expectedVersion())))->resolve($request));
     }
 
-    public function archive(Request $request, Franchise $franchise, TransitionCatalogRecord $action): JsonResponse
+    public function archive(PublishCatalogRequest $request, Franchise $franchise, TransitionCatalogRecord $action): JsonResponse
     {
         Gate::authorize('archive', $franchise);
 
-        return ApiResponse::success($request, (new FranchiseResource($action->archive($franchise, $request->user())))->resolve($request));
+        return ApiResponse::success($request, (new FranchiseResource($action->archive($franchise, $request->user(), $request->expectedVersion())))->resolve($request));
     }
 
     public function destroy(Request $request, Franchise $franchise, AuditLogger $auditLogger): JsonResponse

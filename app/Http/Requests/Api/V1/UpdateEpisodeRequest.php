@@ -21,6 +21,7 @@ class UpdateEpisodeRequest extends FormRequest
         $episode = $this->episode();
 
         return [
+            'expected_version' => ['required', 'integer', 'min:0'],
             'season_id' => ['sometimes', 'nullable', 'integer', 'exists:seasons,id'],
             'episode_number' => ['nullable', 'integer', 'min:0', Rule::unique('episodes')->where('season_id', $episode->season_id)->ignore($episode)],
             'display_number' => ['nullable', 'string', 'max:255'],

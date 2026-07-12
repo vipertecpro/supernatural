@@ -26,6 +26,7 @@ class UpdateWorkRequest extends FormRequest
         $work = $this->work();
 
         return [
+            'expected_version' => ['required', 'integer', 'min:0'],
             'franchise_id' => ['nullable', 'integer', 'exists:franchises,id'],
             'type' => ['sometimes', Rule::enum(WorkType::class)],
             'slug' => ['sometimes', 'string', 'max:255', 'alpha_dash:ascii', Rule::unique('works')->where('universe_id', $work->universe_id)->ignore($work)],

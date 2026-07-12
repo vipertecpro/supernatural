@@ -22,6 +22,7 @@ class FranchiseResource extends JsonResource
             'status' => $this->status->value,
             'is_public' => $this->is_public,
             'position' => $this->position,
+            'version' => $this->lock_version,
             'published_at' => $this->published_at?->toIso8601String(),
             'archived_at' => $this->archived_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),

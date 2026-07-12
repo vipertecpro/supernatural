@@ -19,6 +19,7 @@ class UpdateFranchiseRequest extends FormRequest
         $franchise = $this->franchise();
 
         return [
+            'expected_version' => ['required', 'integer', 'min:0'],
             'name' => ['sometimes', 'string', 'max:255'],
             'slug' => ['sometimes', 'string', 'max:255', 'alpha_dash:ascii', Rule::unique('franchises')->where('universe_id', $franchise->universe_id)->ignore($franchise)],
             'description' => ['nullable', 'string', 'max:10000'],

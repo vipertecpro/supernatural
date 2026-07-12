@@ -15,6 +15,7 @@ class UpdateWorkTranslationRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'expected_version' => ['required', 'integer', 'min:0'],
             'title' => ['sometimes', 'string', 'max:255'],
             'short_title' => ['nullable', 'string', 'max:255'],
             'summary' => ['nullable', 'string', 'max:10000'],

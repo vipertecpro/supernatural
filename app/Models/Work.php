@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HasEditorialRevisions;
 use App\Concerns\HasSpoilerConstraints;
 use App\Enums\CanonStatus;
 use App\Enums\DatePrecision;
@@ -27,12 +28,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property CarbonImmutable|null $original_release_date
  * @property CarbonImmutable|null $published_at
  * @property CarbonImmutable|null $archived_at
+ * @property int $lock_version
  */
 #[Fillable(['universe_id', 'franchise_id', 'type', 'slug', 'original_title', 'original_language', 'summary', 'runtime_minutes', 'release_status', 'canon_status', 'original_release_date', 'release_date_precision', 'status', 'is_public', 'metadata', 'published_at', 'archived_at', 'lock_version', 'created_by', 'updated_by'])]
 class Work extends Model
 {
     /** @use HasFactory<WorkFactory> */
-    use HasFactory, HasSpoilerConstraints;
+    use HasEditorialRevisions, HasFactory, HasSpoilerConstraints;
 
     /** @return BelongsTo<Universe, $this> */
     public function universe(): BelongsTo
@@ -113,6 +115,7 @@ class Work extends Model
             'metadata' => 'array',
             'published_at' => 'immutable_datetime',
             'archived_at' => 'immutable_datetime',
+            'lock_version' => 'integer',
         ];
     }
 }

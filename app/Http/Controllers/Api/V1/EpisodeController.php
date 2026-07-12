@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Domain\Catalog\Actions\CreateEpisode;
 use App\Domain\Catalog\Actions\TransitionCatalogRecord;
 use App\Domain\Catalog\Actions\UpdateEpisode;
+use App\Domain\Catalog\Services\SpoilerVisibilityService;
+use App\Enums\SpoilerVisibility;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CatalogIndexRequest;
 use App\Http\Requests\Api\V1\PublishCatalogRequest;
@@ -37,7 +39,9 @@ class EpisodeController extends Controller
         }
         $paginator = $query->cursorPaginate($request->pageSize());
 
-        return ApiResponse::cursor($request, EpisodeResource::collection($paginator->items())->resolve($request), $paginator);
+        $items = collect($paginator->items())->reject(fn (Episode $item): bool => app(SpoilerVisibilityService::class)->decide($item, $request->user()) === SpoilerVisibility::Hidden)->values();
+
+        return ApiResponse::cursor($request, EpisodeResource::collection($items)->resolve($request), $paginator);
     }
 
     public function store(StoreEpisodeRequest $request, Season $season, CreateEpisode $action): JsonResponse
@@ -53,6 +57,9 @@ class EpisodeController extends Controller
             abort(404);
         }
         $episode->load('spoilerConstraints');
+        if (app(SpoilerVisibilityService::class)->decide($episode, $request->user()) === SpoilerVisibility::Hidden) {
+            abort(404);
+        }
 
         return ApiResponse::success($request, (new EpisodeResource($episode))->resolve($request));
     }
@@ -67,15 +74,15 @@ class EpisodeController extends Controller
     public function publish(PublishCatalogRequest $request, Episode $episode, TransitionCatalogRecord $action): JsonResponse
     {
         Gate::authorize('publish', $episode);
-        $episode = $action->publish($episode, $request->user(), $request->isPublic())->load('spoilerConstraints');
+        $episode = $action->publish($episode, $request->user(), $request->isPublic(), $request->expectedVersion())->load('spoilerConstraints');
 
         return ApiResponse::success($request, (new EpisodeResource($episode))->resolve($request));
     }
 
-    public function archive(Request $request, Episode $episode, TransitionCatalogRecord $action): JsonResponse
+    public function archive(PublishCatalogRequest $request, Episode $episode, TransitionCatalogRecord $action): JsonResponse
     {
         Gate::authorize('archive', $episode);
-        $episode = $action->archive($episode, $request->user())->load('spoilerConstraints');
+        $episode = $action->archive($episode, $request->user(), $request->expectedVersion())->load('spoilerConstraints');
 
         return ApiResponse::success($request, (new EpisodeResource($episode))->resolve($request));
     }

@@ -6,6 +6,8 @@ use App\Domain\Catalog\Actions\CreateSeason;
 use App\Domain\Catalog\Actions\TransitionCatalogRecord;
 use App\Domain\Catalog\Actions\UpdateSeason;
 use App\Domain\Catalog\Exceptions\InvalidCatalogOperation;
+use App\Domain\Catalog\Services\SpoilerVisibilityService;
+use App\Enums\SpoilerVisibility;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CatalogIndexRequest;
 use App\Http\Requests\Api\V1\PublishCatalogRequest;
@@ -36,7 +38,9 @@ class SeasonController extends Controller
         }
         $paginator = $query->cursorPaginate($request->pageSize());
 
-        return ApiResponse::cursor($request, SeasonResource::collection($paginator->items())->resolve($request), $paginator);
+        $items = collect($paginator->items())->reject(fn (Season $item): bool => app(SpoilerVisibilityService::class)->decide($item, $request->user()) === SpoilerVisibility::Hidden)->values();
+
+        return ApiResponse::cursor($request, SeasonResource::collection($items)->resolve($request), $paginator);
     }
 
     public function store(StoreSeasonRequest $request, Work $work, CreateSeason $action): JsonResponse
@@ -52,6 +56,9 @@ class SeasonController extends Controller
             abort(404);
         }
         $season->load('spoilerConstraints');
+        if (app(SpoilerVisibilityService::class)->decide($season, $request->user()) === SpoilerVisibility::Hidden) {
+            abort(404);
+        }
 
         return ApiResponse::success($request, (new SeasonResource($season))->resolve($request));
     }
@@ -66,15 +73,15 @@ class SeasonController extends Controller
     public function publish(PublishCatalogRequest $request, Season $season, TransitionCatalogRecord $action): JsonResponse
     {
         Gate::authorize('publish', $season);
-        $season = $action->publish($season, $request->user(), $request->isPublic())->load('spoilerConstraints');
+        $season = $action->publish($season, $request->user(), $request->isPublic(), $request->expectedVersion())->load('spoilerConstraints');
 
         return ApiResponse::success($request, (new SeasonResource($season))->resolve($request));
     }
 
-    public function archive(Request $request, Season $season, TransitionCatalogRecord $action): JsonResponse
+    public function archive(PublishCatalogRequest $request, Season $season, TransitionCatalogRecord $action): JsonResponse
     {
         Gate::authorize('archive', $season);
-        $season = $action->archive($season, $request->user())->load('spoilerConstraints');
+        $season = $action->archive($season, $request->user(), $request->expectedVersion())->load('spoilerConstraints');
 
         return ApiResponse::success($request, (new SeasonResource($season))->resolve($request));
     }

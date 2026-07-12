@@ -86,3 +86,26 @@ This append-only section records the bounded Catalog implementation.
 | Episode management | Partially present | Relational episodes, optional season support, multiple numbering systems, spoiler-safe Resources, lifecycle, policy, API, and tests exist. | Episode translations, releases, normalized spoiler boundaries, citations. |
 | API | Partially present | Catalog public reads and verified policy-controlled writes extend the v1 envelope with bounded cursor pagination and allowlists. | Remaining product modules, idempotency for retry-prone future actions, client SDK. |
 | Spoiler engine | Partially present | Catalog roots use a stable morph map and conservative pre-serialization text redaction. | Viewer progress, normalized boundaries, tolerance decisions, bypass workflow. |
+
+## Prompt 5 reassessment — 2026-07-12
+
+| Module | Updated status | Prompt 5 result | Still deferred |
+| --- | --- | --- | --- |
+| Editorial revisions | Implemented for Catalog | Attributable proposal/items/blocks, assignment, immutable decisions, apply transaction, audit, events, policies, API, factories, and tests. | UI, schedule automation, non-Catalog targets, reconstruction tooling. |
+| Source attribution | Implemented for Catalog revisions | Normalized citations and source links with code-owned evidence minimums. | Structured claims, takedown integration, broader domain targets. |
+| Rights review | Implemented for sources | Append-only tri-state per-use decisions, expiry, attribution, private-note controls. | Owner-approved legal policy and dual-control thresholds. |
+| Spoiler engine | Implemented for Catalog API | Normalized boundaries, minimal preference/progress, four-state backend decision, hidden filtering, bypass permission. | Full viewing sessions/orders/rewatches and non-Catalog consumers. |
+| Optimistic locking | Implemented for supported Catalog roots | Expected versions on direct API mutations and transactional revision application with stable 409 responses. | Later editorial roots opt in deliberately. |
+| API | Partially present | 27 authenticated verified editorial routes and private-field-safe Resources extend v1. | Remaining product modules and client SDK. |
+
+## Prompt 6 reassessment — 2026-07-12
+
+| Module | Updated status | Prompt 6 result | Still deferred |
+| --- | --- | --- | --- |
+| Lore entities | Implemented backend foundation | Typed root, seven approved extensions, translations, aliases, taxonomies, publication/archive, locking, policy, API, audit and tests. | Public/admin UI, search projection, media, production content. |
+| Lore relationships | Implemented relational foundation | Controlled definitions/rules, real-FK directed and symmetric assertions, inverse labels, temporal/Catalog bounds, citation/spoiler gates and bounded API traversal. | Recursive traversal, graph analytics/database, disputed-edge public UX. |
+| Lore appearances | Implemented backend foundation | Work/season/episode mentions with universe/path validation, ordering, publication, citations/spoilers and API. | External cast/provider ingestion. |
+| Timelines | Implemented backend foundation | Named universe/entity/work timelines, deterministic relative/imprecise entries, structured targets, policy/API and spoiler filtering. | Interactive timeline UI and advanced chronology inference. |
+| Editorial revisions | Implemented for Catalog and Lore | Existing registry, reviews, citations, rights checks, transactions and conflicts now accept approved Lore targets. | Schedule automation, reconstruction tooling and UI. |
+| Spoiler engine | Implemented for Catalog and Lore API | Target-aware relationship redaction and hidden alias/appearance/edge/entry filtering reuse normalized boundaries and viewer context. | Search/notification/community consumers and richer viewing sessions. |
+| API | Partially present | Public and verified Lore/timeline routes extend the v1 contract with one-hop bounded traversal and stable domain errors. | Remaining product modules, SDK and public/admin frontend. |

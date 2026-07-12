@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\HasEditorialRevisions;
 use App\Enums\PublicationStatus;
 use Carbon\CarbonImmutable;
 use Database\Factories\FranchiseFactory;
@@ -16,12 +17,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property PublicationStatus $status
  * @property CarbonImmutable|null $published_at
  * @property CarbonImmutable|null $archived_at
+ * @property int $lock_version
  */
-#[Fillable(['universe_id', 'name', 'slug', 'description', 'status', 'is_public', 'position', 'metadata', 'published_at', 'archived_at', 'created_by', 'updated_by'])]
+#[Fillable(['universe_id', 'name', 'slug', 'description', 'status', 'is_public', 'position', 'metadata', 'published_at', 'archived_at', 'lock_version', 'created_by', 'updated_by'])]
 class Franchise extends Model
 {
     /** @use HasFactory<FranchiseFactory> */
-    use HasFactory;
+    use HasEditorialRevisions, HasFactory;
 
     /** @return BelongsTo<Universe, $this> */
     public function universe(): BelongsTo
@@ -70,6 +72,7 @@ class Franchise extends Model
             'metadata' => 'array',
             'published_at' => 'immutable_datetime',
             'archived_at' => 'immutable_datetime',
+            'lock_version' => 'integer',
         ];
     }
 }

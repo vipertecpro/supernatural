@@ -21,6 +21,7 @@ class UpdateSeasonRequest extends FormRequest
         $season = $this->season();
 
         return [
+            'expected_version' => ['required', 'integer', 'min:0'],
             'type' => ['sometimes', Rule::enum(SeasonType::class)],
             'number' => ['nullable', 'integer', 'min:0', Rule::unique('seasons')->where('work_id', $season->work_id)->ignore($season)],
             'display_number' => ['nullable', 'string', 'max:255'],

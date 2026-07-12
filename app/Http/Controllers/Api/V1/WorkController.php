@@ -6,6 +6,8 @@ use App\Domain\Catalog\Actions\CreateWork;
 use App\Domain\Catalog\Actions\TransitionCatalogRecord;
 use App\Domain\Catalog\Actions\UpdateWork;
 use App\Domain\Catalog\Exceptions\InvalidCatalogOperation;
+use App\Domain\Catalog\Services\SpoilerVisibilityService;
+use App\Enums\SpoilerVisibility;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CatalogIndexRequest;
 use App\Http\Requests\Api\V1\PublishCatalogRequest;
@@ -42,7 +44,9 @@ class WorkController extends Controller
         $query->orderBy($column, str_starts_with($sort, '-') ? 'desc' : 'asc')->orderBy('id');
         $paginator = $query->cursorPaginate($request->pageSize());
 
-        return ApiResponse::cursor($request, WorkResource::collection($paginator->items())->resolve($request), $paginator);
+        $items = collect($paginator->items())->reject(fn (Work $item): bool => app(SpoilerVisibilityService::class)->decide($item, $request->user()) === SpoilerVisibility::Hidden)->values();
+
+        return ApiResponse::cursor($request, WorkResource::collection($items)->resolve($request), $paginator);
     }
 
     public function store(StoreWorkRequest $request, Universe $universe, CreateWork $action): JsonResponse
@@ -70,15 +74,15 @@ class WorkController extends Controller
     public function publish(PublishCatalogRequest $request, Work $work, TransitionCatalogRecord $action): JsonResponse
     {
         Gate::authorize('publish', $work);
-        $work = $action->publish($work, $request->user(), $request->isPublic())->load(['translations', 'seriesDetail', 'spoilerConstraints']);
+        $work = $action->publish($work, $request->user(), $request->isPublic(), $request->expectedVersion())->load(['translations', 'seriesDetail', 'spoilerConstraints']);
 
         return ApiResponse::success($request, (new WorkResource($work))->resolve($request));
     }
 
-    public function archive(Request $request, Work $work, TransitionCatalogRecord $action): JsonResponse
+    public function archive(PublishCatalogRequest $request, Work $work, TransitionCatalogRecord $action): JsonResponse
     {
         Gate::authorize('archive', $work);
-        $work = $action->archive($work, $request->user())->load(['translations', 'seriesDetail', 'spoilerConstraints']);
+        $work = $action->archive($work, $request->user(), $request->expectedVersion())->load(['translations', 'seriesDetail', 'spoilerConstraints']);
 
         return ApiResponse::success($request, (new WorkResource($work))->resolve($request));
     }
@@ -98,6 +102,9 @@ class WorkController extends Controller
     private function ensureVisible(Request $request, Work $work): void
     {
         if (! Work::query()->visibleToPublic()->whereKey($work)->exists() && ! $request->user()?->can('view', $work)) {
+            abort(404);
+        }
+        if (app(SpoilerVisibilityService::class)->decide($work, $request->user()) === SpoilerVisibility::Hidden) {
             abort(404);
         }
     }

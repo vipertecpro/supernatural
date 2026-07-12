@@ -1,5 +1,8 @@
 <?php
 
+use App\Actions\Authorization\AssignRole;
+use App\Enums\RoleName;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -47,4 +50,12 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+function editorialUser(RoleName $role): User
+{
+    $user = User::factory()->create();
+    app(AssignRole::class)->handle($user, $role);
+
+    return $user;
 }

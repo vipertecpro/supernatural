@@ -30,3 +30,11 @@ erDiagram
     EDITORIAL_REVISIONS ||--o{ EDITORIAL_ACTIONS : records
     SOURCES ||--o{ TAKEDOWN_RECORDS : may_restrict
 ```
+
+## Prompt 5 implementation
+
+The Catalog slice now implements revision metadata, field-registry scalar items, checksum-backed plain-text blocks, one-active-primary review assignments, immutable `editorial_actions`, normalized citations/source links, and append-only `source_rights_reviews`. Approval revalidates source, rights, and spoiler requirements; application locks the revision and target and increments one Catalog version. Rights remain independent per use type and only an unexpired `allowed` assessment permits the selected use. Private assignment, reviewer, and legal notes are never present in normal API Resources or audit metadata.
+
+## Prompt 6 implementation
+
+Lore entities, translations, aliases, appearances, relationships, timelines, and timeline entries are added to the existing revision and citation allowlists. The field registry exposes only approved Lore content fields and application revalidates Lore/Catalog ownership inside the existing row-locked transaction. Relationship citations use the existing `citations` and `citation_sources`; tri-state rights history remains unchanged and no relationship-evidence source duplicate is created.

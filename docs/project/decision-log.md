@@ -82,3 +82,42 @@ Implemented and verified within the six-table Catalog boundary.
 ### Consequence
 
 Prompt 5 can build editorial revisions, rights/source minimums, citations, review actions, and normalized spoiler boundaries against stable Catalog identifiers. It must not assume those deferred controls already exist.
+
+## 2026-07-12 — Prompt 5 Catalog editorial governance
+
+### Status
+
+Implemented and verified within the Catalog editorial boundary.
+
+### Decisions
+
+- Use canonical Prompt 3 table names: `source_rights_reviews`, `revision_blocks`, `revision_items`, `review_assignments`, and immutable `editorial_actions`; API wording may call rights reviews assessments without duplicating the model.
+- Keep proposal/review lifecycle separate from Catalog publication state. Approval does not publish; application writes approved changes transactionally.
+- Use a code-owned target/field registry rather than client-controlled patch paths. Large text is plain text with checksums and conservative limits.
+- Extend integer optimistic locking to all five supported Catalog revision targets and require expected versions at direct API mutation/lifecycle boundaries.
+- Treat rights independently by use type; unknown, prohibited, or expired never permits a protected operation.
+- Normalize spoiler boundaries to work/season/episode FKs, explicitly migrate legacy severity values, and enforce visible/warning/redacted/hidden decisions before serialization.
+- Implement only per-universe tolerance and per-work highest progress from User Journey. Viewing sessions, rewatch selection, lists, ratings, notes, and feeds remain deferred.
+- Dispatch submitted, approved, and applied events only after commit and never through Reverb in this phase.
+
+### Consequence
+
+Catalog changes now have attributable proposal, evidence, review, concurrency, and spoiler enforcement foundations suitable for reuse by the next approved domain slice. Legal policy, takedown integration, full progress/order semantics, event consumers, and UI remain future decisions.
+
+## 2026-07-12 — Prompt 6 Lore and Knowledge Graph
+
+### Status
+
+Implemented and verified within the relational Lore boundary.
+
+### Decisions
+
+- Implement the Prompt 3 typed root, seven approved extensions, translations, aliases, taxonomies, appearances, controlled relationship types/rules, assertions, named timelines, ordered entries, and entity-entry associations.
+- Correct the inventory omission by adding `timelines`; keep `lore_event_details` as the canonical event extension name.
+- Store symmetric relationships once in lower-ID order and use inverse labels only for presentation.
+- Reuse citations, tri-state source-rights history, editorial revisions, normalized spoilers, optimistic locking, audit logging, permissions, and the v1 envelope; create no parallel evidence or spoiler framework.
+- Keep public graph reads one hop and cursor-bounded to 50. Do not implement recursive traversal, search/media projections, UI, or Prompt 7.
+
+### Consequence
+
+The backend now has a governed multi-universe Lore source of truth. Prompt 7 may consume published Lore events or IDs but must preserve the established module boundary and deferred search/media decisions.

@@ -8,3 +8,9 @@
 - Security implications: internal legal notes are administrator-only; unknown rights deny hosting/derivation by default.
 - Migration implications: existing source/license data remains; add rights review and citation tables additively.
 - Future review conditions: citation volume or field-level anchoring demands specialized claim storage.
+
+## Prompt 5 implementation note
+
+Implemented `citations` plus ordered `citation_sources`, with Catalog/revision morph allowlists and conservative excerpt limits. Implemented append-only `source_rights_reviews` as the canonical tri-state rights history. The API calls these records rights assessments for client clarity; no duplicate persistence concept was introduced.
+
+Prompt 6 extends the morph allowlist to Lore roots, assertions, timelines, and revision targets. Relationship evidence remains citations; source-rights review semantics and excerpt limits are unchanged.

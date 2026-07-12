@@ -66,3 +66,7 @@ Catalog: `UniverseCard`, `WorkCard`, `SeasonList`, `EpisodeRow`. Lore: `LoreEnti
 - Use Inertia `Link` and Wayfinder, semantic tokens, `gap`, `size-*`, `cn()`, and existing Radix `asChild` APIs.
 - No immersive component owns auth, routing, form validation, permission checks, or essential data.
 - Domain components accept already-authorized Resource shapes and never reconstruct hidden fields.
+
+## Prompt 13 implementation note
+
+Foundations, page framing, navigation, generic states, spoiler states, and status/authority components now exist under `resources/js/components`. Domain components remain deferred. Existing shadcn primitives were themed and composed rather than replaced.

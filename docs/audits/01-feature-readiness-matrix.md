@@ -1,5 +1,7 @@
 # Feature Readiness Matrix
 
+> Prompt 13 update: design tokens, brand identity, Public/Fan/Workspace shell components, route-safe navigation foundations, and reusable application states are implemented. Domain screen readiness classifications are unchanged.
+
 Status vocabulary follows the audit contract: **Already present**, **Partially present**, **Not present**, **Present but unsuitable**, and **Requires refactoring before use**. Suggested phases are sequencing recommendations grounded in current dependencies and gaps, not a generic product roadmap.
 
 | Module                | Current Status                  | Existing Evidence                                                  | Reusable Components                                            | Missing Requirements                                                                                              | Refactor Required                                                           | Suggested Phase                                       |

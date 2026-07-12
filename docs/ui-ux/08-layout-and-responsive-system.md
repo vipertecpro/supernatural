@@ -57,3 +57,7 @@ Laptop+: 256px dedicated sidebar, breadcrumb/header, filter toolbar, table/queue
 - Filters: persistent sidebar/toolbar desktop; labelled Drawer/Sheet mobile with applied-filter summary.
 - Actions: one obvious primary action; secondary actions in visible toolbar; destructive/rare actions in labelled overflow menus.
 - Touch targets target at least 44×44 CSS pixels; sticky controls account for safe-area insets and do not cover validation or content.
+
+## Prompt 13 implementation note
+
+Public Marketing, Public Content, Fan, and configurable Workspace layouts are implemented. Only Public Marketing and Fan are mounted because no frontend workspace pages exist. The Fan shell uses the existing responsive Sidebar on tablet/desktop and safe-area bottom navigation on mobile.

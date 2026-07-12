@@ -1,78 +1,66 @@
 import { Link } from '@inertiajs/react';
 import type { PropsWithChildren } from 'react';
-import Heading from '@/components/heading';
+import { PageContainer, PageHeader } from '@/components/shell/page-frame';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
-import { edit } from '@/routes/profile';
+import { edit as editProfile } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 import type { NavItem } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
-    {
-        title: 'Profile',
-        href: edit(),
-        icon: null,
-    },
-    {
-        title: 'Security',
-        href: editSecurity(),
-        icon: null,
-    },
-    {
-        title: 'Appearance',
-        href: editAppearance(),
-        icon: null,
-    },
+const items: NavItem[] = [
+    { title: 'Profile', href: editProfile() },
+    { title: 'Security', href: editSecurity() },
+    { title: 'Appearance', href: editAppearance() },
 ];
-
 export default function SettingsLayout({ children }: PropsWithChildren) {
     const { isCurrentOrParentUrl } = useCurrentUrl();
 
     return (
-        <div className="px-4 py-6">
-            <Heading
+        <PageContainer>
+            <PageHeader
                 title="Settings"
-                description="Manage your profile and account settings"
+                description="Manage account details, security, and your local appearance preference."
             />
-
-            <div className="flex flex-col lg:flex-row lg:space-x-12">
-                <aside className="w-full max-w-xl lg:w-48">
+            <div className="mt-8 grid gap-8 lg:grid-cols-[12rem_minmax(0,1fr)]">
+                <aside>
                     <nav
-                        className="flex flex-col space-y-1 space-x-0"
                         aria-label="Settings"
+                        className="flex gap-2 overflow-x-auto lg:flex-col"
                     >
-                        {sidebarNavItems.map((item, index) => (
+                        {items.map((item) => (
                             <Button
-                                key={`${toUrl(item.href)}-${index}`}
+                                key={toUrl(item.href)}
                                 size="sm"
                                 variant="ghost"
                                 asChild
-                                className={cn('w-full justify-start', {
-                                    'bg-muted': isCurrentOrParentUrl(item.href),
-                                })}
+                                className={cn(
+                                    'shrink-0 justify-start',
+                                    isCurrentOrParentUrl(item.href) &&
+                                        'bg-surface-selected',
+                                )}
                             >
-                                <Link href={item.href}>
-                                    {item.icon && (
-                                        <item.icon className="h-4 w-4" />
-                                    )}
+                                <Link
+                                    href={item.href}
+                                    aria-current={
+                                        isCurrentOrParentUrl(item.href)
+                                            ? 'page'
+                                            : undefined
+                                    }
+                                >
                                     {item.title}
                                 </Link>
                             </Button>
                         ))}
                     </nav>
                 </aside>
-
-                <Separator className="my-6 lg:hidden" />
-
-                <div className="flex-1 md:max-w-2xl">
-                    <section className="max-w-xl space-y-12">
-                        {children}
-                    </section>
-                </div>
+                <Separator className="lg:hidden" />
+                <section className="max-w-2xl min-w-0 rounded-xl border bg-surface-primary p-5 shadow-surface sm:p-7">
+                    {children}
+                </section>
             </div>
-        </div>
+        </PageContainer>
     );
 }

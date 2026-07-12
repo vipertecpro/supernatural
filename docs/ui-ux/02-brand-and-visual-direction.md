@@ -55,3 +55,7 @@ Grain, paper fibres, scratches, metal, glass, fog, dust, scan lines, and light l
 ## Asset policy
 
 Use abstract procedural graphics, original geometric symbols, rights-cleared contributor assets, and explicitly marked development placeholders. Every asset has provenance, license/ownership, alt/decorative intent, responsive variants, and removal path. No copyrighted screenshots, footage, quotes, soundtrack, actor likenesses, logos, or promotional art.
+
+## Prompt 13 implementation note
+
+The implemented working mark combines layered archive pages, a compass intersection, and a central record node. Warm-paper light and ink/carbon dark appearances use semantic OKLCH variables in `resources/css/app.css`. The codename, mark, and candidate colours remain subject to owner approval and formal contrast and brand review.

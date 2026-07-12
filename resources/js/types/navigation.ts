@@ -12,3 +12,9 @@ export type NavItem = {
     icon?: LucideIcon | null;
     isActive?: boolean;
 };
+
+export type WorkspaceDestination = {
+    key: 'contributor' | 'moderator' | 'administrator';
+    label: string;
+    href: NonNullable<InertiaLinkProps['href']>;
+};

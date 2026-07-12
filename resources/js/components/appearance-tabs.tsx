@@ -1,45 +1,48 @@
-import type { LucideIcon } from 'lucide-react';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import type { Appearance } from '@/hooks/use-appearance';
 import { useAppearance } from '@/hooks/use-appearance';
 import { cn } from '@/lib/utils';
 
 export default function AppearanceToggleTab({
-    className = '',
+    className,
     ...props
 }: HTMLAttributes<HTMLDivElement>) {
     const { appearance, updateAppearance } = useAppearance();
-
-    const tabs: { value: Appearance; icon: LucideIcon; label: string }[] = [
-        { value: 'light', icon: Sun, label: 'Light' },
-        { value: 'dark', icon: Moon, label: 'Dark' },
-        { value: 'system', icon: Monitor, label: 'System' },
+    const options = [
+        { value: 'light' as Appearance, label: 'Light', icon: Sun },
+        { value: 'dark' as Appearance, label: 'Dark', icon: Moon },
+        { value: 'system' as Appearance, label: 'System', icon: Monitor },
     ];
 
     return (
         <div
             className={cn(
-                'inline-flex gap-1 rounded-lg bg-neutral-100 p-1 dark:bg-neutral-800',
+                'rounded-lg border bg-surface-primary p-1',
                 className,
             )}
             {...props}
         >
-            {tabs.map(({ value, icon: Icon, label }) => (
-                <button
-                    key={value}
-                    onClick={() => updateAppearance(value)}
-                    className={cn(
-                        'flex items-center rounded-md px-3.5 py-1.5 transition-colors',
-                        appearance === value
-                            ? 'bg-white shadow-xs dark:bg-neutral-700 dark:text-neutral-100'
-                            : 'text-neutral-500 hover:bg-neutral-200/60 hover:text-black dark:text-neutral-400 dark:hover:bg-neutral-700/60',
-                    )}
-                >
-                    <Icon className="-ml-1 h-4 w-4" />
-                    <span className="ml-1.5 text-sm">{label}</span>
-                </button>
-            ))}
+            <ToggleGroup
+                type="single"
+                value={appearance}
+                onValueChange={(value) =>
+                    value && updateAppearance(value as Appearance)
+                }
+                className="grid grid-cols-3"
+            >
+                {options.map(({ value, label, icon: Icon }) => (
+                    <ToggleGroupItem
+                        key={value}
+                        value={value}
+                        aria-label={`Use ${label.toLowerCase()} appearance`}
+                    >
+                        <Icon />
+                        {label}
+                    </ToggleGroupItem>
+                ))}
+            </ToggleGroup>
         </div>
     );
 }

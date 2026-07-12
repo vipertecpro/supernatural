@@ -1,36 +1,90 @@
 import { Head } from '@inertiajs/react';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Archive, LockKeyhole, ShieldCheck } from 'lucide-react';
+import {
+    PageContainer,
+    PageHeader,
+    Section,
+} from '@/components/shell/page-frame';
+import { SpoilerRedaction } from '@/components/spoiler/spoiler-states';
+import { EmptyState, RestrictedState } from '@/components/states/state-panel';
+import { StatusBadge } from '@/components/status/status-badges';
+import {
+    Card,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { dashboard } from '@/routes';
 
 export default function Dashboard() {
     return (
         <>
-            <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
+            <Head title="Home" />
+            <PageContainer>
+                <PageHeader
+                    title="Your Archive"
+                    description="The fan application shell is ready. Personal product areas remain intentionally unimplemented until their approved phases."
+                    breadcrumbs={[{ title: 'Home', href: dashboard() }]}
+                    badge={<StatusBadge status="draft" />}
+                    metadata="PRIVATE TO YOU / FOUNDATION PREVIEW"
+                />
+                <div className="mt-8 flex flex-col gap-10">
+                    <Section
+                        title="Shell foundation"
+                        description="Responsive navigation, semantic surfaces, and reusable states are active."
+                    >
+                        <div className="grid gap-4 md:grid-cols-3">
+                            <Card>
+                                <CardHeader>
+                                    <Archive className="size-6 text-foreground-evidence" />
+                                    <CardTitle>Practical navigation</CardTitle>
+                                    <CardDescription>
+                                        Desktop sidebar, tablet collapse, and
+                                        mobile bottom navigation use only routes
+                                        that exist.
+                                    </CardDescription>
+                                </CardHeader>
+                            </Card>
+                            <Card>
+                                <CardHeader>
+                                    <ShieldCheck className="size-6 text-success" />
+                                    <CardTitle>Privacy-conscious</CardTitle>
+                                    <CardDescription>
+                                        No Journey, Community, or notification
+                                        data is fabricated for this preview.
+                                    </CardDescription>
+                                </CardHeader>
+                            </Card>
+                            <Card>
+                                <CardHeader>
+                                    <LockKeyhole className="size-6 text-moderation" />
+                                    <CardTitle>Explicit contexts</CardTitle>
+                                    <CardDescription>
+                                        Operational workspaces remain absent
+                                        until their page routes exist.
+                                    </CardDescription>
+                                </CardHeader>
+                            </Card>
+                        </div>
+                    </Section>
+                    <Section
+                        title="Reusable application states"
+                        description="Examples verify that unfinished and withheld experiences remain honest."
+                    >
+                        <div className="grid gap-4 xl:grid-cols-3">
+                            <EmptyState
+                                title="Nothing to show yet"
+                                description="Future domain screens will supply an eligible next action."
+                            />
+                            <RestrictedState kind="private" />
+                            <SpoilerRedaction
+                                severity="moderate"
+                                boundary="your current viewing progress"
+                            />
+                        </div>
+                    </Section>
                 </div>
-                <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                </div>
-            </div>
+            </PageContainer>
         </>
     );
 }
-
-Dashboard.layout = {
-    breadcrumbs: [
-        {
-            title: 'Dashboard',
-            href: dashboard(),
-        },
-    ],
-};

@@ -15,3 +15,5 @@ Wayfinder generates route/action functions; Page props and API Resources have ex
 All surfaces require keyboard navigation, visible focus, semantic landmarks, contrast, screen-reader labels, reduced motion, caption/transcript handling for owned media, alt text, zoom/reflow, and non-color status cues. Authorization is server-side. Error handling preserves request ID and provides safe recovery without exposing internals.
 
 Prompt 12 fixes the navigation and shell boundary in `docs/ui-ux/`: Public, Fan, Contributor, Moderation, and Administration are distinct contexts. Mobile Fan navigation is Home, Explore, Journey, Community, and More. Messaging, Watch Rooms, Case Boards, gamification, events, mobile, and other backend-deferred modules are not active navigation destinations.
+
+Prompt 13 now enforces these boundaries in the layout and navigation layer. The workspace shell exists as a reusable configuration, but no operational workspace is mounted while the existing routes remain no-content stubs.

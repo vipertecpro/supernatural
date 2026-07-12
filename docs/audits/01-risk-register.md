@@ -1,5 +1,7 @@
 # Risk Register
 
+> Prompt 13 update: starter branding and generic shell risk are reduced. Formal contrast measurement, screen-reader/browser testing, final brand approval, and real workspace route integration remain open risks.
+
 Risk totals are **0 Critical, 4 High, 14 Medium, 5 Low, and 2 Informational**.
 
 | ID    | Category               | Finding                                                                                                                                                                                                                      | Evidence                                                                                           | Severity                                            | Impact                                                                                                                          | Recommendation                                                                                                                                | Blocks Next Phase                                                                 |

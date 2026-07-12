@@ -41,6 +41,11 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            // Workspace page routes are still no-content authorization stubs.
+            // Keep the switcher empty until a later prompt supplies real Inertia destinations.
+            'navigation' => [
+                'workspaces' => [],
+            ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

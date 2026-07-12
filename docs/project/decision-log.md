@@ -223,3 +223,21 @@ Accepted as the implementation blueprint; documentation only.
 ### Consequence
 
 Prompt 13 may change frontend assets and tests only within its explicit shell/design-system objective. It must not implement domain screens, onboarding, WebGL, Messaging, realtime delivery, mobile, or backend redesign.
+
+## 2026-07-12 — Prompt 13 design system and application shells
+
+### Status
+
+Implemented within the frontend-foundation boundary.
+
+### Decisions
+
+- Adopt the original layered archive/compass SVG mark and semantic warm-light/ink-dark token system while retaining Instrument Sans and the existing shadcn/Radix primitives.
+- Keep live navigation limited to existing page routes. Moderation and administration remain no-content authorization stubs and are not represented as workspaces.
+- Use one shared workspace shell configured for contributor, moderator, or administrator contexts; mount it only after a real Inertia page exists.
+- Treat offline detection as a warning/retry foundation, not offline-first mutation queuing.
+- Keep withheld spoiler text absent from redacted and hidden components.
+
+### Consequence
+
+Prompt 14 can adopt the established auth/public/fan framing and state vocabulary. It must make an explicit backend decision before implementing persistent onboarding checkpoints or completion state and must not begin Prompt 15 public-domain work.

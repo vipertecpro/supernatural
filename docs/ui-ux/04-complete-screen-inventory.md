@@ -297,3 +297,7 @@ Each row references a complete state profile:
 | Major backend gap (`M`) | 18 | New secure operational/list/persistence API or domain capability required |
 | Deferred (`D`) | 11 | Messaging and Watch Rooms; backend does not exist |
 | **Total** | **206** | Complete Prompt 12 inventory |
+
+## Prompt 14 implementation note
+
+AU-01–09 and AU-10–16 are now implemented or integrated: branded Fortify forms, safe suspension notice, persisted introduction/interests/progress/spoilers/order/privacy/review steps, verification resume, conflict recovery, and Dashboard completion enforcement. The separate “verification completed” experience is a redirect to the saved onboarding step or completed Dashboard rather than a transient page. No public, Fan-domain, Community, or workspace screen was pulled forward.

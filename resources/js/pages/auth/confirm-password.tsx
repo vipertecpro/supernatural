@@ -3,6 +3,7 @@ import {
     index as confirmOptions,
     store as confirmStore,
 } from '@/actions/Laravel/Passkeys/Http/Controllers/PasskeyConfirmationController';
+import { FormErrorSummary } from '@/components/forms/form-error-summary';
 import InputError from '@/components/input-error';
 import PasskeyVerify from '@/components/passkey-verify';
 import PasswordInput from '@/components/password-input';
@@ -29,6 +30,7 @@ export default function ConfirmPassword() {
             <Form {...store.form()} resetOnSuccess={['password']}>
                 {({ processing, errors }) => (
                     <div className="space-y-6">
+                        <FormErrorSummary errors={errors} />
                         <div className="grid gap-2">
                             <Label htmlFor="password">Password</Label>
                             <PasswordInput

@@ -81,3 +81,7 @@ The bounded Identity prerequisite now implements private `user_blocks` and scope
 ## Prompt 12 UI/UX architecture and visible-product sequence
 
 Prompt 12 documents 206 screens, five separate experience contexts, a reusable semantic design system, accessibility/motion/spoiler/safety contracts, API readiness, and the exact Prompt 13–20 frontend roadmap. Prompt 13 implements design-system foundations and shells only; Prompts 14–20 then deliver authentication/onboarding, public site, public knowledge, Fan Journey, Community/Bunkers, contributor, and moderation/administration surfaces. Messaging and other backend-deferred domains do not enter this visible-product sequence as functional UI.
+
+## Prompt 14 completion note
+
+Authentication framing and the persisted seven-step onboarding workflow are implemented with existing-user completion backfill, Fortify registration/verification integration, typed preference/progress reuse, Dashboard redirect enforcement, suspension precedence, accessible responsive Inertia pages, optimistic conflicts, deletion cleanup, tests, and documentation. Prompt 15 is next and remains limited to the public website/static policy/error phase; Catalog/Lore/Search detail screens remain Prompt 16.

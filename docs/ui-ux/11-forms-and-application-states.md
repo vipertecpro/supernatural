@@ -62,3 +62,7 @@ Uploads show client transfer, quarantine, processing, moderation, rights review,
 ## Offline/unstable network
 
 The web app is not offline-first. It detects failed writes, preserves unsent non-sensitive form content where practical, marks stale data, allows retry, and never queues a mutation invisibly. Sensitive report, appeal, rights, moderation, block/mute, or account-deletion payloads are not persisted to browser storage by default. NativePHP offline synchronization remains deferred.
+
+## Prompt 14 implemented forms
+
+Auth forms now expose focusable error summaries and accessible success status. Onboarding uses server checkpoints, visible labels, fieldsets/legends, predictable Back/Continue actions, explicit optional-step copy, disabled duplicate submissions, and a dedicated 409 `ConflictState`. Form values remain in DOM/component memory only and are never copied to local/session storage. The empty universe/order states submit safe empty values without fabricating records.

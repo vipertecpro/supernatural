@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { FormErrorSummary } from '@/components/forms/form-error-summary';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -25,6 +26,7 @@ export default function Register({ passwordRules }: Props) {
             >
                 {({ processing, errors }) => (
                     <>
+                        <FormErrorSummary errors={errors} />
                         <div className="grid gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="name">Name</Label>
@@ -70,6 +72,11 @@ export default function Register({ passwordRules }: Props) {
                                     passwordrules={passwordRules}
                                 />
                                 <InputError message={errors.password} />
+                                <p className="text-xs text-foreground-muted">
+                                    Use a unique password that satisfies the
+                                    security requirements reported by your
+                                    browser.
+                                </p>
                             </div>
 
                             <div className="grid gap-2">

@@ -5,6 +5,7 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { initializeTheme } from '@/hooks/use-appearance';
 import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
+import OnboardingLayout from '@/layouts/onboarding/onboarding-layout';
 import PublicMarketingLayout from '@/layouts/public/public-marketing-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
@@ -22,6 +23,10 @@ createInertiaApp({
 
         if (name.startsWith('auth/')) {
             return AuthLayout;
+        }
+
+        if (name.startsWith('onboarding/')) {
+            return OnboardingLayout;
         }
 
         if (name.startsWith('settings/')) {

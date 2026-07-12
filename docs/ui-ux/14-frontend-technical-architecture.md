@@ -80,3 +80,7 @@ Immersive modules are dynamic imports inside public pages with a static fallback
 - **Visual regression:** shells, responsive navigation, state panels, spoiler variants, dense workspace tables, and public hero fallbacks.
 
 Prompt 13 may recommend the minimum testing dependency set, but dependency installation requires explicit approval and must include maintenance/license/security review.
+
+## Prompt 14 implementation note
+
+`features/onboarding` owns types and shared step components; `layouts/onboarding` owns progress/navigation/focus; thin pages own local selection state; generated controller helpers own route contracts. Server props contain bounded published identity data only. Inertia `<Form>` owns mutations and error bags. No query cache, client store, Axios, test runner, or storage helper was introduced.

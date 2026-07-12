@@ -149,3 +149,14 @@ This append-only section records architecture-phase risks. Prompt 3 changed no a
 | R-071 | Open — Medium | The 206-screen roadmap can cause oversized frontend prompts and inconsistent patterns. Enforce Prompt 13–20 boundaries, shared state profiles, feature ownership, and exit criteria before advancing. |
 | R-072 | Open — Medium | Original visual assets still require provenance, license/ownership records, alt/decorative intent, responsive variants, and removal paths. Do not use series branding, likenesses, quotes, footage, soundtrack, or recognizable symbols. |
 | R-073 | Accepted/deferred — Medium | Eleven Messaging/Watch Room screens are architecture records only. Installed generic chat primitives do not indicate backend readiness and must not create active navigation or product claims. |
+
+## Prompt 14 reassessment — 2026-07-12
+
+| ID | Status / severity | Authentication/Onboarding consequence and mitigation |
+| --- | --- | --- |
+| R-074 | Mitigated — High | Existing users could be unexpectedly blocked by a new completion gate. Deterministic migration backfill and missing-state completed fallback preserve access; local data confirms 2/2 completed. |
+| R-075 | Mitigated — High | Stale/future step writes could overwrite newer preferences. Workflow row locks, expected versions, sequential validation, typed domain locks, and branded HTTP 409 recovery prevent last-write-wins. |
+| R-076 | Mitigated — High | Onboarding could leak draft Catalog or spoilers. Every mutation revalidates published/public scopes, props omit synopses and episode titles, and protected text never enters the DOM. |
+| R-077 | Accepted — Medium | Watched-through setup is capped at 100 published episodes to bound events and work. Large back catalogs require later progress UI, not an unbounded onboarding mutation. |
+| R-078 | Open — Medium | Formal screen-reader, forced-colour, 200% zoom, reduced-motion, multi-browser, real email/rate-limit, and passkey-device testing remains before an accessibility or production-readiness claim. |
+| R-079 | Accepted/deferred — Low | Current typed models have no global primary-universe or global privacy/community defaults. The UI omits unsupported controls rather than storing arbitrary JSON or fake capability. |

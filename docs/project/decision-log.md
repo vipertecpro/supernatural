@@ -241,3 +241,23 @@ Implemented within the frontend-foundation boundary.
 ### Consequence
 
 Prompt 14 can adopt the established auth/public/fan framing and state vocabulary. It must make an explicit backend decision before implementing persistent onboarding checkpoints or completion state and must not begin Prompt 15 public-domain work.
+
+## 2026-07-12 — Prompt 14 authentication and persisted onboarding
+
+### Status
+
+Implemented within the authentication/onboarding boundary.
+
+### Decisions
+
+- Store only workflow progress in one unique `user_onboarding_states` row with a stable step enum and optimistic-lock version.
+- Deterministically backfill all existing users as completed; create incomplete state transactionally only through new Fortify registration.
+- Keep interests/order/privacy in `user_fandom_preferences`, spoiler choices in `user_spoiler_preferences`, and progress in the existing hierarchical progress action/tables.
+- Treat absence of a state as completed for compatibility with non-registration user creation; completed onboarding cannot ordinarily revert.
+- Keep current typed privacy values private and expose only the implemented three-level spoiler policy. Do not invent primary-universe, global privacy, Community, or notification settings.
+- Gate Dashboard after authentication, verification, and platform-access checks while leaving settings/security/logout recovery routes available.
+- Use stable HTTP 409 conflict rendering for stale/future submissions, no last-write-wins, no browser persistence, no notification, and no Reverb broadcast.
+
+### Consequence
+
+Prompt 15 may implement only the approved public website/static policy/error surfaces. It must reuse the established Public Marketing shell, leave onboarding and Dashboard domain content unchanged, and defer public Catalog/Lore/Search detail screens to Prompt 16.

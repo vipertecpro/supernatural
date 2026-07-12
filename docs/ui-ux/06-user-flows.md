@@ -125,3 +125,7 @@ User action menu → select Block or Mute → plain-language impact summary → 
 | Editorial revision | contributor target/workspace | granular contributor/reviewer capabilities | W1; evidence checklist, lock conflict | status changes to In review/Approved/Applied | bounded edits; desktop diff | structured diff, field links, status announcement |
 | Moderator case | queues/case link | permission and case scope | W1; no reporter/Journey leakage; conflict handling | immutable action/closure timeline update | card queue + full detail | table/card parity, dangerous confirmation, focus timeline |
 | Search discovery | global control/public/fan shell | public or viewer-aware | P1; safe suggestion/empty/spoiler-filtered states | focus result page heading | full-screen overlay + filter drawer | combobox semantics, result count/status, list alternative |
+
+## Prompt 14 implemented onboarding flow
+
+Registration now creates an incomplete server checkpoint in the same transaction. Verification resolves that checkpoint; interruption resumes its stable route. Each current submission advances once, earlier steps remain editable, future/stale submissions show a 409 conflict, and completion redirects to Fan Home. Empty Catalog data skips interest-dependent progress/order while still requiring explicit spoiler and privacy confirmation. Platform suspension takes precedence and settings/security/logout remain recovery routes.

@@ -5,9 +5,11 @@ namespace App\Actions\Fortify;
 use App\Actions\Authorization\AssignRole;
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
+use App\Enums\OnboardingStep;
 use App\Enums\RoleName;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserOnboardingState;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -35,6 +37,12 @@ class CreateNewUser implements CreatesNewUsers
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'password' => $input['password'],
+            ]);
+
+            UserOnboardingState::query()->create([
+                'user_id' => $user->id,
+                'current_step' => OnboardingStep::Introduction,
+                'lock_version' => 0,
             ]);
 
             $fanRole = Role::query()->firstOrCreate(

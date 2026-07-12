@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { FormErrorSummary } from '@/components/forms/form-error-summary';
 import InputError from '@/components/input-error';
 import PasskeyVerify from '@/components/passkey-verify';
 import PasswordInput from '@/components/password-input';
@@ -31,6 +32,7 @@ export default function Login({ status, canResetPassword }: Props) {
             >
                 {({ processing, errors }) => (
                     <>
+                        <FormErrorSummary errors={errors} />
                         <div className="grid gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Email address</Label>
@@ -103,7 +105,10 @@ export default function Login({ status, canResetPassword }: Props) {
             </Form>
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div
+                    role="status"
+                    className="mb-4 text-center text-sm font-medium text-success"
+                >
                     {status}
                 </div>
             )}

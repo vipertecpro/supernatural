@@ -36,3 +36,7 @@ Spoiler controls announce severity, withheld state, boundary, and reveal consequ
 ## Testing gates for later prompts
 
 Each implemented prompt requires semantic/keyboard review, focus-path tests, zoom/reflow checks, reduced-motion checks, light/dark/high-contrast contrast checks, and screen-reader spot checks. Automated axe-style and component tooling may be proposed in Prompt 13 but must not be installed without approval. Public cinematic work additionally tests no-WebGL, failed-WebGL, data-saver, keyboard-only, and screen-reader reading order.
+
+## Prompt 14 implementation note
+
+Authentication/onboarding now includes one layout-owned main landmark, skip link, logical page `h1`, semantic ordered step navigation, `aria-current="step"`, polite current-step announcement, heading focus after navigation, focusable validation summary, visible labels, fieldset/legend groups, keyboard-native checkbox/radio cards, and mobile action placement. Formal screen-reader, forced-colour, 200% zoom, and multi-browser testing remains a manual gate; no WCAG conformance claim is made.

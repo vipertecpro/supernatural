@@ -146,3 +146,13 @@ This append-only section records the bounded Catalog implementation.
 | Community and Bunkers | Backend Phase 7 implemented | Local-role Bunkers, memberships, UGC, interactions, polls, feeds, spoiler/Media/moderation/notification integration. | Frontend, Community Search, link previews, Messaging/Reverb, production load/retention review. |
 | Interaction safety | Implemented backend prerequisite | Private blocks/scoped mutes, central evaluator, Community/Bunker/feed/notification enforcement, owner API, deletion and tests. | Frontend, Community Search, expired-row pruning, Messaging/realtime consumption. |
 | UI/UX architecture | Blueprint complete | 206-screen inventory, five surfaces, navigation/flows, semantic design system, responsive/accessibility/motion/safety contracts, API traceability, Prompt 13–20 sequence. | All product screens remain unimplemented except starter auth/settings; Prompt 13 foundations/shells are next. |
+
+## Prompt 14 reassessment — 2026-07-12
+
+| Module | Updated status | Prompt 14 result | Still deferred |
+| --- | --- | --- | --- |
+| Authentication UX | Implemented web experience | Prompt 13 branding plus error summaries, status semantics, autocomplete/OTP labeling, suspension notice, and Fortify regression coverage. | Production email/provider and multi-device passkey manual validation. |
+| Onboarding persistence | Implemented | One workflow-only row, existing-user completion backfill, transactional registration creation, optimistic versioning, deletion cascade. | Explicit restart and optional whole-flow skip policy. |
+| Onboarding screens | Implemented | Seven resumable responsive Inertia steps, review/completion, empty Catalog behavior, conflict UX, verification and Dashboard redirects. | Global primary universe and unsupported global privacy/community/notification settings. |
+| Domain integration | Implemented for supported types | Typed fandom/spoiler/order/privacy records and existing hierarchical progress action are reused; no duplicate backend domain. | Journey creation and broader personal settings remain their later approved phases. |
+| Public website | Not started | Prompt 14 preserved Public Marketing shell only. | Prompt 15 static public website; Prompt 16 public Catalog/Lore/Search. |

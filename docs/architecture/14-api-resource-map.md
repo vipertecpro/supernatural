@@ -39,3 +39,5 @@ Prompt 9 adds verified report-category and own-report endpoints; permission/case
 Prompt 10 adds eligible Bunker discovery/detail/rules/members and global/universe/Bunker feeds; verified Bunker lifecycle, membership, request, invitation, ban, rule, post/comment, reaction, bookmark, and poll actions. Private Bunkers return 404 to non-members, voter identities/bookmark totals are absent, writes use local-role policies plus restrictions, and stale mutable records retain HTTP 409.
 
 Prompt 11 adds owner-only `/me/blocks` and `/me/mutes` collection/create/delete resources. Routes accept structured target/scope input, use bounded cursor metadata and named limits, return non-enumerating deletion failures, and provide no target-facing lookup, arbitrary-user list, or public count.
+
+Prompt 14 adds authenticated verified Inertia web routes under `/onboarding`; it does not add or change API v1 resources. The web controllers call the same typed Journey actions used by the API, preserve stable 409 semantics, and never expose onboarding state through an unauthenticated endpoint.

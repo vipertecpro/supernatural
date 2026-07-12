@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { FormErrorSummary } from '@/components/forms/form-error-summary';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,7 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
             >
                 {({ processing, errors }) => (
                     <div className="grid gap-6">
+                        <FormErrorSummary errors={errors} />
                         <div className="grid gap-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -54,6 +56,10 @@ export default function ResetPassword({ token, email, passwordRules }: Props) {
                                 passwordrules={passwordRules}
                             />
                             <InputError message={errors.password} />
+                            <p className="text-xs text-foreground-muted">
+                                Use a unique password that satisfies the current
+                                account security policy.
+                            </p>
                         </div>
 
                         <div className="grid gap-2">

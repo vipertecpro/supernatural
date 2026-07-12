@@ -106,3 +106,7 @@ Community reads expose published public records or authenticated active-member r
 ## Prompt 11 Interaction Safety contract
 
 Verified owners may list/create/delete only their `/me/blocks` and `/me/mutes`. Resources expose the selected target and the owner's own bounded reason/scope/expiry only. Duplicate creates are idempotent, lists are cursor-bounded, request IDs remain present, and no target-facing state/direction endpoint exists.
+
+## Prompt 14 web onboarding contract
+
+Prompt 14 introduces no API v1 endpoint. Authenticated verified Inertia routes persist workflow checkpoints and call existing Journey domain actions. Stale or future-step web writes return HTTP 409 with a conflict page; validation remains 422 redirect/error-bag behavior. Onboarding records and values are not shared with unauthenticated clients, API tokens, or public Resources.

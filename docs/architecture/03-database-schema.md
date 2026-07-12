@@ -112,3 +112,7 @@ Prompt 10 implements 18 canonical Community tables: all Bunker/category/membersh
 ## Prompt 11 implemented Identity subset
 
 Prompt 11 implements canonical `user_blocks` and `user_mutes`. Blocks use a unique directional user pair and reverse lookup. Mutes use a unique `(muting_user_id, muted_user_id, scope)` tuple plus active-expiration and reverse indexes. Both cascade on either user deletion and contain no public aggregate or free-text note.
+
+## Prompt 14 onboarding workflow state
+
+Prompt 14 adds `user_onboarding_states` as a one-to-one Identity/User Journey orchestration record: unique cascading `user_id`, stable `current_step`, nullable start/activity/completion timestamps, unsigned `lock_version`, and timestamps. It stores no universe IDs, progress, spoiler values, viewing order, privacy value, completed-step array, JSON, or soft-delete state. Existing users are backfilled as completed; new Fortify registrations are incomplete.

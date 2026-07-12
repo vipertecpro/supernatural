@@ -1,6 +1,7 @@
 import { Form, Head, setLayoutProps } from '@inertiajs/react';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useMemo, useState } from 'react';
+import { FormErrorSummary } from '@/components/forms/form-error-summary';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,7 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from '@/components/ui/input-otp';
+import { Label } from '@/components/ui/label';
 import { OTP_MAX_LENGTH } from '@/hooks/use-two-factor-auth';
 import { store } from '@/routes/two-factor/login';
 
@@ -62,12 +64,18 @@ export default function TwoFactorChallenge() {
                 >
                     {({ errors, processing, clearErrors }) => (
                         <>
+                            <FormErrorSummary errors={errors} />
                             {showRecoveryInput ? (
                                 <>
+                                    <Label htmlFor="recovery_code">
+                                        Recovery code
+                                    </Label>
                                     <Input
+                                        id="recovery_code"
                                         name="recovery_code"
                                         type="text"
                                         placeholder="Enter recovery code"
+                                        autoComplete="one-time-code"
                                         autoFocus={showRecoveryInput}
                                         required
                                     />
@@ -77,8 +85,12 @@ export default function TwoFactorChallenge() {
                                 </>
                             ) : (
                                 <div className="flex flex-col items-center justify-center space-y-3 text-center">
+                                    <Label htmlFor="two_factor_code">
+                                        Six-digit authentication code
+                                    </Label>
                                     <div className="flex w-full items-center justify-center">
                                         <InputOTP
+                                            id="two_factor_code"
                                             name="code"
                                             maxLength={OTP_MAX_LENGTH}
                                             value={code}
@@ -86,6 +98,7 @@ export default function TwoFactorChallenge() {
                                             disabled={processing}
                                             pattern={REGEXP_ONLY_DIGITS}
                                             autoFocus
+                                            autoComplete="one-time-code"
                                         >
                                             <InputOTPGroup>
                                                 {Array.from(

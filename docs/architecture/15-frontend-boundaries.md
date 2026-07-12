@@ -17,3 +17,5 @@ All surfaces require keyboard navigation, visible focus, semantic landmarks, con
 Prompt 12 fixes the navigation and shell boundary in `docs/ui-ux/`: Public, Fan, Contributor, Moderation, and Administration are distinct contexts. Mobile Fan navigation is Home, Explore, Journey, Community, and More. Messaging, Watch Rooms, Case Boards, gamification, events, mobile, and other backend-deferred modules are not active navigation destinations.
 
 Prompt 13 now enforces these boundaries in the layout and navigation layer. The workspace shell exists as a reusable configuration, but no operational workspace is mounted while the existing routes remain no-content stubs.
+
+Prompt 14 adds a dedicated `OnboardingLayout` between Auth and Fan contexts. It receives only workflow metadata and authorized step props, uses generated Wayfinder actions, and persists no form value in browser storage. The Fan Dashboard is onboarding-gated; settings/security recovery stays outside that gate. Public Marketing remains unchanged.

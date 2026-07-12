@@ -7,9 +7,16 @@ use App\Domain\Editorial\Exceptions\OptimisticLockConflict;
 use App\Domain\Lore\Exceptions\InvalidLoreOperation;
 use App\Domain\Media\Exceptions\InvalidMediaOperation;
 use App\Domain\Moderation\Exceptions\InvalidModerationOperation;
+use App\Domain\Onboarding\Exceptions\InvalidOnboardingTransition;
+use App\Domain\Onboarding\OnboardingPageData;
+use App\Domain\Onboarding\OnboardingStateResolver;
 use App\Domain\UserJourney\Exceptions\InvalidJourneyOperation;
+use App\Enums\OnboardingStep;
 use App\Http\Middleware\AssignRequestId;
 use App\Http\Middleware\EnforceUserRestrictions;
+use App\Http\Middleware\EnsureOnboardingCompleted;
+use App\Http\Middleware\EnsureOnboardingIncomplete;
+use App\Http\Middleware\EnsurePlatformAccess;
 use App\Http\Middleware\EnsureVerifiedUserAccess;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
@@ -24,6 +31,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -40,7 +48,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->append(AssignRequestId::class);
-        $middleware->alias(['restrictions' => EnforceUserRestrictions::class]);
+        $middleware->alias([
+            'restrictions' => EnforceUserRestrictions::class,
+            'onboarding.completed' => EnsureOnboardingCompleted::class,
+            'onboarding.incomplete' => EnsureOnboardingIncomplete::class,
+            'platform.access' => EnsurePlatformAccess::class,
+        ]);
 
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
@@ -86,10 +99,38 @@ return Application::configure(basePath: dirname(__DIR__))
                 : null;
         });
 
-        $exceptions->render(function (OptimisticLockConflict $exception, Request $request): ?JsonResponse {
-            return $request->is('api/v1/*')
-                ? ApiResponse::error($request, $exception->errorCode, $exception->getMessage(), 409)
-                : null;
+        $exceptions->render(function (OptimisticLockConflict $exception, Request $request) {
+            if ($request->is('api/v1/*')) {
+                return ApiResponse::error($request, $exception->errorCode, $exception->getMessage(), 409);
+            }
+
+            if ($request->is('onboarding*') && $request->user() !== null) {
+                $state = app(OnboardingStateResolver::class)->forUser($request->user());
+                $pageStep = $state->current_step->value === 'completed'
+                    ? OnboardingStep::Review
+                    : $state->current_step;
+
+                return Inertia::render('onboarding/conflict', [
+                    'onboarding' => app(OnboardingPageData::class)->shared($state, $pageStep),
+                ])->toResponse($request)->setStatusCode(409);
+            }
+
+            return null;
+        });
+
+        $exceptions->render(function (InvalidOnboardingTransition $exception, Request $request) {
+            if ($request->is('onboarding*') && $request->user() !== null) {
+                $state = app(OnboardingStateResolver::class)->forUser($request->user());
+                $pageStep = $state->current_step->value === 'completed'
+                    ? OnboardingStep::Review
+                    : $state->current_step;
+
+                return Inertia::render('onboarding/conflict', [
+                    'onboarding' => app(OnboardingPageData::class)->shared($state, $pageStep),
+                ])->toResponse($request)->setStatusCode(409);
+            }
+
+            return null;
         });
 
         $exceptions->render(function (InvalidLoreOperation $exception, Request $request): ?JsonResponse {

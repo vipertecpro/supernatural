@@ -5,8 +5,11 @@ class ExperienceAudioController {
     private ambientGain: GainNode | null = null;
     private effectsGain: GainNode | null = null;
     private drone: OscillatorNode | null = null;
+    private engine: OscillatorNode | null = null;
+    private engineGain: GainNode | null = null;
     private wind: AudioBufferSourceNode | null = null;
     private enabled = false;
+    private heroActive = true;
     private ambientVolume = 0.16;
     private effectsVolume = 0.22;
 
@@ -36,8 +39,11 @@ class ExperienceAudioController {
     public disable(): void {
         this.enabled = false;
         this.drone?.stop();
+        this.engine?.stop();
         this.wind?.stop();
         this.drone = null;
+        this.engine = null;
+        this.engineGain = null;
         this.wind = null;
     }
 
@@ -90,9 +96,37 @@ class ExperienceAudioController {
     }
 
     public resume(): void {
-        if (this.enabled) {
+        if (this.enabled && this.heroActive) {
             void this.context?.resume();
         }
+    }
+
+    public setHeroActive(active: boolean): void {
+        this.heroActive = active;
+
+        if (!active) {
+            this.pause();
+        } else {
+            this.resume();
+        }
+    }
+
+    public setMotion(progress: number, velocity: number): void {
+        if (!this.context || !this.engine || !this.engineGain) {
+            return;
+        }
+
+        const now = this.context.currentTime;
+        this.engine.frequency.setTargetAtTime(
+            46 + progress * 24 + Math.min(18, velocity * 2),
+            now,
+            0.12,
+        );
+        this.engineGain.gain.setTargetAtTime(
+            0.025 + progress * 0.035,
+            now,
+            0.15,
+        );
     }
 
     private startAtmosphere(): void {
@@ -121,6 +155,21 @@ class ExperienceAudioController {
         droneGain.gain.value = 0.11;
         this.drone.connect(droneGain).connect(lowPass);
         this.drone.start();
+
+        this.engine = this.context.createOscillator();
+        this.engine.type = 'sawtooth';
+        this.engine.frequency.value = 46;
+        this.engineGain = this.context.createGain();
+        this.engineGain.gain.value = 0.025;
+        const engineFilter = this.context.createBiquadFilter();
+        engineFilter.type = 'lowpass';
+        engineFilter.frequency.value = 145;
+        engineFilter.Q.value = 1.1;
+        this.engine
+            .connect(this.engineGain)
+            .connect(engineFilter)
+            .connect(lowPass);
+        this.engine.start();
 
         const buffer = this.context.createBuffer(
             1,

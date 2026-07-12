@@ -34,6 +34,7 @@ export default function OpenSource({ publicSite }: PublicPageProps) {
                 eyebrow="OPEN SOURCE / ENGINEERING"
                 title="The architecture is part of the story."
                 description="The Archive is being developed in public as a reusable, API-first fandom platform with explicit security, accessibility, evidence, and rights boundaries."
+                variant="system"
             >
                 {publicSite.repositoryUrl && (
                     <Button className="mt-8" asChild>
@@ -58,6 +59,7 @@ export default function OpenSource({ publicSite }: PublicPageProps) {
             </PublicArticleSection>
             <section
                 className="my-12 grid gap-4 sm:grid-cols-2"
+                data-immersive-section
                 aria-labelledby="stack-title"
             >
                 <h2 id="stack-title" className="sr-only">
@@ -104,7 +106,11 @@ export default function OpenSource({ publicSite }: PublicPageProps) {
                     belong in the repository.
                 </p>
             </PublicArticleSection>
-            <aside className="public-note" aria-label="Software licence status">
+            <aside
+                className="public-note"
+                data-immersive-section
+                aria-label="Software licence status"
+            >
                 <h2>Source available does not mean licensed for reuse</h2>
                 <p>
                     No standalone project-wide software licence has been

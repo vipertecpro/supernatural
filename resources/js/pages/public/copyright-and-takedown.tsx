@@ -13,9 +13,11 @@ export default function CopyrightAndTakedown({ publicSite }: PublicPageProps) {
                 eyebrow="TRUST / RIGHTS"
                 title="Copyright and takedown process."
                 description="This page describes the project’s current handling process. It is not legal advice, does not determine ownership, and is not a jurisdiction-specific legal notice policy."
+                variant="rights"
             />
             <aside
                 className="public-note"
+                data-immersive-section
                 aria-label="Unofficial project disclaimer"
             >
                 <h2>Unofficial project</h2>

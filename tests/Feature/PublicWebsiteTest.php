@@ -104,7 +104,7 @@ test('public route source includes no deferred domain pages', function () {
 
 test('public frontend contracts retain safe navigation metadata and effects fallbacks', function () {
     $navigation = file_get_contents(resource_path('js/lib/shell/navigation.ts'));
-    $effects = file_get_contents(resource_path('js/hooks/use-public-effects.ts'));
+    $effects = file_get_contents(resource_path('js/features/experience/capability-resolver.ts'));
     $metadata = file_get_contents(resource_path('js/components/public/public-head.tsx'));
     $copy = file_get_contents(resource_path('js/content/public-site.ts'));
 
@@ -112,11 +112,26 @@ test('public frontend contracts retain safe navigation metadata and effects fall
         ->toContain('home()', 'about()', 'openSource()')
         ->not->toContain('explore()', 'lore()', 'community()', 'bunkers()')
         ->and($effects)
-        ->toContain('prefers-reduced-motion', 'saveData', 'pointer: coarse', 'deviceMemory', 'public-effects')
+        ->toContain('prefers-reduced-motion', 'saveData', 'pointer: coarse', 'deviceMemory', 'detectWebglSupport')
         ->not->toContain('userAgent', 'hardwareConcurrency')
         ->and($metadata)
         ->toContain('canonical', 'og:title', 'twitter:card', 'application/ld+json')
         ->not->toContain('twitter:site', 'og:image')
         ->and($copy)
         ->toContain('Public interface planned', 'Foundation implemented', 'NativePHP mobile application');
+});
+
+test('every editorial public page selects a distinct immersive scene variant', function () {
+    $pages = [
+        'about.tsx' => 'knowledge',
+        'open-source.tsx' => 'system',
+        'accessibility.tsx' => 'signal',
+        'content-policy.tsx' => 'boundary',
+        'copyright-and-takedown.tsx' => 'rights',
+    ];
+
+    foreach ($pages as $page => $variant) {
+        expect(file_get_contents(resource_path("js/pages/public/{$page}")))
+            ->toContain("variant=\"{$variant}\"");
+    }
 });

@@ -11,6 +11,7 @@ export function HomepageChoreography() {
 
         let cleanup = (): void => undefined;
         let cancelled = false;
+        const fallbackTimers: number[] = [];
 
         void Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
             ([{ gsap }, { ScrollTrigger }]) => {
@@ -20,6 +21,10 @@ export function HomepageChoreography() {
 
                 gsap.registerPlugin(ScrollTrigger);
                 const context = gsap.context(() => {
+                    const heroRevealTargets = [
+                        '.archive-hero [data-hero-reveal]',
+                        '.archive-hero-title > span',
+                    ];
                     const heroTimeline = gsap.timeline({
                         defaults: { ease: 'power4.out' },
                     });
@@ -43,6 +48,22 @@ export function HomepageChoreography() {
                         },
                         0.12,
                     );
+
+                    const heroRevealFallback = window.setTimeout(() => {
+                        gsap.set(heroRevealTargets, {
+                            clearProps:
+                                'opacity,transform,filter,clipPath,visibility',
+                        });
+                    }, 3600);
+                    fallbackTimers.push(heroRevealFallback);
+
+                    heroTimeline.eventCallback('onComplete', () => {
+                        window.clearTimeout(heroRevealFallback);
+                        gsap.set(heroRevealTargets, {
+                            clearProps:
+                                'opacity,transform,filter,clipPath,visibility',
+                        });
+                    });
 
                     gsap.to('.archive-hero-aurora-one', {
                         xPercent: 22,
@@ -199,7 +220,12 @@ export function HomepageChoreography() {
                         },
                     });
                 });
-                cleanup = () => context.revert();
+                cleanup = () => {
+                    fallbackTimers.forEach((timer) =>
+                        window.clearTimeout(timer),
+                    );
+                    context.revert();
+                };
             },
         );
 

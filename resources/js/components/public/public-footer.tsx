@@ -64,6 +64,7 @@ export function PublicFooter() {
                                 <Link
                                     className="public-text-link"
                                     href={dashboard()}
+                                    prefetch
                                 >
                                     Dashboard
                                 </Link>
@@ -74,6 +75,7 @@ export function PublicFooter() {
                                     <Link
                                         className="public-text-link"
                                         href={login()}
+                                        prefetch
                                     >
                                         Sign in
                                     </Link>
@@ -83,6 +85,7 @@ export function PublicFooter() {
                                         <Link
                                             className="public-text-link"
                                             href={register()}
+                                            prefetch
                                         >
                                             Create account
                                         </Link>
@@ -146,6 +149,7 @@ function FooterGroup({
                         <Link
                             className="public-text-link"
                             href={href}
+                            prefetch
                             aria-current={
                                 isNavigationActive(currentUrl, href)
                                     ? 'page'

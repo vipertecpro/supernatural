@@ -1,6 +1,10 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
+import {
+    applyExperienceQualityDrops,
+    ScenePerformanceGovernor,
+} from './scene-performance-governor';
 import type { ExperienceQuality } from './types';
 
 function ArchiveWorld({
@@ -245,13 +249,16 @@ export default function NightRoadScene({
     quality: ExperienceQuality;
     onContextLost: () => void;
 }) {
+    const [qualityDrops, setQualityDrops] = useState(0);
+    const renderQuality = applyExperienceQualityDrops(quality, qualityDrops);
+
     return (
         <Canvas
             camera={{ position: [0, 1.1, 6.5], fov: 47 }}
-            dpr={quality === 'high' ? [1, 1.75] : [1, 1.25]}
+            dpr={renderQuality === 'high' ? [1, 1.75] : [1, 1.25]}
             frameloop={active ? 'always' : 'never'}
             gl={{
-                antialias: quality !== 'low',
+                antialias: renderQuality !== 'low',
                 powerPreference: 'high-performance',
             }}
             onCreated={({ gl }) => {
@@ -264,7 +271,15 @@ export default function NightRoadScene({
                 );
             }}
         >
-            <ArchiveWorld active={active} quality={quality} />
+            <ScenePerformanceGovernor
+                key={renderQuality}
+                active={active}
+                quality={renderQuality}
+                onPressure={() =>
+                    setQualityDrops((current) => Math.min(2, current + 1))
+                }
+            />
+            <ArchiveWorld active={active} quality={renderQuality} />
         </Canvas>
     );
 }

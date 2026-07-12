@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { PublicPageChoreography } from '@/features/experience/public-page-choreography';
 import PublicMarketingLayout from '@/layouts/public/public-marketing-layout';
 import { cn } from '@/lib/utils';
 
@@ -17,15 +18,16 @@ export default function PublicContentLayout({
 }) {
     return (
         <PublicMarketingLayout>
+            <PublicPageChoreography />
             <div
                 className={cn(
-                    'mx-auto grid w-full gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:py-16',
+                    'public-content-shell mx-auto grid w-full gap-8 px-4 pb-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:pb-32',
                     wide
                         ? 'max-w-(--content-wide)'
                         : 'max-w-(--content-default)',
                 )}
             >
-                <article className="public-prose text-body max-w-(--content-reading) min-w-0">
+                <article className="public-prose text-body max-w-none min-w-0">
                     {children}
                 </article>
                 {context && (

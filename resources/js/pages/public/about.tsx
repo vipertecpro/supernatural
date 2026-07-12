@@ -17,6 +17,7 @@ export default function About({ publicSite }: PublicPageProps) {
                 eyebrow="ABOUT / THE ARCHIVE"
                 title="A living record, not another pile of pages."
                 description="The Archive is a fandom-neutral platform foundation for understanding connected fictional worlds while respecting progress, evidence, privacy, and community safety."
+                variant="knowledge"
             />
             <PublicArticleSection title="Why a static wiki is not enough">
                 <p>
@@ -89,6 +90,7 @@ export default function About({ publicSite }: PublicPageProps) {
             </PublicArticleSection>
             <aside
                 className="public-note"
+                data-immersive-section
                 aria-label="Unofficial project disclaimer"
             >
                 <h2>Unofficial by design</h2>

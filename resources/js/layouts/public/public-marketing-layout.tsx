@@ -17,6 +17,7 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet';
 import { useExperience } from '@/features/experience/experience-context';
+import { PublicImmersiveBackdrop } from '@/features/experience/public-immersive-backdrop';
 import { isNavigationActive, publicNavigation } from '@/lib/shell/navigation';
 import { dashboard, home, login, register } from '@/routes';
 
@@ -31,6 +32,7 @@ export default function PublicMarketingLayout({
     const currentUrl = usePage().url;
     const { visualMode } = useExperience();
     const [scrolled, setScrolled] = useState(false);
+    const isHomepage = currentUrl === '/' || currentUrl.startsWith('/?');
 
     useEffect(() => {
         const update = (): void => setScrolled(window.scrollY > 24);
@@ -43,12 +45,14 @@ export default function PublicMarketingLayout({
     return (
         <div
             data-experience-surface="public"
+            data-public-route={currentUrl.split('?')[0] || '/'}
             className="min-h-svh overflow-x-clip bg-(--background-public)"
         >
             <a href="#main-content" className="skip-link">
                 Skip to content
             </a>
             <OfflineBanner />
+            {!isHomepage && <PublicImmersiveBackdrop url={currentUrl} />}
             {hero && (
                 <a href="#archive-opens" className="skip-link skip-intro-link">
                     Skip introduction
@@ -61,6 +65,7 @@ export default function PublicMarketingLayout({
                 <div className="mx-auto flex h-(--shell-header-height) max-w-(--content-wide) items-center gap-4 px-4 sm:px-6">
                     <Link
                         href={home()}
+                        prefetch
                         aria-label="The Archive home"
                         viewTransition={visualMode !== 'reduced'}
                     >
@@ -74,6 +79,7 @@ export default function PublicMarketingLayout({
                             <Button key={title} variant="ghost" asChild>
                                 <Link
                                     href={href}
+                                    prefetch
                                     viewTransition={visualMode !== 'reduced'}
                                     aria-current={
                                         isNavigationActive(currentUrl, href)
@@ -91,15 +97,19 @@ export default function PublicMarketingLayout({
                         <div className="hidden items-center gap-2 sm:flex">
                             {auth.user ? (
                                 <Button asChild>
-                                    <Link href={dashboard()}>Open app</Link>
+                                    <Link href={dashboard()} prefetch>
+                                        Open app
+                                    </Link>
                                 </Button>
                             ) : (
                                 <>
                                     <Button variant="ghost" asChild>
-                                        <Link href={login()}>Sign in</Link>
+                                        <Link href={login()} prefetch>
+                                            Sign in
+                                        </Link>
                                     </Button>
                                     <Button asChild>
-                                        <Link href={register()}>
+                                        <Link href={register()} prefetch>
                                             Create account
                                         </Link>
                                     </Button>
@@ -141,6 +151,7 @@ export default function PublicMarketingLayout({
                                             >
                                                 <Link
                                                     href={href}
+                                                    prefetch
                                                     viewTransition={
                                                         visualMode !== 'reduced'
                                                     }
@@ -161,7 +172,10 @@ export default function PublicMarketingLayout({
                                     <div className="mt-auto flex flex-col gap-2">
                                         {auth.user ? (
                                             <Button asChild>
-                                                <Link href={dashboard()}>
+                                                <Link
+                                                    href={dashboard()}
+                                                    prefetch
+                                                >
                                                     Open app
                                                 </Link>
                                             </Button>
@@ -171,12 +185,18 @@ export default function PublicMarketingLayout({
                                                     variant="outline"
                                                     asChild
                                                 >
-                                                    <Link href={login()}>
+                                                    <Link
+                                                        href={login()}
+                                                        prefetch
+                                                    >
                                                         Sign in
                                                     </Link>
                                                 </Button>
                                                 <Button asChild>
-                                                    <Link href={register()}>
+                                                    <Link
+                                                        href={register()}
+                                                        prefetch
+                                                    >
                                                         Create account
                                                     </Link>
                                                 </Button>
@@ -190,7 +210,11 @@ export default function PublicMarketingLayout({
                 </div>
             </header>
             {hero}
-            <main id="main-content" tabIndex={-1}>
+            <main
+                id="main-content"
+                tabIndex={-1}
+                className="public-main-content"
+            >
                 {children}
             </main>
             <PublicFooter />

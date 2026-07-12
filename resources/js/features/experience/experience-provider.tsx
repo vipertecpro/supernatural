@@ -38,7 +38,7 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
     const [routeTransitioning, setRouteTransitioning] = useState(false);
 
     const mode = resolveExperienceMode(preference, capabilities, webglFailed);
-    const visualMode = resolveVisualMode(mode, capabilities);
+    const visualMode = resolveVisualMode(mode);
     const quality = resolveQuality(visualMode, capabilities, webglFailed);
     const smoothScrollEnabled =
         visualMode !== 'reduced' && !capabilities.coarsePointer;
@@ -109,10 +109,14 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
     }, [smoothScrollEnabled]);
 
     useEffect(() => {
-        const offStart = router.on('start', () => setRouteTransitioning(true));
-        const offFinish = router.on('finish', () =>
-            setRouteTransitioning(false),
-        );
+        const offStart = router.on('start', () => {
+            setRouteTransitioning(true);
+            experienceAudio.pause();
+        });
+        const offFinish = router.on('finish', () => {
+            setRouteTransitioning(false);
+            experienceAudio.resume();
+        });
         const offNavigate = router.on('navigate', () => {
             setRouteTransitioning(false);
             requestAnimationFrame(() =>
@@ -167,7 +171,7 @@ export function ExperienceProvider({ children }: { children: ReactNode }) {
         sessionStorage.setItem(introKey, 'true');
         setIntroComplete(true);
         requestAnimationFrame(() =>
-            document.querySelector<HTMLElement>('#main-content')?.focus(),
+            document.querySelector<HTMLElement>('#road-hero-title')?.focus(),
         );
     }, []);
 

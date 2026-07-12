@@ -1,6 +1,7 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { BrandWordmark } from '@/components/brand/brand-wordmark';
 import { AppearanceMenu } from '@/components/navigation/appearance-menu';
+import { PublicImmersiveBackdrop } from '@/features/experience/public-immersive-backdrop';
 import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 
@@ -9,17 +10,32 @@ export default function AuthSimpleLayout({
     title,
     description,
 }: AuthLayoutProps) {
+    const currentUrl = usePage().url;
+
     return (
-        <div className="archive-atmosphere relative flex min-h-svh items-center justify-center bg-(--background-public) px-4 py-10 sm:px-6">
+        <div className="immersive-auth-shell relative min-h-svh overflow-hidden bg-(--background-public)">
             <a href="#auth-content" className="skip-link">
                 Skip to form
             </a>
-            <div className="absolute top-4 right-4">
+            <PublicImmersiveBackdrop url={currentUrl} />
+            <div className="absolute top-4 right-4 z-20">
                 <AppearanceMenu />
             </div>
+            <aside className="immersive-auth-story" aria-hidden="true">
+                <p>IDENTITY / SECURE CHANNEL</p>
+                <h2>
+                    Every archive <span>begins with a witness.</span>
+                </h2>
+                <div className="immersive-auth-sigil">
+                    <span />
+                    <span />
+                    <span />
+                </div>
+                <small>ENCRYPTED SESSION · PRIVATE BY DEFAULT</small>
+            </aside>
             <main
                 id="auth-content"
-                className="w-full max-w-md rounded-xl border border-border-strong bg-surface-primary p-6 shadow-surface sm:p-8"
+                className="immersive-auth-panel w-full max-w-md border border-border-strong bg-surface-primary/92 p-6 shadow-surface backdrop-blur-xl sm:p-8"
             >
                 <Link href={home()} className="inline-flex">
                     <BrandWordmark />

@@ -13,6 +13,7 @@ export default function ContentPolicy({ publicSite }: PublicPageProps) {
                 eyebrow="TRUST / CONTENT POLICY"
                 title="Create with context. Contribute with permission."
                 description="This public summary reflects the repository Content Policy and remains subject to legal and operational review. It does not replace the canonical policy source or legal advice."
+                variant="boundary"
             />
             <PublicArticleSection title="Rights, sources, and attribution">
                 <ul>

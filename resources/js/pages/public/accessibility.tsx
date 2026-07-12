@@ -13,6 +13,7 @@ export default function Accessibility({ publicSite }: PublicPageProps) {
                 eyebrow="ACCESSIBILITY / STATEMENT"
                 title="The archive should open for everyone."
                 description="We design and implement toward WCAG 2.2 Level AA. This statement describes an engineering target and current practice; it is not a certification or claim of complete conformance."
+                variant="signal"
             />
             <PublicArticleSection title="Current principles">
                 <ul>
@@ -33,9 +34,9 @@ export default function Accessibility({ publicSite }: PublicPageProps) {
                         readable contrast targets, and forced-colour fallbacks.
                     </li>
                     <li>
-                        Reduced-motion support plus a local visual-effects
-                        preference. Data Saver and reduced-motion signals
-                        override ambient effects.
+                        Reduced-motion and Data Saver signals automatically
+                        replace ambient effects with static, lightweight
+                        fallbacks.
                     </li>
                     <li>
                         Decorative SVG and CSS scenes are hidden from assistive

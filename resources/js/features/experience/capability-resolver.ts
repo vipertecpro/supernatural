@@ -40,15 +40,32 @@ export const readExperienceCapabilities = (): ExperienceCapabilities => {
     }
 
     const hints = navigator as NavigatorWithHints;
+    const reviewMode = window.location.hostname.endsWith('.test')
+        ? new URLSearchParams(window.location.search).get('roadHeroReview')
+        : null;
+    const forceMotion =
+        reviewMode === 'full' ||
+        reviewMode === 'motion' ||
+        reviewMode === 'fallback';
 
     return {
-        reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)')
-            .matches,
-        saveData: hints.connection?.saveData === true,
-        coarsePointer: window.matchMedia('(pointer: coarse)').matches,
-        narrowViewport: window.matchMedia('(max-width: 767px)').matches,
-        lowMemory: hints.deviceMemory !== undefined && hints.deviceMemory <= 4,
-        webgl: detectWebglSupport(),
+        reducedMotion:
+            !forceMotion &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        saveData: !forceMotion && hints.connection?.saveData === true,
+        coarsePointer:
+            reviewMode === 'full'
+                ? false
+                : window.matchMedia('(pointer: coarse)').matches,
+        narrowViewport:
+            reviewMode === 'full'
+                ? false
+                : window.matchMedia('(max-width: 767px)').matches,
+        lowMemory:
+            reviewMode === 'full'
+                ? false
+                : hints.deviceMemory !== undefined && hints.deviceMemory <= 4,
+        webgl: reviewMode !== 'fallback' && detectWebglSupport(),
     };
 };
 
@@ -57,12 +74,12 @@ export const resolveExperienceMode = (
     capabilities: ExperienceCapabilities,
     webglFailed = false,
 ): ExperienceMode => {
-    if (capabilities.reducedMotion || capabilities.saveData) {
-        return 'reduced';
-    }
-
     if (preference !== 'automatic') {
         return preference;
+    }
+
+    if (capabilities.reducedMotion || capabilities.saveData) {
+        return 'reduced';
     }
 
     if (
@@ -80,12 +97,7 @@ export const resolveExperienceMode = (
 
 export const resolveVisualMode = (
     mode: ExperienceMode,
-    capabilities: ExperienceCapabilities,
 ): VisualExperienceMode => {
-    if (capabilities.reducedMotion || capabilities.saveData) {
-        return 'reduced';
-    }
-
     return mode === 'silent' ? 'balanced' : mode;
 };
 
@@ -98,13 +110,15 @@ export const resolveQuality = (
         return 'fallback';
     }
 
+    if (capabilities.narrowViewport || capabilities.coarsePointer) {
+        return 'low';
+    }
+
     if (mode === 'full' && !capabilities.lowMemory) {
         return 'high';
     }
 
-    return capabilities.narrowViewport || capabilities.coarsePointer
-        ? 'low'
-        : 'medium';
+    return 'medium';
 };
 
 export const clampVolume = (volume: number): number =>

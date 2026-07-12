@@ -34,7 +34,7 @@ export function PageHeader({
     metadata?: ReactNode;
 }) {
     return (
-        <header className="flex flex-col gap-5 border-b border-border-subtle pb-6">
+        <header className="app-page-header flex flex-col gap-5 border-b border-border-subtle pb-6">
             {breadcrumbs.length > 0 && (
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             )}
@@ -81,7 +81,10 @@ export function Section({
     className?: string;
 }) {
     return (
-        <section className={cn('flex flex-col gap-5', className)}>
+        <section
+            className={cn('app-page-section flex flex-col gap-5', className)}
+            data-immersive-section
+        >
             {(title || description || actions) && (
                 <header className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
                     <div>

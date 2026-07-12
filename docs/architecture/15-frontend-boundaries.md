@@ -19,3 +19,8 @@ Prompt 12 fixes the navigation and shell boundary in `docs/ui-ux/`: Public, Fan,
 Prompt 13 now enforces these boundaries in the layout and navigation layer. The workspace shell exists as a reusable configuration, but no operational workspace is mounted while the existing routes remain no-content stubs.
 
 Prompt 14 adds a dedicated `OnboardingLayout` between Auth and Fan contexts. It receives only workflow metadata and authorized step props, uses generated Wayfinder actions, and persists no form value in browser storage. The Fan Dashboard is onboarding-gated; settings/security recovery stays outside that gate. Public Marketing remains unchanged.
+
+Prompt 15 mounts the supported public Homepage/About/Open Source/Accessibility/policy set. Public cinematic code remains inside public page chunks/components and accepts no private Resource. The shared public layout adds a small local effects enum only; Fan/workspace state, permissions, mutations, and domain data are not imported. Prompt 16 owns every public knowledge-domain page.
+## Prompt 15B boundary
+
+The global provider contains only preferences, capability resolution, focus-safe route state, and opt-in audio. Three/GSAP/Lenis are lazy or public-surface-only. No private journey, notification, role, moderation, permission, draft, or telemetry data enters the experience runtime. Prompt 16 remains the owner of all knowledge-domain screens.

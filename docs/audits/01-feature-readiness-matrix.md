@@ -1,5 +1,7 @@
 # Feature Readiness Matrix
 
+> Prompt 15 update (2026-07-13): the public Homepage, About, Open Source, Accessibility, Content Policy, and Copyright/Takedown pages are implemented. Public Catalog, Lore, Timeline, Search, Community, Bunker, and viewing-order interfaces remain later phases even where their backend is ready.
+
 > Prompt 13 update: design tokens, brand identity, Public/Fan/Workspace shell components, route-safe navigation foundations, and reusable application states are implemented. Domain screen readiness classifications are unchanged.
 
 Status vocabulary follows the audit contract: **Already present**, **Partially present**, **Not present**, **Present but unsuitable**, and **Requires refactoring before use**. Suggested phases are sequencing recommendations grounded in current dependencies and gaps, not a generic product roadmap.
@@ -156,3 +158,4 @@ This append-only section records the bounded Catalog implementation.
 | Onboarding screens | Implemented | Seven resumable responsive Inertia steps, review/completion, empty Catalog behavior, conflict UX, verification and Dashboard redirects. | Global primary universe and unsupported global privacy/community/notification settings. |
 | Domain integration | Implemented for supported types | Typed fandom/spoiler/order/privacy records and existing hierarchical progress action are reused; no duplicate backend domain. | Journey creation and broader personal settings remain their later approved phases. |
 | Public website | Not started | Prompt 14 preserved Public Marketing shell only. | Prompt 15 static public website; Prompt 16 public Catalog/Lore/Search. |
+| Immersive public experience | Implemented with fallbacks | Full/Balanced/Reduced/Silent runtime, lazy procedural hero, motion/audio controls, rights-gated provider shells; production media remains configuration-dependent |

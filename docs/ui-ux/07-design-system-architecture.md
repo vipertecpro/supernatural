@@ -70,3 +70,6 @@ Catalog: `UniverseCard`, `WorkCard`, `SeasonList`, `EpisodeRow`. Lore: `LoreEnti
 ## Prompt 13 implementation note
 
 Foundations, page framing, navigation, generic states, spoiler states, and status/authority components now exist under `resources/js/components`. Domain components remain deferred. Existing shadcn primitives were themed and composed rather than replaced.
+## Experience tokens
+
+Prompt 15B adds `font-display`, `font-editorial`, and `font-casefile` families plus experience datasets for mode, visual mode, quality, visibility, and transition state. Cinematic selectors remain public-feature CSS; core accessible primitives do not depend on Three, GSAP, Lenis, or audio.

@@ -116,3 +116,7 @@ User, role, feature-flag, platform-setting, notification-operation, audit, and d
 - Desktop sidebar collapse preserves accessible names/tooltips. Mobile sheets restore focus to their trigger.
 - Workspace switcher lists only authorized surfaces and explains context; it does not enumerate permissions.
 - Search results preserve query/filter state in the URL. Cursor pagination exposes next/previous navigation without fabricating page totals.
+
+## Prompt 15 public navigation
+
+Until Prompt 16 implements public knowledge routes, the live primary public navigation is Home, About, and Open Source. Accessibility, Content Policy, and Copyright and Takedown are footer Trust links. Guests receive Sign in/Create account; authenticated visitors receive Dashboard/Open app. Proposed Explore, Lore, Timeline, Search, Community, and Bunker links remain absent rather than dead.

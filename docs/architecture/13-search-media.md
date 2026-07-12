@@ -37,3 +37,6 @@ Authenticated Search results may include the viewer's exact current progress sta
 ## Prompt 10 implementation
 
 Media attachments now allow `bunker` and `community_post` targets through existing rights, moderation, publication, universe, restriction, ordering, and spoiler gates. Comment media and Community Search projections remain deferred. Search receives no private Bunker, bookmark, reaction, vote, or Journey data.
+## Prompt 15B experience media
+
+TMDB is an optional server-side metadata provider with six-hour caching, exact CDN allowlisting, terms/commercial gates, responsive URLs, and public attribution. The read token never enters Inertia props. Cinematic official video reuses `external_embeds`, requires YouTube plus `authorized_channel` metadata and effective embedding rights, and mounts a privacy-enhanced iframe only after activation. Experience assets additionally pass the client manifest; this does not replace database Media governance.

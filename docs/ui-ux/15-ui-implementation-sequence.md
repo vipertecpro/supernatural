@@ -65,3 +65,10 @@ Prompt 13 is implemented. Prompt 14 is next, subject to the documented onboardin
 ## Prompt 14 completion
 
 Prompt 14 is implemented: branded auth regression improvements, platform suspension notice, server workflow state, existing-user completion backfill, Fortify lifecycle integration, seven resumable steps, typed domain persistence, empty-data paths, optimistic conflict UX, responsive/accessibility behavior, tests, and documentation. Prompt 15 is the next allowed phase and must stay limited to the public website/static policy/error surfaces described above.
+
+## Prompt 15 completion
+
+Prompt 15 is implemented: complete static-first cinematic homepage, supported public information/policy pages, route-safe public navigation and footer, effects preference, reduced-motion/Data Saver fallbacks, metadata/structured-data foundation, responsive original CSS/SVG visuals, tests, and documentation. Prompt 16 is next and remains responsible for public Catalog, Lore, Timeline, Search, Media/source, and viewing-order screens.
+## Prompt 15B completion boundary
+
+The cinematic runtime, homepage narrative, public navigation, media shells, rights gates, fallback modes, and restrained global transition layer precede Prompt 16. Prompt 16 may consume the runtime for real Catalog/Lore/Timeline/Media/Search pages but must not move domain data or rights decisions into Canvas/client-only state.

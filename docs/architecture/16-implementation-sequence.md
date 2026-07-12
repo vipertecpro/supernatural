@@ -85,3 +85,10 @@ Prompt 12 documents 206 screens, five separate experience contexts, a reusable s
 ## Prompt 14 completion note
 
 Authentication framing and the persisted seven-step onboarding workflow are implemented with existing-user completion backfill, Fortify registration/verification integration, typed preference/progress reuse, Dashboard redirect enforcement, suspension precedence, accessible responsive Inertia pages, optimistic conflicts, deletion cleanup, tests, and documentation. Prompt 15 is next and remains limited to the public website/static policy/error phase; Catalog/Lore/Search detail screens remain Prompt 16.
+
+## Prompt 15 completion note
+
+The public homepage and bounded information/policy routes are implemented with an original CSS/SVG narrative, safe auth-aware CTAs, route-safe navigation/footer, effects preference, reduced-motion/Data Saver behavior, conservative metadata/JSON-LD, responsive/accessibility contracts, tests, and no new dependency. Prompt 16 may now implement the public Catalog/Lore/Search read surfaces against existing APIs without changing the Prompt 15 static trust pages or importing cinematic code into Fan/workspace bundles.
+## Prompt 15B inserted phase
+
+Prompt 15B completes the reusable cinematic shell, rights-aware provider presentation, and fallback architecture after Prompt 15 and before Prompt 16. Prompt 16 should begin with real public Catalog browse/detail contracts, then Lore and Timeline, then Media and Search; it should reuse experience modes without expanding cinematic runtime authority.

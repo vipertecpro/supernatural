@@ -19,13 +19,13 @@ export default function PublicContentLayout({
         <PublicMarketingLayout>
             <div
                 className={cn(
-                    'mx-auto grid w-full gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:py-12',
+                    'mx-auto grid w-full gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:py-16',
                     wide
                         ? 'max-w-(--content-wide)'
                         : 'max-w-(--content-default)',
                 )}
             >
-                <article className="text-body max-w-(--content-reading) min-w-0">
+                <article className="public-prose text-body max-w-(--content-reading) min-w-0">
                     {children}
                 </article>
                 {context && (

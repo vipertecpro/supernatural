@@ -47,3 +47,10 @@ These are review gates, not performance guarantees:
 ## Safety rules
 
 No autoplay sound, cursor replacement, aggressive flicker, essential timed content, or endless cinematic loader. Ambient control is keyboard accessible, remembers a local preference, and does not imply account-level sync unless an API is later added. Original video receives captions/transcript when it communicates information.
+
+## Prompt 15 implementation note
+
+The homepage uses the Base and Enhanced tiers only: semantic content and static CSS/SVG are always complete; Intersection Observer adds restrained section reveals; CSS adds record drift, signal movement, and grain only when effects resolve to Enhanced. Reduced motion and Save-Data override explicit enhancement. Hero animation runs only in view and pauses with the hidden document. No Canvas, video, sound, WebGL, or motion dependency is used.
+## Prompt 15B selected implementation
+
+GSAP/ScrollTrigger owns sequenced public reveals and parallax, Lenis owns eligible public smooth scrolling, and R3F/Three owns the lazy hero environment. `ExperienceProvider` resolves Full, Balanced, Reduced, and Silent with High/Medium/Low/Fallback quality. Reduced motion and Save-Data disable WebGL animation, smooth-scroll interception, continuous movement, preloader, audio, and large route movement. Every controller unregisters listeners, RAF/ticker work, and triggers.

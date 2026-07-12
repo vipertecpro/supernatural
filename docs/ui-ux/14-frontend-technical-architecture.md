@@ -84,3 +84,10 @@ Prompt 13 may recommend the minimum testing dependency set, but dependency insta
 ## Prompt 14 implementation note
 
 `features/onboarding` owns types and shared step components; `layouts/onboarding` owns progress/navigation/focus; thin pages own local selection state; generated controller helpers own route contracts. Server props contain bounded published identity data only. Inertia `<Form>` owns mutations and error bags. No query cache, client store, Axios, test runner, or storage helper was introduced.
+
+## Prompt 15 implementation note
+
+`components/public` owns metadata, effects, footer, chapter, hero, and preview primitives; `content/public-site.ts` owns typed homepage copy; public page entry points remain thin. `PublicPageController` owns fixed safe metadata and configured URL validation. Route-level page chunks isolate long-form content; the shared public layout adds only the public navigation/footer/effects contract to the app chunk.
+## Immersive runtime boundary
+
+`resources/js/features/experience` owns capability resolution, preferences, sound, smooth scroll, route state, preloader, choreography, and the lazy R3F scene. The provider is global but heavy code is dynamically imported. Public layouts opt in with `data-experience-surface="public"`; auth/application/workspace surfaces receive only the lightweight transition/focus layer. Provider capability data is local-only.

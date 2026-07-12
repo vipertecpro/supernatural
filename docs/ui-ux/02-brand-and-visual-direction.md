@@ -59,3 +59,10 @@ Use abstract procedural graphics, original geometric symbols, rights-cleared con
 ## Prompt 13 implementation note
 
 The implemented working mark combines layered archive pages, a compass intersection, and a central record node. Warm-paper light and ink/carbon dark appearances use semantic OKLCH variables in `resources/css/app.css`. The codename, mark, and candidate colours remain subject to owner approval and formal contrast and brand review.
+
+## Prompt 15 public experience note
+
+The night-road research archive is now expressed through original CSS perspective geometry, authored signal/graph SVG, layered abstract records, generated grain, and semantic content. No remote or franchise asset is used. The homepage distinguishes implemented foundations from planned public interfaces and keeps the codename/trademark decision open.
+## Prompt 15B cinematic extension
+
+Public surfaces now express the archive through an original night road, fog, investigative documents, radio signals, evidence lines, restrained geometric seals, and gathering lights. Cinzel Decorative is reserved for ceremonial display, Cormorant Garamond for editorial headings, Special Elite for case-file moments, Instrument Sans for controls/body, and system monospace for evidence. No official franchise typography, logo, symbol, vehicle, prop, location, or likeness is reproduced.

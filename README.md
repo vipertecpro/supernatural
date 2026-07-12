@@ -1,8 +1,8 @@
 # Supernatural Fandom Platform
 
-An open-source, reusable foundation for building fandom communities across television, film, games, anime, books, and other fictional universes. **Supernatural** is intended to be the first thematic implementation, but the application architecture is fandom-neutral.
+An independently developed, source-available foundation for building fandom communities across television, film, games, anime, books, and other fictional universes. **Supernatural** is intended to be the first thematic implementation, but the application architecture and public experience are fandom-neutral.
 
-This repository is under active development. Current functionality is foundation-level: secure authentication, email verification, first-party roles and permissions, audit logging, source/license/spoiler domain primitives, an API v1 contract, and hardened broadcasting configuration. It is not a completed public site, fan dashboard, moderation product, chat system, or mobile application.
+This repository is under active development. Current functionality includes the original public homepage and trust/information pages, secure authentication, persisted onboarding, first-party roles and permissions, governed Catalog/Lore/Media/Search/Journey/Moderation/Community backend foundations, an API v1 contract, and hardened broadcasting configuration. Cinematic public Catalog/Lore/Search interfaces, complete Fan and operational workspaces, Messaging, Watch Rooms, and mobile remain future phases.
 
 ## Unofficial Project and Content Rights
 
@@ -33,6 +33,8 @@ Laravel Herd serves this checkout at `https://supernatural.test`. Other environm
 ```bash
 composer run dev
 ```
+
+Public canonical and repository metadata are opt-in. Configure `PUBLIC_SITE_URL` with an intentional public HTTPS origin and `PUBLIC_REPOSITORY_URL` with a credential-free HTTPS GitHub, GitLab, or Codeberg repository. Missing or unsafe values are omitted from public metadata and links.
 
 The default environment leaves broadcasting disabled. Reverb requires explicit local credentials and configuration; see [docs/project/environment-setup.md](docs/project/environment-setup.md) and [docs/project/realtime-foundation.md](docs/project/realtime-foundation.md).
 
@@ -70,3 +72,6 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md
 ## Software License Status
 
 No standalone software license has been approved for this repository. Although a legacy package manifest currently contains an `MIT` metadata value, no `LICENSE` file exists and that metadata is not treated as an approved project-wide licensing decision. Source availability alone does not grant permission to copy, modify, or redistribute the software. The maintainers must resolve licensing before representing the repository as reusable open-source software.
+## Immersive experience
+
+Prompt 15B adds an adaptive cinematic public runtime with a lazy original WebGL scene, GSAP/Lenis choreography, reduced and silent modes, opt-in procedural audio, self-hosted open fonts, rights-gated TMDB metadata, and click-to-load official YouTube embeds. See `docs/implementation/15b-immersive-experience-overhaul.md`. Prompt 16 public knowledge-domain screens are not included.

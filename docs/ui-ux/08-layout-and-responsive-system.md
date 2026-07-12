@@ -61,3 +61,10 @@ Laptop+: 256px dedicated sidebar, breadcrumb/header, filter toolbar, table/queue
 ## Prompt 13 implementation note
 
 Public Marketing, Public Content, Fan, and configurable Workspace layouts are implemented. Only Public Marketing and Fan are mounted because no frontend workspace pages exist. The Fan shell uses the existing responsive Sidebar on tablet/desktop and safe-area bottom navigation on mobile.
+
+## Prompt 15 implementation note
+
+Public Marketing now owns the complete primary/mobile navigation, appearance/effects controls, guest/auth CTA swap, and grouped footer. The homepage alternates constrained twelve-column narrative chapters on desktop and one-column reading order on phone. Public Content now mounts About, Open Source, Accessibility, and policy pages at the 45rem reading measure.
+## Prompt 15B responsive composition
+
+Desktop may use High/Medium WebGL, layered parallax, and pinned-feeling chapters. Coarse-pointer or narrow viewports default toward Balanced/Low, reduce particles/DPR, use a full-screen archive menu, and retain native vertical flow. Reduced and Save-Data surfaces use the CSS/SVG composition. Verified reflow targets are 320, 390, 768, 1024, and 1440 CSS pixels without horizontal overflow.

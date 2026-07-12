@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $creator
  * @property string|null $publisher
  * @property string|null $attribution_text
+ * @property array<string, mixed>|null $provider_metadata
  * @property MediaStatus $status
  * @property MediaModerationStatus $moderation_status
  * @property MediaVisibility $visibility

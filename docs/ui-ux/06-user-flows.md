@@ -129,3 +129,7 @@ User action menu → select Block or Mute → plain-language impact summary → 
 ## Prompt 14 implemented onboarding flow
 
 Registration now creates an incomplete server checkpoint in the same transaction. Verification resolves that checkpoint; interruption resumes its stable route. Each current submission advances once, earlier steps remain editable, future/stale submissions show a 409 conflict, and completion redirects to Fan Home. Empty Catalog data skips interest-dependent progress/order while still requiring explicit spoiler and privacy confirmation. Platform suspension takes precedence and settings/security/logout remain recovery routes.
+
+## Prompt 15 visitor flow
+
+The homepage now introduces the platform through static-first chapters, links guests to registration and existing users to Dashboard, and links all visitors to About/Open Source and trust policies. Each feature statement identifies implemented foundations or planned public interfaces. No visitor is routed into an unimplemented domain screen.

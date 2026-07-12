@@ -40,3 +40,10 @@ Each implemented prompt requires semantic/keyboard review, focus-path tests, zoo
 ## Prompt 14 implementation note
 
 Authentication/onboarding now includes one layout-owned main landmark, skip link, logical page `h1`, semantic ordered step navigation, `aria-current="step"`, polite current-step announcement, heading focus after navigation, focusable validation summary, visible labels, fieldset/legend groups, keyboard-native checkbox/radio cards, and mobile action placement. Formal screen-reader, forced-colour, 200% zoom, and multi-browser testing remains a manual gate; no WCAG conformance claim is made.
+
+## Prompt 15 implementation note
+
+Public pages now include semantic header/navigation/main/article/section/aside/footer structure, one page `h1`, skip navigation and homepage skip-introduction links, current-page semantics, a labelled effects menu, decorative SVG exclusion, static alternatives for all previews, reduced-motion/Data Saver override, forced-colour removal of atmosphere, and responsive reading measures. The public statement targets WCAG 2.2 AA without claiming certification.
+## Immersive experience requirements
+
+The intro has Skip and focus restoration; sound is muted until activated; continuous effects stop in Reduced mode; Canvas and graphs duplicate no essential information; mobile navigation traps/restores focus through the existing dialog primitive; route transitions never hide validation state; and 320px reflow, 200% zoom, keyboard navigation, visible state, touch targets, and safe-flash thresholds remain review gates. This is an implementation target, not a WCAG certification claim.

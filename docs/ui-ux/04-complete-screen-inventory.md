@@ -301,3 +301,7 @@ Each row references a complete state profile:
 ## Prompt 14 implementation note
 
 AU-01–09 and AU-10–16 are now implemented or integrated: branded Fortify forms, safe suspension notice, persisted introduction/interests/progress/spoilers/order/privacy/review steps, verification resume, conflict recovery, and Dashboard completion enforcement. The separate “verification completed” experience is a redirect to the saved onboarding step or completed Dashboard rather than a transient page. No public, Fan-domain, Community, or workspace screen was pulled forward.
+
+## Prompt 15 implementation note
+
+PW-01, PW-02, PW-22, PW-23, PW-24, and PW-27 are implemented at `/`, `/about`, `/open-source`, `/content-policy`, `/copyright-and-takedown`, and `/accessibility`. Privacy, Terms, Catalog, Lore, Timeline, Search, Community, Bunker, and viewing-order screens remain missing/deferred under their documented phases. Prompt 15 intentionally did not create routes for them.

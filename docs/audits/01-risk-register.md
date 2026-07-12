@@ -1,5 +1,7 @@
 # Risk Register
 
+> Prompt 15 update (2026-07-13): public visual assets are original CSS/SVG with no remote media; canonical/repository URLs are opt-in and validated; effects store one non-sensitive enum and honor reduced motion/Data Saver. Residual risks include unresolved final name/trademark/software licence, formal contrast/assistive-technology review, and later domain-screen privacy/spoiler integration.
+
 > Prompt 13 update: starter branding and generic shell risk are reduced. Formal contrast measurement, screen-reader/browser testing, final brand approval, and real workspace route integration remain open risks.
 
 Risk totals are **0 Critical, 4 High, 14 Medium, 5 Low, and 2 Informational**.
@@ -160,3 +162,6 @@ This append-only section records architecture-phase risks. Prompt 3 changed no a
 | R-077 | Accepted — Medium | Watched-through setup is capped at 100 published episodes to bound events and work. Large back catalogs require later progress UI, not an unbounded onboarding mutation. |
 | R-078 | Open — Medium | Formal screen-reader, forced-colour, 200% zoom, reduced-motion, multi-browser, real email/rate-limit, and passkey-device testing remains before an accessibility or production-readiness claim. |
 | R-079 | Accepted/deferred — Low | Current typed models have no global primary-universe or global privacy/community defaults. The UI omits unsupported controls rather than storing arbitrary JSON or fake capability. |
+| Experience bundle/runtime cost | Medium | Lazy 3D chunk, adaptive DPR/particles, offscreen/hidden pause, fallback tier, bundle budgets; generic raw-size warning remains documented |
+| Third-party media rights drift | High | Disabled by default, exact hosts, terms/commercial gates, source rights review, asset manifest, visible attribution, no downloads |
+| Motion/audio accessibility | Medium | Reduced/Save-Data override, Skip, opt-in sound, volume controls, semantic DOM alternatives, focus restoration |

@@ -1,8 +1,10 @@
 import { Link, usePage } from '@inertiajs/react';
 import { Menu } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { BrandWordmark } from '@/components/brand/brand-wordmark';
 import { AppearanceMenu } from '@/components/navigation/appearance-menu';
+import { PublicFooter } from '@/components/public/public-footer';
 import { OfflineBanner } from '@/components/states/offline-banner';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +16,8 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
+import { useExperience } from '@/features/experience/experience-context';
+import { isNavigationActive, publicNavigation } from '@/lib/shell/navigation';
 import { dashboard, home, login, register } from '@/routes';
 
 export default function PublicMarketingLayout({
@@ -24,27 +28,63 @@ export default function PublicMarketingLayout({
     hero?: ReactNode;
 }) {
     const { auth } = usePage().props;
+    const currentUrl = usePage().url;
+    const { visualMode } = useExperience();
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const update = (): void => setScrolled(window.scrollY > 24);
+        update();
+        window.addEventListener('scroll', update, { passive: true });
+
+        return () => window.removeEventListener('scroll', update);
+    }, []);
 
     return (
-        <div className="min-h-svh bg-(--background-public)">
+        <div
+            data-experience-surface="public"
+            className="min-h-svh overflow-x-clip bg-(--background-public)"
+        >
             <a href="#main-content" className="skip-link">
                 Skip to content
             </a>
             <OfflineBanner />
-            <header className="sticky top-0 border-b border-border-subtle bg-background/92 backdrop-blur">
+            {hero && (
+                <a href="#archive-opens" className="skip-link skip-intro-link">
+                    Skip introduction
+                </a>
+            )}
+            <header
+                className="public-header sticky top-0 z-40 border-b border-border-subtle bg-background/92 backdrop-blur"
+                data-scrolled={scrolled}
+            >
                 <div className="mx-auto flex h-(--shell-header-height) max-w-(--content-wide) items-center gap-4 px-4 sm:px-6">
-                    <Link href={home()} aria-label="The Archive home">
+                    <Link
+                        href={home()}
+                        aria-label="The Archive home"
+                        viewTransition={visualMode !== 'reduced'}
+                    >
                         <BrandWordmark />
                     </Link>
                     <nav
                         aria-label="Public navigation"
                         className="ml-8 hidden items-center gap-1 md:flex"
                     >
-                        <Button variant="ghost" asChild>
-                            <Link href={home()} aria-current="page">
-                                Home
-                            </Link>
-                        </Button>
+                        {publicNavigation.map(({ title, href }) => (
+                            <Button key={title} variant="ghost" asChild>
+                                <Link
+                                    href={href}
+                                    viewTransition={visualMode !== 'reduced'}
+                                    aria-current={
+                                        isNavigationActive(currentUrl, href)
+                                            ? 'page'
+                                            : undefined
+                                    }
+                                >
+                                    {title}
+                                </Link>
+                            </Button>
+                        ))}
                     </nav>
                     <div className="ml-auto flex items-center gap-1">
                         <AppearanceMenu />
@@ -79,7 +119,7 @@ export default function PublicMarketingLayout({
                             </SheetTrigger>
                             <SheetContent
                                 side="right"
-                                className="flex w-full max-w-sm flex-col"
+                                className="public-mobile-menu flex w-full max-w-none flex-col md:max-w-sm"
                             >
                                 <SheetHeader>
                                     <SheetTitle>Navigation</SheetTitle>
@@ -92,15 +132,32 @@ export default function PublicMarketingLayout({
                                     aria-label="Mobile public navigation"
                                     className="flex flex-1 flex-col gap-2 p-4"
                                 >
-                                    <SheetClose asChild>
-                                        <Button
-                                            variant="ghost"
-                                            className="justify-start"
-                                            asChild
-                                        >
-                                            <Link href={home()}>Home</Link>
-                                        </Button>
-                                    </SheetClose>
+                                    {publicNavigation.map(({ title, href }) => (
+                                        <SheetClose key={title} asChild>
+                                            <Button
+                                                variant="ghost"
+                                                className="h-11 justify-start"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href={href}
+                                                    viewTransition={
+                                                        visualMode !== 'reduced'
+                                                    }
+                                                    aria-current={
+                                                        isNavigationActive(
+                                                            currentUrl,
+                                                            href,
+                                                        )
+                                                            ? 'page'
+                                                            : undefined
+                                                    }
+                                                >
+                                                    {title}
+                                                </Link>
+                                            </Button>
+                                        </SheetClose>
+                                    ))}
                                     <div className="mt-auto flex flex-col gap-2">
                                         {auth.user ? (
                                             <Button asChild>
@@ -136,12 +193,7 @@ export default function PublicMarketingLayout({
             <main id="main-content" tabIndex={-1}>
                 {children}
             </main>
-            <footer className="border-t border-border-subtle">
-                <div className="mx-auto flex max-w-(--content-wide) flex-col gap-2 px-4 py-8 text-sm text-foreground-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
-                    <p>The Archive is a working codename.</p>
-                    <p>Original, fandom-neutral product foundation.</p>
-                </div>
-            </footer>
+            <PublicFooter />
         </div>
     );
 }

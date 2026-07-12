@@ -9,9 +9,17 @@ use App\Http\Controllers\Onboarding\SpoilerPreferencesController;
 use App\Http\Controllers\Onboarding\UniverseInterestsController;
 use App\Http\Controllers\Onboarding\ViewingOrderController;
 use App\Http\Controllers\Onboarding\ViewingProgressController;
+use App\Http\Controllers\PublicPageController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::controller(PublicPageController::class)->group(function () {
+    Route::get('/', 'home')->name('home');
+    Route::get('about', 'about')->name('about');
+    Route::get('open-source', 'openSource')->name('open-source');
+    Route::get('accessibility', 'accessibility')->name('accessibility');
+    Route::get('content-policy', 'contentPolicy')->name('content-policy');
+    Route::get('copyright-and-takedown', 'copyrightAndTakedown')->name('copyright-and-takedown');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('account/suspended', SuspensionController::class)->name('account.suspended');

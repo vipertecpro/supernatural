@@ -13,6 +13,7 @@ use App\Domain\Onboarding\OnboardingStateResolver;
 use App\Domain\UserJourney\Exceptions\InvalidJourneyOperation;
 use App\Enums\OnboardingStep;
 use App\Http\Middleware\AssignRequestId;
+use App\Http\Middleware\ContentSecurityPolicy;
 use App\Http\Middleware\EnforceUserRestrictions;
 use App\Http\Middleware\EnsureOnboardingCompleted;
 use App\Http\Middleware\EnsureOnboardingIncomplete;
@@ -58,6 +59,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(append: [
+            ContentSecurityPolicy::class,
             HandleAppearance::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,

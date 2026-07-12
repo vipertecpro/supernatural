@@ -261,3 +261,26 @@ Implemented within the authentication/onboarding boundary.
 ### Consequence
 
 Prompt 15 may implement only the approved public website/static policy/error surfaces. It must reuse the established Public Marketing shell, leave onboarding and Dashboard domain content unchanged, and defer public Catalog/Lore/Search detail screens to Prompt 16.
+
+## 2026-07-13 — Prompt 15 public website and homepage
+
+### Status
+
+Implemented within the public website/static trust boundary.
+
+### Decisions
+
+- Keep Home, About, and Open Source as the only live primary public destinations until Prompt 16 supplies knowledge-domain pages.
+- Use original CSS/SVG road, archive, signal, graph, Journey, Bunker, spoiler, and source compositions; add no remote/copyrighted asset, Canvas, WebGL, video, audio, or motion dependency.
+- Store only `automatic`, `enhanced`, or `reduced` as a local public effects preference. Reduced motion and Save-Data always override animation; runtime device hints are not persisted.
+- Treat foundation capability and public-interface availability as distinct copy states. Deferred functionality remains explicitly planned and unlinked.
+- Emit canonical/social URL fields and conservative JSON-LD only when an explicit valid HTTPS public URL is configured.
+- Hide missing repository links and allow configured external repository links only for credential-free HTTPS GitHub, GitLab, or Codeberg URLs.
+- Keep the project source-available without claiming an approved software licence or third-party content rights.
+
+### Consequence
+
+Prompt 16 can add public Catalog, Lore, Timeline, Search, Media/source, and viewing-order read interfaces against existing APIs. It must reuse the Prompt 15 public navigation/footer/metadata/effects foundation and retain static structured alternatives for future graph/timeline enhancements.
+## 2026-07-13 — Prompt 15B immersive runtime
+
+Selected GSAP/ScrollTrigger, Lenis, Three/R3F/Drei, Web Audio, and Fontsource for a lazy, adaptive public experience. Rejected post-processing due to bundle cost, automatic sound, remote fonts, copied franchise assets, arbitrary embeds/images, and capability telemetry. TMDB and official YouTube remain disabled until explicit rights/terms gates pass. Prompt 16 domain screens remain deferred.

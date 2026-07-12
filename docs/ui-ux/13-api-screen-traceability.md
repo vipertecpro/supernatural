@@ -65,3 +65,7 @@ Authoritative baseline: 243 `/api/v1` routes plus Fortify/settings web routes. T
 ## Prompt 14 traceability update
 
 AU-04 and AU-09–16 no longer have a page/orchestration gap. Fourteen named web routes render/mutate the persisted flow; underlying interests, progress, spoiler, order, and privacy writes reuse typed Journey domain actions/tables. The API v1 route count/contract is unchanged. Global privacy, Community defaults, and notification defaults remain absent where no typed backend support exists.
+
+## Prompt 15 traceability update
+
+PW-01–02, PW-22–24, and PW-27 are implemented as database-free Inertia pages with bounded `publicSite` props. Their only viewer-specific input is the existing nullable auth identity used to swap the account CTA. No public-domain API aggregation was needed; PW-03–21 remain Prompt 16 or later.

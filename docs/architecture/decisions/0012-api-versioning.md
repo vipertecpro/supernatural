@@ -8,3 +8,7 @@
 - Security implications: every surface declares auth, verification, permission, limits, and data minimization; token abilities only narrow access.
 - Migration implications: no change to existing v1 health/me endpoints; product resources are additive.
 - Future review conditions: client needs prove GraphQL or a different versioning strategy materially better.
+
+## Prompt 8 implementation note
+
+Owner-private User Journey resources are additive v1 fields/routes. Retry-prone progress/session writes use scoped client identifiers, stale versions retain HTTP 409, page sizes remain bounded, and no route accepts a user identifier.

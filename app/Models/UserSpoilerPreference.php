@@ -9,8 +9,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/** @property SpoilerTolerance $tolerance */
-#[Fillable(['user_id', 'universe_id', 'tolerance', 'show_warnings'])]
+/**
+ * @property int $user_id
+ * @property int $universe_id
+ * @property SpoilerTolerance $tolerance
+ * @property bool $show_warnings
+ * @property string $rewatch_behavior
+ * @property int $lock_version
+ */
+#[Fillable(['user_id', 'universe_id', 'tolerance', 'show_warnings', 'rewatch_behavior', 'lock_version'])]
 class UserSpoilerPreference extends Model
 {
     /** @use HasFactory<UserSpoilerPreferenceFactory> */
@@ -31,6 +38,6 @@ class UserSpoilerPreference extends Model
     /** @return array<string, string> */
     protected function casts(): array
     {
-        return ['tolerance' => SpoilerTolerance::class, 'show_warnings' => 'boolean'];
+        return ['tolerance' => SpoilerTolerance::class, 'show_warnings' => 'boolean', 'lock_version' => 'integer'];
     }
 }

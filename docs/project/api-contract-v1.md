@@ -27,6 +27,8 @@ All version-one endpoints use `/api/v1`.
 | GET | `/api/v1/search`, `/search/suggestions`, `/discovery/related/{type}/{id}` | Public, rate limited | Projection-backed, source-resolved, spoiler-prefiltered discovery |
 | GET | `/api/v1/media/assets/{asset}`, `/media/embeds/{embed}`, `/media/attachments/{type}/{id}` | Public published or explicitly draft-authorized | Rights/moderation/publication-safe Media metadata without storage paths |
 | POST/PATCH | `/api/v1/media/assets`, `/media/embeds`, `/media/attachments` and lifecycle actions | Sanctum, verified, policy, rate limited | Private quarantine, allowlisted providers/targets, optimistic locking |
+| GET | `/api/v1/universes/{universe}/viewing-orders`, `/viewing-orders/{order}` and items | Public, rate limited | Published non-archived Catalog viewing paths |
+| GET/POST/PATCH/DELETE | `/api/v1/me/journeys`, progress, sessions, rewatches, continue watching, watchlists, favourites, ratings, notes and preferences | Sanctum, verified, owner policy, rate limited | Private User Journey state, bounded cursors, idempotency and optimistic conflicts |
 
 The legacy unversioned `/api/user` endpoint has been removed.
 
@@ -76,6 +78,8 @@ Catalog and Lore update, publish, and archive requests include `expected_version
 Lore errors add `invalid_lore_operation`, `invalid_relationship_semantics`, `duplicate_lore_relationship`, `invalid_catalog_boundary`, `cross_universe_lore_reference`, `lore_evidence_required`, and `lore_spoiler_classification_required`. Relationship resources never recursively embed edges.
 
 Media errors add `invalid_media_operation`, `unsafe_media_file`, `unsupported_media_provider`, `media_rights_required`, `media_moderation_required`, `media_processing_required`, `media_takedown_blocked`, `invalid_media_target`, `invalid_media_source`, `duplicate_media_attachment`, and `cross_universe_media_attachment`. Search validation rejects unknown filters/sorts and oversized/short queries before query execution.
+
+User Journey errors add `invalid_journey_operation`, `invalid_journey_target`, `journey_target_unavailable`, `active_journey_exists`, `active_rewatch_exists`, `progress_moved_backwards`, `invalid_progress_position`, `invalid_progress_percentage`, `duplicate_watchlist_item`, and cross-universe variants. Stale writes retain `optimistic_lock_conflict`.
 
 ## Rate Limits
 

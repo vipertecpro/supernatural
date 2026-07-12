@@ -22,3 +22,9 @@ erDiagram
 ```
 
 High-frequency progress writes debounce client-side but remain idempotent server-side; the server accepts a monotonic client timestamp/version and rejects stale overwrites. Progress APIs use bulk endpoints with bounded item counts for mobile/offline reconciliation.
+
+## Prompt 8 implementation
+
+Viewing orders remain Catalog-owned and contain allowlisted work, season, or episode targets. User Journey uses `user_viewing_journeys` for the selected order/lifecycle, `rewatch_cycles` for isolated repeats, `viewing_progress_events` for append-only knowledge/correction history, and a null-safe owner/cycle/scope key for current progress. The previously reserved saved-theory/activity/recap rows remain deferred capabilities rather than implemented tables.
+
+Personal APIs are owner-only and force private visibility. Search personalization joins current progress at query time and never enters shared projections. Account deletion removes all current and historical journey rows; a future export can group those same rows into current-state and historical sections without copying protected Catalog text.

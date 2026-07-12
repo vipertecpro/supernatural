@@ -14,3 +14,5 @@
 Implemented normalized work/season/episode boundaries, attributable draft/approved classification, minimal preference/progress context, and backend visible/warning/redacted/hidden decisions. Legacy severity values are explicitly mapped; richer viewing orders and sessions remain deferred.
 
 Prompt 6 adds Lore morph aliases and target-aware relationship serialization. Hidden assertions and timeline/appearance/alias children are omitted before output, while redacted relationships never serialize the protected target identity.
+
+Prompt 8 expands viewer knowledge to exact completed scopes, legacy positional progress, append-only completion events, and rewatch history. A normal progress reset does not make a user unknow completed content; only an explicit full spoiler-reset event changes that scope's historical basis.

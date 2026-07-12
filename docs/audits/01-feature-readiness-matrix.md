@@ -119,3 +119,14 @@ This append-only section records the bounded Catalog implementation.
 | Media attachments | Implemented backend foundation | Allowlisted Catalog/Lore morph targets, one-source/universe/duplicate/primary/order/public/spoiler controls. | Gallery/admin UI and richer revision workflow. |
 | Search projections | Implemented relational foundation | Locale-specific rebuildable public documents/suggestions, after-commit refresh/removal, source versions, command reconciliation. | External engine until ADR thresholds; scheduled reconciliation. |
 | Search API | Implemented first generation | Bounded token/title ranking, filters, safe cursor, backend spoiler filtering, suggestions, related discovery, hashed aggregate input. | Typo/semantic search, advanced facets, public trending until privacy thresholds. |
+
+## Prompt 8 reassessment — 2026-07-12
+
+| Module | Updated status | Prompt 8 result | Still deferred |
+| --- | --- | --- | --- |
+| Viewing orders | Implemented backend foundation | Catalog-owned published orders/items, universe/target integrity, defaults, reorder, publication/archive, locking, public API. | Editorial management UI and personal custom orders. |
+| User journeys/progress | Implemented backend foundation | Owner-private lifecycle, exact/legacy progress, append-only events, hierarchy derivation, idempotency, conflicts, sessions and rewatches. | Mobile batch/offline UI and production retention operations. |
+| Personal library | Implemented private foundation | Watchlists, favourites, ratings, plain-text notes, typed fandom/spoiler preferences, policies and owner APIs. | Public/follower projections, reviews, aggregates and frontend UI. |
+| Spoiler engine | Implemented with journey knowledge | Exact completion, historical events, legacy paths and rewatches feed the existing canonical resolver. | Versioned reachability projection if order complexity/scale later requires it. |
+| Search API | Implemented with private personalization | Authenticated progress joins at query time without projection/ranking/analytics mutation. | User-requested completed/unwatched filters and recommendations remain deferred. |
+| Privacy/account deletion | Implemented for User Journey | All identifiable current/historical journey rows cascade on deletion; export structure is documented. | Export endpoint/UI, legal hold and production retention approval. |

@@ -142,3 +142,22 @@ Implemented and verified within the Phase 4 boundary.
 ### Consequence
 
 Prompt 8 should implement only the next User Journey phase, expand viewing sessions/orders/preferences as approved, and reuse Search/Spoiler contracts. Community, moderation, notifications, messaging, and external search remain later phases.
+
+## 2026-07-12 — Prompt 8 User Journey
+
+### Status
+
+Implemented and verified within the Phase 5 boundary.
+
+### Decisions
+
+- Keep viewing orders/items Catalog-owned and correct the 12-table User Journey inventory by replacing three deferred reservations with journeys, progress events, and rewatch cycles.
+- Expand existing progress/preferences in place; preserve legacy positional spoiler semantics and append-only knowledge history.
+- Make all personal journey data owner-private; reserve visibility values without exposing a public projection.
+- Use integer basis points/seconds, scoped idempotency keys, row locks, expected versions, and null-safe active/default/scope keys.
+- Keep Search projections/ranking global and join authenticated progress only at query time.
+- Delete identifiable current/historical journey data with account deletion; defer the export endpoint/UI while documenting a versionable structure.
+
+### Consequence
+
+Prompt 9 should implement only the minimum moderation and stable-notification phase. It may consume scalar after-commit journey events but must not expose private viewing history, introduce Community early, or broadcast playback/progress through Reverb.

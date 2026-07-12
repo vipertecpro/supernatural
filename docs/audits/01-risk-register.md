@@ -113,3 +113,15 @@ This append-only section records architecture-phase risks. Prompt 3 changed no a
 | R-048 | Mitigated — Medium | Relational ranking is bounded to 250 candidates and has no typo tolerance. Observe p95 and quality; adopt Scout/engine only at ADR 0010 thresholds. |
 | R-049 | Open — Medium | Search query hashes and trending snapshots need an approved retention/pruning schedule, minimum sample threshold, and abuse filtering before production analytics/trending publication. |
 | R-050 | Accepted/deferred — Low | Media processing/variants are lifecycle records only. No derivatives are generated until format-specific security, resource, and licensing controls are approved. |
+
+## Prompt 8 reassessment — 2026-07-12
+
+| ID | Status / severity | User Journey consequence and mitigation |
+| --- | --- | --- |
+| R-038 | Resolved for Phase 5 | Ordered journeys, exact scopes, sessions, rewatches and historical completion now replace the minimal highest-path limitation while retaining legacy semantics. |
+| R-051 | Open — Medium | Progress events and sessions can become high volume. Establish pruning/retention, legal hold and export operations before production launch. |
+| R-052 | Mitigated — Medium | Portable SQL cannot express every universe/work/season/episode equality. Target registry and transactional actions enforce/test paths; direct bypass writes remain prohibited. |
+| R-053 | Mitigated — Low | Personal visibility enums reserve future states but every Phase 5 API forces owner-private output and has no public projection. Any sharing requires a new policy/API review. |
+| R-054 | Open — Medium | A populated richer progress schema cannot always rollback into one legacy user/work row. Rollback refuses lossy consolidation; backup/export and an explicit transform are required. |
+| R-055 | Accepted/deferred — Low | Continue watching is a bounded relational query. Add a private projection only after measured p95/query-volume evidence. |
+| R-056 | Open — Medium | Export structure and account deletion are defined, but an export endpoint/UI and legal-hold exception workflow require owner/legal approval. |

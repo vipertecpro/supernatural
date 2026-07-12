@@ -61,3 +61,7 @@ Phase 3 is implemented as the 19-table relational Lore foundation, reusing Promp
 ## Prompt 7 completion note
 
 Phase 4 is implemented as the rights-aware private-quarantine Media foundation and nine-table relational Media/Search slice. Search consumes committed Catalog/Lore facts into rebuildable locale projections and enforces source publication and spoiler decisions before pagination. Prompt 8 may begin only the next approved User Journey phase after review; it must reuse the current minimal progress/spoiler contract and must not begin Community or other later phases.
+
+## Prompt 8 completion note
+
+Phase 5 implements Catalog viewing orders plus the owner-private User Journey lifecycle, current/historical progress, sessions, rewatches, continue watching, watchlists, favourites, ratings, notes, typed preferences, spoiler knowledge, Search query-time personalization, API v1, deletion behavior, factories, and tests. Prompt 9 may begin only the approved Phase 6 moderation/notification minimum after review; it must consume scalar journey events without exposing personal history and must not begin Community.

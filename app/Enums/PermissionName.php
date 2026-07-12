@@ -56,6 +56,10 @@ enum PermissionName: string
     case SearchRebuild = 'search.rebuild';
     case SearchInspectProjections = 'search.inspect-projections';
     case SearchManage = 'search.manage';
+    case JourneyViewingOrdersCreate = 'journey.viewing-orders.create';
+    case JourneyViewingOrdersUpdate = 'journey.viewing-orders.update';
+    case JourneyViewingOrdersPublish = 'journey.viewing-orders.publish';
+    case JourneyViewingOrdersArchive = 'journey.viewing-orders.archive';
 
     /**
      * Get the human-readable permission label.

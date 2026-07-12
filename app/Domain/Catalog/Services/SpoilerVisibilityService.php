@@ -3,6 +3,8 @@
 namespace App\Domain\Catalog\Services;
 
 use App\Enums\PermissionName;
+use App\Enums\ProgressEventType;
+use App\Enums\ProgressStatus;
 use App\Enums\SpoilerClassificationStatus;
 use App\Enums\SpoilerSeverity;
 use App\Enums\SpoilerTolerance;
@@ -75,25 +77,49 @@ class SpoilerVisibilityService
         }
 
         return collect($boundaries)->every(function (SpoilerBoundary $boundary) use ($viewer): bool {
-            $progress = ViewingProgress::query()
-                ->with(['season', 'episode'])
+            $progressRows = ViewingProgress::query()
+                ->with(['season', 'episode', 'events'])
                 ->where('user_id', $viewer->id)
                 ->where('work_id', $boundary->work_id)
-                ->first();
+                ->get();
 
-            if ($progress === null) {
-                return false;
-            }
-            if ($boundary->episode_id !== null) {
-                return $progress->episode !== null
-                    && $progress->episode->position >= $boundary->episode->position;
-            }
-            if ($boundary->season_id !== null) {
-                return $progress->season !== null
-                    && $progress->season->position >= $boundary->season->position;
-            }
+            return $progressRows->contains(function (ViewingProgress $progress) use ($boundary): bool {
+                if ($progress->is_legacy_projection) {
+                    if ($boundary->episode_id !== null) {
+                        return $progress->episode !== null && $progress->episode->position >= $boundary->episode->position;
+                    }
+                    if ($boundary->season_id !== null) {
+                        return $progress->season !== null && $progress->season->position >= $boundary->season->position;
+                    }
 
-            return true;
+                    return true;
+                }
+
+                $matchesScope = match (true) {
+                    $boundary->episode_id !== null => $progress->scope_type === 'episode' && $progress->episode_id === $boundary->episode_id,
+                    $boundary->season_id !== null => $progress->scope_type === 'season' && $progress->season_id === $boundary->season_id,
+                    default => $progress->scope_type === 'work' && $progress->work_id === $boundary->work_id,
+                };
+                if (! $matchesScope) {
+                    return false;
+                }
+
+                if ($progress->status === ProgressStatus::Completed) {
+                    return true;
+                }
+
+                $historicallyCompleted = false;
+                foreach ($progress->events->sortBy('occurred_at') as $event) {
+                    if ($event->event_type === ProgressEventType::MarkedComplete) {
+                        $historicallyCompleted = true;
+                    }
+                    if ($event->event_type === ProgressEventType::Reset && ($event->safe_metadata['spoiler_knowledge_reset'] ?? false) === true) {
+                        $historicallyCompleted = false;
+                    }
+                }
+
+                return $historicallyCompleted;
+            });
         });
     }
 

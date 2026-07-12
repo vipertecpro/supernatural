@@ -54,3 +54,7 @@ Lore entities, translations, aliases, appearances, relationships, timelines, and
 ## Prompt 7 implementation
 
 Search documents store only identity-safe title data and approved summary/alias text plus normalized severity/boundary metadata. Query and suggestion services resolve the authoritative source and apply the existing viewer decision before pagination; hidden rows/counts and hidden aliases are absent. Media attachments opt into the stable spoiler morph map and public lists conservatively exclude redacted/hidden attachments before nested media serialization.
+
+## Prompt 8 implementation
+
+The canonical resolver now recognizes exact completed work/season/episode progress, legacy positional rows, append-only completion history, and all rewatch cycles. Partial progress does not satisfy a boundary. Resetting current progress preserves historical knowledge unless an explicit full spoiler reset event occurs. Search, Catalog, Lore, and Media continue calling this one resolver; no per-module calculation was introduced.

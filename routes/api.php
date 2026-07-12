@@ -1,25 +1,36 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ContinueWatchingController;
 use App\Http\Controllers\Api\V1\EditorialCitationController;
 use App\Http\Controllers\Api\V1\EditorialReviewController;
 use App\Http\Controllers\Api\V1\EditorialRevisionController;
 use App\Http\Controllers\Api\V1\EntityAppearanceController;
 use App\Http\Controllers\Api\V1\EpisodeController;
 use App\Http\Controllers\Api\V1\ExternalEmbedController;
+use App\Http\Controllers\Api\V1\FavouriteController;
 use App\Http\Controllers\Api\V1\FranchiseController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\JourneyPreferenceController;
 use App\Http\Controllers\Api\V1\LoreAliasController;
 use App\Http\Controllers\Api\V1\LoreEntityController;
 use App\Http\Controllers\Api\V1\LoreRelationshipController;
 use App\Http\Controllers\Api\V1\MeController;
 use App\Http\Controllers\Api\V1\MediaAssetController;
 use App\Http\Controllers\Api\V1\MediaAttachmentController;
+use App\Http\Controllers\Api\V1\PersonalNoteController;
+use App\Http\Controllers\Api\V1\RatingController;
+use App\Http\Controllers\Api\V1\RewatchCycleController;
 use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\SeasonController;
 use App\Http\Controllers\Api\V1\SourceRightsReviewController;
 use App\Http\Controllers\Api\V1\SpoilerBoundaryController;
 use App\Http\Controllers\Api\V1\TimelineController;
 use App\Http\Controllers\Api\V1\TimelineEntryController;
+use App\Http\Controllers\Api\V1\ViewingJourneyController;
+use App\Http\Controllers\Api\V1\ViewingOrderController;
+use App\Http\Controllers\Api\V1\ViewingProgressController;
+use App\Http\Controllers\Api\V1\ViewingSessionController;
+use App\Http\Controllers\Api\V1\WatchlistController;
 use App\Http\Controllers\Api\V1\WorkController;
 use App\Http\Controllers\Api\V1\WorkTranslationController;
 use App\Http\Middleware\ResolveOptionalSanctumUser;
@@ -58,9 +69,58 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
         Route::get('media/assets/{asset}', [MediaAssetController::class, 'show'])->name('media.assets.show');
         Route::get('media/embeds/{embed}', [ExternalEmbedController::class, 'show'])->name('media.embeds.show');
         Route::get('media/attachments/{targetType}/{targetId}', [MediaAttachmentController::class, 'index'])->whereNumber('targetId')->name('media.attachments.index');
+        Route::get('universes/{universe}/viewing-orders', [ViewingOrderController::class, 'index'])->name('universes.viewing-orders.index');
+        Route::get('viewing-orders/{viewingOrder}', [ViewingOrderController::class, 'show'])->name('viewing-orders.show');
+        Route::get('viewing-orders/{viewingOrder}/items', [ViewingOrderController::class, 'items'])->name('viewing-orders.items');
     });
 
     Route::middleware(['auth:sanctum', 'verified', 'throttle:api-v1'])->scopeBindings()->group(function () {
+        Route::get('me/journeys', [ViewingJourneyController::class, 'index'])->name('me.journeys.index');
+        Route::post('me/journeys', [ViewingJourneyController::class, 'store'])->name('me.journeys.store');
+        Route::get('me/journeys/{journey}', [ViewingJourneyController::class, 'show'])->name('me.journeys.show');
+        Route::post('me/journeys/{journey}/pause', [ViewingJourneyController::class, 'pause'])->name('me.journeys.pause');
+        Route::post('me/journeys/{journey}/resume', [ViewingJourneyController::class, 'resume'])->name('me.journeys.resume');
+        Route::post('me/journeys/{journey}/complete', [ViewingJourneyController::class, 'complete'])->name('me.journeys.complete');
+        Route::post('me/journeys/{journey}/abandon', [ViewingJourneyController::class, 'abandon'])->name('me.journeys.abandon');
+
+        Route::get('me/progress', [ViewingProgressController::class, 'index'])->name('me.progress.index');
+        Route::get('me/progress/{type}/{id}', [ViewingProgressController::class, 'show'])->whereIn('type', ['work', 'season', 'episode'])->whereNumber('id')->name('me.progress.show');
+        Route::put('me/progress/{type}/{id}', [ViewingProgressController::class, 'update'])->whereIn('type', ['work', 'season', 'episode'])->whereNumber('id')->name('me.progress.update');
+        Route::post('me/progress/{type}/{id}/complete', [ViewingProgressController::class, 'complete'])->whereIn('type', ['work', 'season', 'episode'])->whereNumber('id')->name('me.progress.complete');
+        Route::post('me/progress/{type}/{id}/correct', [ViewingProgressController::class, 'correct'])->whereIn('type', ['work', 'season', 'episode'])->whereNumber('id')->name('me.progress.correct');
+        Route::post('me/progress/{type}/{id}/reset', [ViewingProgressController::class, 'reset'])->whereIn('type', ['work', 'season', 'episode'])->whereNumber('id')->name('me.progress.reset');
+
+        Route::post('me/viewing-sessions', [ViewingSessionController::class, 'store'])->name('me.viewing-sessions.store');
+        Route::patch('me/viewing-sessions/{session}', [ViewingSessionController::class, 'update'])->name('me.viewing-sessions.update');
+        Route::post('me/viewing-sessions/{session}/end', [ViewingSessionController::class, 'end'])->name('me.viewing-sessions.end');
+        Route::get('me/rewatches', [RewatchCycleController::class, 'index'])->name('me.rewatches.index');
+        Route::post('me/rewatches', [RewatchCycleController::class, 'store'])->name('me.rewatches.store');
+        Route::post('me/rewatches/{rewatch}/complete', [RewatchCycleController::class, 'complete'])->name('me.rewatches.complete');
+        Route::post('me/rewatches/{rewatch}/abandon', [RewatchCycleController::class, 'abandon'])->name('me.rewatches.abandon');
+        Route::get('me/continue-watching', ContinueWatchingController::class)->name('me.continue-watching');
+
+        Route::get('me/watchlists', [WatchlistController::class, 'index'])->name('me.watchlists.index');
+        Route::post('me/watchlists', [WatchlistController::class, 'store'])->name('me.watchlists.store');
+        Route::get('me/watchlists/{watchlist}', [WatchlistController::class, 'show'])->name('me.watchlists.show');
+        Route::patch('me/watchlists/{watchlist}', [WatchlistController::class, 'update'])->name('me.watchlists.update');
+        Route::delete('me/watchlists/{watchlist}', [WatchlistController::class, 'destroy'])->name('me.watchlists.destroy');
+        Route::post('me/watchlists/{watchlist}/items', [WatchlistController::class, 'addItem'])->name('me.watchlists.items.store');
+        Route::delete('me/watchlist-items/{item}', [WatchlistController::class, 'removeItem'])->name('me.watchlist-items.destroy');
+
+        Route::get('me/favourites', [FavouriteController::class, 'index'])->name('me.favourites.index');
+        Route::post('me/favourites', [FavouriteController::class, 'store'])->name('me.favourites.store');
+        Route::delete('me/favourites/{favourite}', [FavouriteController::class, 'destroy'])->name('me.favourites.destroy');
+        Route::get('me/ratings', [RatingController::class, 'index'])->name('me.ratings.index');
+        Route::put('me/ratings/{type}/{id}', [RatingController::class, 'upsert'])->whereIn('type', ['work', 'season', 'episode'])->whereNumber('id')->name('me.ratings.upsert');
+        Route::delete('me/ratings/{rating}', [RatingController::class, 'destroy'])->name('me.ratings.destroy');
+        Route::get('me/notes', [PersonalNoteController::class, 'index'])->name('me.notes.index');
+        Route::post('me/notes', [PersonalNoteController::class, 'store'])->name('me.notes.store');
+        Route::get('me/notes/{note}', [PersonalNoteController::class, 'show'])->name('me.notes.show');
+        Route::patch('me/notes/{note}', [PersonalNoteController::class, 'update'])->name('me.notes.update');
+        Route::delete('me/notes/{note}', [PersonalNoteController::class, 'destroy'])->name('me.notes.destroy');
+        Route::get('me/journey-preferences', [JourneyPreferenceController::class, 'index'])->name('me.journey-preferences.index');
+        Route::patch('me/journey-preferences', [JourneyPreferenceController::class, 'update'])->name('me.journey-preferences.update');
+
         Route::post('media/assets', [MediaAssetController::class, 'store'])->name('media.assets.store');
         Route::patch('media/assets/{asset}', [MediaAssetController::class, 'update'])->name('media.assets.update');
         Route::post('media/assets/{asset}/publish', [MediaAssetController::class, 'publish'])->name('media.assets.publish');

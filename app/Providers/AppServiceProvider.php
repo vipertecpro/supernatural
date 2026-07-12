@@ -16,6 +16,7 @@ use App\Models\EditorialRevision;
 use App\Models\EntityAppearance;
 use App\Models\Episode;
 use App\Models\ExternalEmbed;
+use App\Models\Favourite;
 use App\Models\Franchise;
 use App\Models\LoreAlias;
 use App\Models\LoreEntity;
@@ -25,8 +26,11 @@ use App\Models\MediaAsset;
 use App\Models\MediaAttachment;
 use App\Models\MediaProcessingJob;
 use App\Models\MediaVariant;
+use App\Models\PersonalNote;
+use App\Models\Rating;
 use App\Models\RevisionBlock;
 use App\Models\RevisionItem;
+use App\Models\RewatchCycle;
 use App\Models\SearchDocument;
 use App\Models\SearchQuery;
 use App\Models\SearchSuggestion;
@@ -40,6 +44,16 @@ use App\Models\TimelineEntry;
 use App\Models\TrendingSnapshot;
 use App\Models\Universe;
 use App\Models\User;
+use App\Models\UserFandomPreference;
+use App\Models\UserSpoilerPreference;
+use App\Models\UserViewingJourney;
+use App\Models\ViewingOrder;
+use App\Models\ViewingOrderItem;
+use App\Models\ViewingProgress;
+use App\Models\ViewingProgressEvent;
+use App\Models\ViewingSession;
+use App\Models\Watchlist;
+use App\Models\WatchlistItem;
 use App\Models\Work;
 use App\Models\WorkTranslation;
 use App\Policies\AuditLogPolicy;
@@ -48,12 +62,16 @@ use App\Policies\EditorialRevisionPolicy;
 use App\Policies\EntityAppearancePolicy;
 use App\Policies\EpisodePolicy;
 use App\Policies\ExternalEmbedPolicy;
+use App\Policies\FavouritePolicy;
 use App\Policies\FranchisePolicy;
 use App\Policies\LoreAliasPolicy;
 use App\Policies\LoreEntityPolicy;
 use App\Policies\LoreRelationshipPolicy;
 use App\Policies\MediaAssetPolicy;
 use App\Policies\MediaAttachmentPolicy;
+use App\Policies\PersonalNotePolicy;
+use App\Policies\RatingPolicy;
+use App\Policies\RewatchCyclePolicy;
 use App\Policies\SeasonPolicy;
 use App\Policies\SourcePolicy;
 use App\Policies\SourceRightsReviewPolicy;
@@ -61,6 +79,12 @@ use App\Policies\SpoilerBoundaryPolicy;
 use App\Policies\TimelineEntryPolicy;
 use App\Policies\TimelinePolicy;
 use App\Policies\UniversePolicy;
+use App\Policies\UserFandomPreferencePolicy;
+use App\Policies\UserViewingJourneyPolicy;
+use App\Policies\ViewingOrderPolicy;
+use App\Policies\ViewingProgressPolicy;
+use App\Policies\ViewingSessionPolicy;
+use App\Policies\WatchlistPolicy;
 use App\Policies\WorkPolicy;
 use App\Policies\WorkTranslationPolicy;
 use Carbon\CarbonImmutable;
@@ -133,6 +157,20 @@ class AppServiceProvider extends ServiceProvider
             'search_suggestion' => SearchSuggestion::class,
             'trending_snapshot' => TrendingSnapshot::class,
             'search_query' => SearchQuery::class,
+            'viewing_order' => ViewingOrder::class,
+            'viewing_order_item' => ViewingOrderItem::class,
+            'user_viewing_journey' => UserViewingJourney::class,
+            'viewing_progress' => ViewingProgress::class,
+            'viewing_progress_event' => ViewingProgressEvent::class,
+            'viewing_session' => ViewingSession::class,
+            'rewatch_cycle' => RewatchCycle::class,
+            'watchlist' => Watchlist::class,
+            'watchlist_item' => WatchlistItem::class,
+            'favourite' => Favourite::class,
+            'rating' => Rating::class,
+            'personal_note' => PersonalNote::class,
+            'user_fandom_preference' => UserFandomPreference::class,
+            'user_spoiler_preference' => UserSpoilerPreference::class,
         ]);
     }
 
@@ -182,6 +220,16 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(TimelineEntry::class, TimelineEntryPolicy::class);
         Gate::policy(Work::class, WorkPolicy::class);
         Gate::policy(WorkTranslation::class, WorkTranslationPolicy::class);
+        Gate::policy(UserViewingJourney::class, UserViewingJourneyPolicy::class);
+        Gate::policy(ViewingOrder::class, ViewingOrderPolicy::class);
+        Gate::policy(ViewingProgress::class, ViewingProgressPolicy::class);
+        Gate::policy(ViewingSession::class, ViewingSessionPolicy::class);
+        Gate::policy(RewatchCycle::class, RewatchCyclePolicy::class);
+        Gate::policy(Watchlist::class, WatchlistPolicy::class);
+        Gate::policy(Favourite::class, FavouritePolicy::class);
+        Gate::policy(Rating::class, RatingPolicy::class);
+        Gate::policy(PersonalNote::class, PersonalNotePolicy::class);
+        Gate::policy(UserFandomPreference::class, UserFandomPreferencePolicy::class);
 
         foreach (PermissionName::cases() as $permission) {
             Gate::define(

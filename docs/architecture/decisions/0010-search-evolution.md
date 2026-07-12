@@ -12,3 +12,5 @@
 ## Prompt 7 implementation note
 
 Implemented portable relational token matching and deterministic title weighting over bounded candidates. SQLite/MySQL use the same correctness path; a future MySQL FULLTEXT optimization must retain it as fallback. Projections are locale-specific, source-versioned, event-refreshed, manually rebuildable, spoiler-filtered before pagination, and contain no raw source model serialization. No Scout or search vendor was added.
+
+Prompt 8 keeps personal progress outside projections and ranking. Authenticated result metadata is joined from bounded owner scope keys at query time; guest result shapes contain no personal fields.

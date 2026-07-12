@@ -20,7 +20,7 @@ class WorkFactory extends Factory
         $title = fake()->randomElement(['The Ember Files', 'The First Signal', 'Glass Horizon']).' '.fake()->unique()->numberBetween(10, 999999);
 
         return [
-            'universe_id' => Universe::factory(),
+            'universe_id' => Universe::factory()->published(),
             'franchise_id' => null,
             'type' => WorkType::Film,
             'slug' => str($title)->slug(),

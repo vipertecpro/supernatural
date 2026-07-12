@@ -25,6 +25,8 @@ class UserSpoilerPreferenceFactory extends Factory
             'universe_id' => Universe::factory(),
             'tolerance' => SpoilerTolerance::Strict,
             'show_warnings' => true,
+            'rewatch_behavior' => 'historical',
+            'lock_version' => 0,
         ];
     }
 }

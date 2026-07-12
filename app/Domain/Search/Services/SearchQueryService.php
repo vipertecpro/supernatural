@@ -9,6 +9,7 @@ use App\Models\SearchDocument;
 use App\Models\SearchQuery;
 use App\Models\SearchSuggestion;
 use App\Models\User;
+use App\Models\ViewingProgress;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
@@ -39,7 +40,17 @@ class SearchQueryService
             $builder->where('normalized_text', 'like', '%'.$token.'%');
         }
 
-        $ranked = $builder->limit(250)->get()->map(function (SearchDocument $document) use ($normalized, $tokens, $viewer): ?array {
+        $documents = $builder->limit(250)->get();
+        $progressByKey = collect();
+        if ($viewer !== null) {
+            $scopeKeys = $documents
+                ->filter(fn (SearchDocument $document): bool => in_array($document->source_type, ['work', 'season', 'episode'], true))
+                ->map(fn (SearchDocument $document): string => $document->source_type.':'.$document->source_id)
+                ->values();
+            $progressByKey = ViewingProgress::query()->where('user_id', $viewer->id)->where('cycle_key', 0)->whereIn('scope_key', $scopeKeys)->get()->keyBy('scope_key');
+        }
+
+        $ranked = $documents->map(function (SearchDocument $document) use ($normalized, $tokens, $viewer, $progressByKey): ?array {
             $source = $this->resolveSource($document);
             if ($source === null) {
                 return null;
@@ -57,14 +68,21 @@ class SearchQueryService
                 str_starts_with($localized, $normalized) => 750,
                 default => 400 + collect($tokens)->filter(fn (string $token): bool => str_contains($canonical.' '.$localized, $token))->count() * 25,
             } + $document->ranking_weight;
+            $progress = $progressByKey->get($document->source_type.':'.$document->source_id);
 
-            return [
+            $item = [
                 '_score' => $score, '_id' => $document->id, 'id' => $document->source_id, 'type' => $document->document_type->value,
                 'universe_id' => $document->universe_id, 'title' => $document->localized_title ?? $document->canonical_title, 'canonical_title' => $document->canonical_title,
                 'slug' => $document->slug, 'route' => '/api/v1/'.$document->route_key,
                 'excerpt' => in_array($visibility, [SpoilerVisibility::Redacted, SpoilerVisibility::Hidden], true) ? null : $document->searchable_summary,
                 'locale' => $document->locale, 'canon_classification' => $document->canon_classification, 'spoiler_visibility' => $visibility->value,
             ];
+            if ($viewer !== null) {
+                $item['viewing_status'] = $progress?->status->value;
+                $item['progress_basis_points'] = $progress?->progress_basis_points;
+            }
+
+            return $item;
         })->filter()->sortBy([['_score', 'desc'], ['_id', 'asc']])->values();
 
         $pageSize = min(max((int) ($filters['page_size'] ?? 20), 1), 50);
